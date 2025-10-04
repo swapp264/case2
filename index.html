@@ -343,6 +343,18 @@
 
       // Set year
       (function(){ var y = document.getElementById('year'); if(y){ y.textContent = new Date().getFullYear(); } })();
+
+      // Demo login handlers: jump straight to dashboard with role
+      window.demoLoginAsNGO = function() {
+        window.location.href = 'dashboard.html?role=ngo';
+      };
+      window.demoLoginAsAdmin = function() {
+        window.location.href = 'dashboard.html?role=admin';
+      };
+      window.demoLoginAsUser = function() {
+        // For demo, route users to the same dashboard (no admin theme)
+        window.location.href = 'index.html?role=user';
+      };
     </script>
   </body>
 </html>
