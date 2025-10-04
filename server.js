@@ -35,6 +35,38 @@ mongoose.connect(MONGODB_URI, {
   console.error('MongoDB connection error:', err);
 });
 
+// Create volunteer application
+app.post('/api/volunteer-applications', async (req, res) => {
+  try {
+    const required = ['name','email','phone','role','availability','motivation','terms'];
+    for (const f of required) {
+      if (req.body == null || req.body[f] === undefined || req.body[f] === '') {
+        return res.status(400).json({ error: `Missing field: ${f}` });
+      }
+    }
+
+    const application = new VolunteerApplication({
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+      age: req.body.age,
+      role: req.body.role,
+      availability: req.body.availability,
+      experience: req.body.experience,
+      motivation: req.body.motivation,
+      terms: !!req.body.terms,
+      applicationDate: req.body.applicationDate || new Date(),
+      status: req.body.status || 'pending'
+    });
+
+    const saved = await application.save();
+    res.status(201).json({ success: true, application: saved });
+  } catch (error) {
+    console.error('Create volunteer application failed:', error);
+    res.status(500).json({ error: 'Failed to create application', details: error.message });
+  }
+});
+
 mongoose.connection.on('connected', () => { dbConnected = true; });
 mongoose.connection.on('disconnected', () => { dbConnected = false; });
 mongoose.connection.on('error', () => { dbConnected = false; });

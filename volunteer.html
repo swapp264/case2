@@ -773,10 +773,9 @@
         }
       });
 
-      // Form submission
+      // Form submission (POST to backend with offline fallback)
       document.getElementById('volunteer-form').addEventListener('submit', async function(e) {
         e.preventDefault();
-        
         const formData = {
           name: document.getElementById('name').value,
           email: document.getElementById('email').value,
@@ -797,18 +796,43 @@
           return;
         }
 
-        // Store in localStorage
-        const applications = JSON.parse(localStorage.getItem('volunteerApplications') || '[]');
-        applications.push(formData);
-        localStorage.setItem('volunteerApplications', JSON.stringify(applications));
+        try {
+          const sameOrigin = (window.location.origin && window.location.origin.startsWith('http')) ? window.location.origin : '';
+          const endpoints = [
+            '/api/volunteer-applications',
+            sameOrigin ? sameOrigin + '/api/volunteer-applications' : null,
+            'http://localhost:3000/api/volunteer-applications',
+            'http://127.0.0.1:3000/api/volunteer-applications'
+          ].filter(Boolean);
 
-        // Show success message
-        alert('✅ Thank you for your application, ' + formData.name + '!\n\nWe have received your volunteer application and will review it shortly. You will be contacted at ' + formData.email + ' within 2-3 business days.\n\nThank you for your interest in helping animals!');
-        
-        // Reset form
+          let ok = false, lastErr;
+          for (const url of endpoints) {
+            try {
+              const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+              });
+              const data = await res.json().catch(()=>({}));
+              if (res.ok && data && data.success) { ok = true; break; }
+              lastErr = new Error(data.error || `Request failed (${res.status})`);
+            } catch (e2) {
+              lastErr = e2;
+            }
+          }
+
+          if (!ok) throw lastErr || new Error('All endpoints failed');
+          alert('✅ Application submitted successfully!');
+        } catch (err) {
+          // Fallback: store locally if backend not reachable (dev/offline)
+          const applications = JSON.parse(localStorage.getItem('volunteerApplications') || '[]');
+          applications.push(formData);
+          localStorage.setItem('volunteerApplications', JSON.stringify(applications));
+          alert('Submitted locally (backend unavailable). Start the Node server to save to DB.');
+        }
+
+        // Reset form and scroll
         document.getElementById('volunteer-form').reset();
-        
-        // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     </script>
