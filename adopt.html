@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — Adopt</title>
+    <meta name="description" content="Browse adoptable dogs, cats, and other animals.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <a href="index.html" aria-label="StrayCare Home">
+          <h1>StrayCare</h1>
+        </a>
+        <form class="site-search" role="search" aria-label="Site search" action="search.html" method="get">
+          <input type="search" name="q" placeholder="Search pets, services, help…" aria-label="Search" />
+          <button type="submit" aria-label="Search">🔍</button>
+        </form>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="adopt.html" aria-current="page">Adopt</a></li>
+            <li><a href="donate.html">Donate</a></li>
+            <li><a href="volunteer.html">Volunteer</a></li>
+            <li><a href="emergency.html">Emergency</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="user-actions">
+          <div class="user-dropdown">
+            <button class="user-icon" aria-label="User Menu">👤</button>
+            <div class="dropdown-menu">
+              <a href="login.html">Login</a>
+              <a href="register.html">Register (User)</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <section aria-labelledby="filters-title">
+          <h2 id="filters-title">Filters</h2>
+          <form id="filters-form" onsubmit="event.preventDefault();">
+            <fieldset>
+              <legend>Animal type</legend>
+              <label><input type="radio" name="type" value="all" checked> All</label>
+              <label><input type="radio" name="type" value="dog"> Dogs</label>
+              <label><input type="radio" name="type" value="cat"> Cats</label>
+              <label><input type="radio" name="type" value="other"> Other</label>
+            </fieldset>
+            <fieldset>
+              <legend>Age</legend>
+              <label><input type="checkbox" name="age" value="puppy"> Puppy/Kitten</label>
+              <label><input type="checkbox" name="age" value="adult"> Adult</label>
+              <label><input type="checkbox" name="age" value="senior"> Senior</label>
+            </fieldset>
+          </form>
+        </section>
+
+        <section aria-labelledby="results-title">
+          <h2 id="results-title">Adoptable animals</h2>
+          <div class="pets-grid">
+            <article class="pet-card" data-type="dog" data-age="adult">
+              <div class="pet-image">
+                <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&h=300&fit=crop&crop=center" alt="Buddy the dog" loading="lazy">
+              </div>
+              <div class="pet-info">
+                <h3>Buddy — Dog</h3>
+                <p>2 years • Male • Vaccinated</p>
+                <p>Friendly and energetic. Good with kids.</p>
+                <button class="enquiry-btn" aria-expanded="false" aria-controls="enquiry-buddy">Adoption enquiry</button>
+                <div id="enquiry-buddy" class="enquiry-details" hidden>
+                  <h4>How adoption works</h4>
+                  <ul>
+                    <li>Submit an enquiry with your basic details</li>
+                    <li>We schedule a quick compatibility call</li>
+                    <li>Home visit and meet-and-greet</li>
+                    <li>Documentation and adoption kit</li>
+                  </ul>
+                  <form class="enquiry-form">
+                    <input type="hidden" name="petName" value="Buddy — Dog">
+                    <label>
+                      Your name
+                      <input type="text" name="applicantName" placeholder="Full name" required>
+                    </label>
+                    <label>
+                      Email
+                      <input type="email" name="email" placeholder="you@example.com" required>
+                    </label>
+                    <label>
+                      Message (optional)
+                      <textarea name="message" rows="2" placeholder="Tell us about your home and family"></textarea>
+                    </label>
+                    <button type="submit">Send enquiry</button>
+                    <div class="enquiry-status" aria-live="polite"></div>
+                  </form>
+                </div>
+              </div>
+            </article>
+            <article class="pet-card" data-type="cat" data-age="adult">
+              <div class="pet-image">
+                <img src="https://images.unsplash.com/photo-1514888286974-6c03e2a1a220?w=400&h=300&fit=crop&crop=center" alt="Luna the cat" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1574158622682-e40e69881006?w=400&h=300&fit=crop&crop=center';">
+              </div>
+              <div class="pet-info">
+                <h3>Luna — Cat</h3>
+                <p>1 year • Female • Spayed</p>
+                <p>Quiet and affectionate. Indoor only.</p>
+                <button class="enquiry-btn" aria-expanded="false" aria-controls="enquiry-luna">Adoption enquiry</button>
+                <div id="enquiry-luna" class="enquiry-details" hidden>
+                  <h4>How adoption works</h4>
+                  <ul>
+                    <li>Submit an enquiry with your basic details</li>
+                    <li>We schedule a quick compatibility call</li>
+                    <li>Home visit and meet-and-greet</li>
+                    <li>Documentation and adoption kit</li>
+                  </ul>
+                  <form class="enquiry-form">
+                    <input type="hidden" name="petName" value="Luna — Cat">
+                    <label>
+                      Your name
+                      <input type="text" name="applicantName" placeholder="Full name" required>
+                    </label>
+                    <label>
+                      Email
+                      <input type="email" name="email" placeholder="you@example.com" required>
+                    </label>
+                    <label>
+                      Message (optional)
+                      <textarea name="message" rows="2" placeholder="Tell us about your home and family"></textarea>
+                    </label>
+                    <button type="submit">Send enquiry</button>
+                    <div class="enquiry-status" aria-live="polite"></div>
+                  </form>
+                </div>
+              </div>
+            </article>
+            <article class="pet-card" data-type="dog" data-age="puppy">
+              <div class="pet-image">
+                <img src="https://images.unsplash.com/photo-1543852786-1cf6624b998d?w=400&h=300&fit=crop&crop=center" alt="Max the puppy" loading="lazy">
+              </div>
+              <div class="pet-info">
+                <h3>Max — Puppy</h3>
+                <p>6 months • Male • Vaccinated</p>
+                <p>Energetic and playful. Loves to learn new tricks.</p>
+                <button class="enquiry-btn" aria-expanded="false" aria-controls="enquiry-max">Adoption enquiry</button>
+                <div id="enquiry-max" class="enquiry-details" hidden>
+                  <h4>How adoption works</h4>
+                  <ul>
+                    <li>Submit an enquiry with your basic details</li>
+                    <li>We schedule a quick compatibility call</li>
+                    <li>Home visit and meet-and-greet</li>
+                    <li>Documentation and adoption kit</li>
+                  </ul>
+                  <form class="enquiry-form">
+                    <input type="hidden" name="petName" value="Max — Puppy">
+                    <label>
+                      Your name
+                      <input type="text" name="applicantName" placeholder="Full name" required>
+                    </label>
+                    <label>
+                      Email
+                      <input type="email" name="email" placeholder="you@example.com" required>
+                    </label>
+                    <label>
+                      Message (optional)
+                      <textarea name="message" rows="2" placeholder="Tell us about your home and family"></textarea>
+                    </label>
+                    <button type="submit">Send enquiry</button>
+                    <div class="enquiry-status" aria-live="polite"></div>
+                  </form>
+                </div>
+              </div>
+            </article>
+            <article class="pet-card" data-type="cat" data-age="puppy">
+              <div class="pet-image">
+                <img src="https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?w=400&h=300&fit=crop&crop=center" alt="Whiskers the kitten" loading="lazy">
+              </div>
+              <div class="pet-info">
+                <h3>Whiskers — Kitten</h3>
+                <p>4 months • Female • Vaccinated</p>
+                <p>Curious and adventurous. Perfect for active families.</p>
+                <button class="enquiry-btn" aria-expanded="false" aria-controls="enquiry-whiskers">Adoption enquiry</button>
+                <div id="enquiry-whiskers" class="enquiry-details" hidden>
+                  <h4>How adoption works</h4>
+                  <ul>
+                    <li>Submit an enquiry with your basic details</li>
+                    <li>We schedule a quick compatibility call</li>
+                    <li>Home visit and meet-and-greets</li>
+                    <li>Documentation and adoption kit</li>
+                  </ul>
+                  <form class="enquiry-form">
+                    <input type="hidden" name="petName" value="Whiskers — Kitten">
+                    <label>
+                      Your name
+                      <input type="text" name="applicantName" placeholder="Full name" required>
+                    </label>
+                    <label>
+                      Email
+                      <input type="email" name="email" placeholder="you@example.com" required>
+                    </label>
+                    <label>
+                      Message (optional)
+                      <textarea name="message" rows="2" placeholder="Tell us about your home and family"></textarea>
+                    </label>
+                    <button type="submit">Send enquiry</button>
+                    <div class="enquiry-status" aria-live="polite"></div>
+                  </form>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="newsletter">
+          <h3>Join our community</h3>
+          <p>Get stories, adoption drives, and rescue tips in your inbox.</p>
+          <form class="newsletter-form" aria-label="Newsletter subscription" onsubmit="event.preventDefault(); this.reset();">
+            <input type="email" placeholder="Your email address" aria-label="Email" required>
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+        <p>
+          © <span id="year">2025</span> StrayCare
+          • <a href="contact.html">Contact</a>
+          • <a href="donate.html">Donate</a>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .enquiry-btn { margin-top: .25rem; }
+  .enquiry-details { margin-top: 1rem; padding: 1rem; border: 1px solid #e1e8ed; border-radius: 12px; background: rgba(255,255,255,0.9); }
+  .enquiry-details h4 { color: #8B4513; margin-bottom: .5rem; }
+  .enquiry-details ul { margin-left: 1.25rem; margin-bottom: 1rem; }
+  .enquiry-form { display: grid; gap: .75rem; max-width: 520px; }
+  .enquiry-form input, .enquiry-form textarea { background: rgba(255, 255, 255, 0.95); color:#333; border:2px solid #e1e8ed; }
+  @media (max-width: 768px) { .enquiry-details { padding: .75rem; } }
+</style>
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    // Toggle enquiry panels
+    document.querySelectorAll('.enquiry-btn').forEach(btn => {
+      btn.addEventListener('click', function(){
+        const id = btn.getAttribute('aria-controls');
+        const panel = document.getElementById(id);
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!expanded));
+        if (panel) {
+          if (expanded) { panel.setAttribute('hidden',''); }
+          else { panel.removeAttribute('hidden'); panel.scrollIntoView({behavior:'smooth', block:'nearest'}); }
+        }
+      });
+    });
+
+    // Filtering using type, age, and ?q=
+    const params = new URLSearchParams(window.location.search);
+    const q = (params.get('q') || '').trim().toLowerCase();
+    const filtersForm = document.getElementById('filters-form');
+    const cards = Array.from(document.querySelectorAll('.pet-card'));
+
+    function getSelectedType() {
+      const sel = filtersForm.querySelector('input[name="type"]:checked');
+      return sel ? sel.value : 'all';
+    }
+    function getSelectedAges() {
+      return Array.from(filtersForm.querySelectorAll('input[name="age"]:checked')).map(i => i.value);
+    }
+    function applyFilters() {
+      const type = getSelectedType();
+      const ages = new Set(getSelectedAges());
+      let visible = 0;
+      cards.forEach(card => {
+        const t = card.getAttribute('data-type');
+        const a = card.getAttribute('data-age');
+        const text = card.innerText.toLowerCase();
+        const qHit = q ? text.includes(q) : true;
+        const typeHit = type === 'all' ? true : t === type;
+        const ageHit = ages.size === 0 ? true : ages.has(a);
+        const show = qHit && typeHit && ageHit;
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      const title = document.getElementById('results-title');
+      if (title) {
+        if (q) {
+          title.textContent = `Adoptable animals — ${visible} match${visible===1?'':'es'} for "${q}"`;
+        } else {
+          title.textContent = `Adoptable animals — ${visible} result${visible===1?'':'s'}`;
+        }
+      }
+    }
+    applyFilters();
+    filtersForm.addEventListener('change', applyFilters);
+
+    // Handle enquiry form submissions -> POST to backend
+    document.querySelectorAll('.enquiry-form').forEach(form => {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = form.querySelector('button[type="submit"]');
+        const status = form.querySelector('.enquiry-status');
+        const data = Object.fromEntries(new FormData(form).entries());
+        btn.disabled = true; btn.textContent = 'Sending…';
+        status.textContent = '';
+        try {
+          const sameOrigin = (window.location.origin && window.location.origin.startsWith('http'))
+            ? window.location.origin
+            : '';
+          const fallbacks = [
+            sameOrigin ? `${sameOrigin}/api/adoption-enquiries` : null,
+            'http://localhost:3000/api/adoption-enquiries'
+          ].filter(Boolean);
+
+          let res, body, lastErr;
+          for (const url of fallbacks) {
+            try {
+              res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+              });
+              body = await res.json().catch(() => ({}));
+              if (res.ok) break;
+              lastErr = new Error(body.error || `Request failed (${res.status})`);
+            } catch (e2) {
+              lastErr = e2;
+            }
+          }
+          if (!res || !res.ok) throw lastErr || new Error('Failed to submit');
+          status.textContent = 'Thank you! We will contact you soon.';
+          status.style.color = 'green';
+          form.reset();
+        } catch (err) {
+          console.error('Adoption enquiry submit failed:', err);
+          status.textContent = 'Submission failed. Please ensure the site is opened via http://localhost:3000 and try again.';
+          status.style.color = 'crimson';
+        } finally {
+          btn.disabled = false; btn.textContent = 'Send enquiry';
+        }
+      });
+    });
+  });
+</script>
+
+

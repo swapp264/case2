@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — Search</title>
+    <meta name="description" content="Search the StrayCare site">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+      .results { display: grid; gap: 1rem; margin-top: 1rem; }
+      .result { padding: 1rem; border:1px solid #e1e8ed; border-radius:12px; background: rgba(255,255,255,0.9); }
+      .result a { font-weight: 600; color:#8B4513; text-decoration: none; }
+      .meta { color:#555; font-size: .9rem; }
+      .snippet { margin-top:.35rem; color:#333; }
+      .muted { color:#777; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <a href="index.html" aria-label="StrayCare Home"><h1>StrayCare</h1></a>
+        <form class="site-search" role="search" aria-label="Site search" action="search.html" method="get">
+          <input type="search" name="q" placeholder="Search pets, services, help…" aria-label="Search" />
+          <button type="submit" aria-label="Search">🔍</button>
+        </form>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="adopt.html">Adopt</a></li>
+            <li><a href="donate.html">Donate</a></li>
+            <li><a href="volunteer.html">Volunteer</a></li>
+            <li><a href="emergency.html">Emergency</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <h2 id="title">Search</h2>
+        <p class="muted" id="desc">Type in the box above and press Enter to search the whole site.</p>
+        <div id="results" class="results" aria-live="polite"></div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>© <span id="year">2025</span> StrayCare • <a href="contact.html">Contact</a> • <a href="donate.html">Donate</a></p>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+      const params = new URLSearchParams(window.location.search);
+      const qRaw = (params.get('q') || '').trim();
+      const q = qRaw.toLowerCase();
+      const title = document.getElementById('title');
+      const desc = document.getElementById('desc');
+      const resultsEl = document.getElementById('results');
+      const pages = [
+        'index.html',
+        'about.html',
+        'adopt.html',
+        'donate.html',
+        'volunteer.html',
+        'emergency.html',
+        'contact.html',
+        'login.html',
+        'register.html',
+        'profile.html',
+        'settings.html'
+      ];
+
+      // prefill the input with the query
+      const input = document.querySelector('input[name="q"]');
+      if (input) input.value = qRaw;
+
+      if (!q) {
+        title.textContent = 'Search the site';
+        desc.textContent = 'Enter a search term above to find matches across all pages.';
+      } else {
+        title.textContent = `Results for "${qRaw}"`;
+        desc.textContent = 'Searching…';
+        searchAll();
+      }
+
+      function textFromHTML(html) {
+        const div = document.createElement('div');
+        div.innerHTML = html;
+        // remove script/style
+        div.querySelectorAll('script,style,noscript').forEach(n => n.remove());
+        return div.textContent || '';
+      }
+
+      function snippetAround(text, index, len = 160) {
+        const start = Math.max(0, index - Math.floor(len/2));
+        const end = Math.min(text.length, start + len);
+        let snip = text.slice(start, end).replace(/\s+/g, ' ').trim();
+        return (start>0? '…' : '') + snip + (end<text.length? '…' : '');
+      }
+
+      async function searchAll(){
+        try {
+          const results = await Promise.allSettled(
+            pages.map(async (p) => {
+              const res = await fetch(p, { cache: 'no-cache' });
+              if (!res.ok) throw new Error(`HTTP ${res.status}`);
+              const html = await res.text();
+              const text = textFromHTML(html);
+              const lc = text.toLowerCase();
+              const idx = lc.indexOf(q);
+              if (idx === -1) return null;
+              // extract title
+              const m = html.match(/<title>([^<]+)<\/title>/i);
+              const pageTitle = m ? m[1] : p;
+              return { page: p, title: pageTitle, snippet: snippetAround(text, idx) };
+            })
+          );
+
+          const matches = results
+            .filter(r => r.status === 'fulfilled' && r.value)
+            .map(r => r.value);
+
+          if (matches.length === 0) {
+            desc.textContent = 'No results found.';
+            resultsEl.innerHTML = '';
+            return;
+          }
+
+          desc.textContent = `${matches.length} result${matches.length===1?'':'s'} found`;
+          resultsEl.innerHTML = matches.map(m => `
+            <article class="result">
+              <a href="${m.page}">${m.title}</a>
+              <div class="meta">${m.page}</div>
+              <div class="snippet">${m.snippet.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+            </article>
+          `).join('');
+        } catch (e) {
+          console.error('Search failed:', e);
+          desc.textContent = 'Search failed. Please try again.';
+        }
+      }
+    </script>
+  </body>
+</html>

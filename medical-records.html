@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Medical Records — StrayCare</title>
+    <meta name="description" content="Track vaccination, deworming, and sterilization records for rescued animals.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="medical-records.css">
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <a href="index.html" aria-label="StrayCare Home">
+          <h1>StrayCare</h1>
+        </a>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="rescue-cases.html">Rescue Cases</a></li>
+            <li><a href="volunteers.html">Volunteers</a></li>
+            <li><a href="medical-records.html" class="active">Medical Records</a></li>
+            <li><a href="collaboration.html">Collaboration</a></li>
+          </ul>
+        </nav>
+        <div class="user-actions">
+          <div class="user-dropdown">
+            <button class="user-icon" aria-label="User Menu">👤 NGO Admin</button>
+            <div class="dropdown-menu">
+              <a href="profile.html">Profile</a>
+              <a href="settings.html">Settings</a>
+              <a href="#" onclick="authManager.logout()">Logout</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <!-- Page Header -->
+        <section class="page-header">
+          <div class="header-content">
+            <h1>Medical Records & Vaccination Tracking</h1>
+            <p>Comprehensive medical records management for rescued animals with automated reminders</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn-primary" onclick="openNewRecordModal()">+ Add New Record</button>
+            <button class="btn-secondary">Export Records</button>
+          </div>
+        </section>
+
+        <!-- Statistics Overview -->
+        <section class="stats-overview">
+          <div class="stat-card">
+            <div class="stat-icon">🏥</div>
+            <div class="stat-content">
+              <h3>Total Animals</h3>
+              <p class="stat-number">247</p>
+              <span class="stat-change positive">+12 this month</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">💉</div>
+            <div class="stat-content">
+              <h3>Vaccinations Due</h3>
+              <p class="stat-number">23</p>
+              <span class="stat-change warning">Due this week</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🩺</div>
+            <div class="stat-content">
+              <h3>Sterilized</h3>
+              <p class="stat-number">189</p>
+              <span class="stat-change positive">76% completion</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📋</div>
+            <div class="stat-content">
+              <h3>Health Checks</h3>
+              <p class="stat-number">156</p>
+              <span class="stat-change positive">This month</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Filters and Search -->
+        <section class="filters-section">
+          <div class="search-box">
+            <input type="text" placeholder="Search by animal name, ID, or breed..." id="searchInput">
+            <button class="search-btn">🔍</button>
+          </div>
+          <div class="filter-options">
+            <select id="statusFilter">
+              <option value="">All Status</option>
+              <option value="healthy">Healthy</option>
+              <option value="under-treatment">Under Treatment</option>
+              <option value="recovered">Recovered</option>
+              <option value="critical">Critical</option>
+            </select>
+            <select id="vaccinationFilter">
+              <option value="">All Vaccinations</option>
+              <option value="due">Due</option>
+              <option value="up-to-date">Up to Date</option>
+              <option value="overdue">Overdue</option>
+            </select>
+            <select id="sterilizationFilter">
+              <option value="">Sterilization Status</option>
+              <option value="done">Done</option>
+              <option value="scheduled">Scheduled</option>
+              <option value="not-done">Not Done</option>
+            </select>
+          </div>
+        </section>
+
+        <!-- Medical Records Table -->
+        <section class="records-section">
+          <div class="table-container">
+            <table class="medical-records-table">
+              <thead>
+                <tr>
+                  <th>Animal ID</th>
+                  <th>Name</th>
+                  <th>Breed</th>
+                  <th>Age</th>
+                  <th>Status</th>
+                  <th>Last Vaccination</th>
+                  <th>Next Due</th>
+                  <th>Sterilization</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>#SC001</td>
+                  <td>Buddy</td>
+                  <td>Golden Retriever</td>
+                  <td>2 years</td>
+                  <td><span class="status-badge healthy">Healthy</span></td>
+                  <td>2024-01-15</td>
+                  <td><span class="due-date warning">2024-04-15</span></td>
+                  <td><span class="status-badge done">Done</span></td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-small" onclick="viewRecord('SC001')">View</button>
+                      <button class="btn-small" onclick="editRecord('SC001')">Edit</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>#SC002</td>
+                  <td>Luna</td>
+                  <td>Persian Cat</td>
+                  <td>1 year</td>
+                  <td><span class="status-badge under-treatment">Under Treatment</span></td>
+                  <td>2024-02-20</td>
+                  <td><span class="due-date normal">2024-05-20</span></td>
+                  <td><span class="status-badge done">Done</span></td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-small" onclick="viewRecord('SC002')">View</button>
+                      <button class="btn-small" onclick="editRecord('SC002')">Edit</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>#SC003</td>
+                  <td>Max</td>
+                  <td>Labrador</td>
+                  <td>3 years</td>
+                  <td><span class="status-badge healthy">Healthy</span></td>
+                  <td>2024-03-10</td>
+                  <td><span class="due-date overdue">2024-04-10</span></td>
+                  <td><span class="status-badge scheduled">Scheduled</span></td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-small" onclick="viewRecord('SC003')">View</button>
+                      <button class="btn-small" onclick="editRecord('SC003')">Edit</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>#SC004</td>
+                  <td>Bella</td>
+                  <td>Siamese Cat</td>
+                  <td>6 months</td>
+                  <td><span class="status-badge critical">Critical</span></td>
+                  <td>2024-01-05</td>
+                  <td><span class="due-date overdue">2024-03-05</span></td>
+                  <td><span class="status-badge not-done">Not Done</span></td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-small" onclick="viewRecord('SC004')">View</button>
+                      <button class="btn-small" onclick="editRecord('SC004')">Edit</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Reminders Section -->
+        <section class="reminders-section">
+          <h2>Upcoming Reminders</h2>
+          <div class="reminders-grid">
+            <div class="reminder-card urgent">
+              <div class="reminder-icon">⚠️</div>
+              <div class="reminder-content">
+                <h3>Bella - Vaccination Overdue</h3>
+                <p>Rabies vaccination was due on March 5, 2024</p>
+                <span class="reminder-date">Overdue by 15 days</span>
+              </div>
+              <button class="btn-small">Schedule Now</button>
+            </div>
+            <div class="reminder-card warning">
+              <div class="reminder-icon">📅</div>
+              <div class="reminder-content">
+                <h3>Buddy - Vaccination Due</h3>
+                <p>Annual vaccination due on April 15, 2024</p>
+                <span class="reminder-date">Due in 5 days</span>
+              </div>
+              <button class="btn-small">Schedule Now</button>
+            </div>
+            <div class="reminder-card info">
+              <div class="reminder-icon">🩺</div>
+              <div class="reminder-content">
+                <h3>Max - Sterilization Scheduled</h3>
+                <p>Sterilization surgery scheduled for April 20, 2024</p>
+                <span class="reminder-date">In 10 days</span>
+              </div>
+              <button class="btn-small">View Details</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- New Record Modal -->
+    <div id="newRecordModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Add New Medical Record</h2>
+          <button class="close-btn" onclick="closeNewRecordModal()">&times;</button>
+        </div>
+        <form class="medical-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="animalName">Animal Name</label>
+              <input type="text" id="animalName" required>
+            </div>
+            <div class="form-group">
+              <label for="animalBreed">Breed</label>
+              <input type="text" id="animalBreed" required>
+            </div>
+            <div class="form-group">
+              <label for="animalAge">Age</label>
+              <input type="text" id="animalAge" placeholder="e.g., 2 years" required>
+            </div>
+            <div class="form-group">
+              <label for="animalStatus">Health Status</label>
+              <select id="animalStatus" required>
+                <option value="">Select Status</option>
+                <option value="healthy">Healthy</option>
+                <option value="under-treatment">Under Treatment</option>
+                <option value="recovered">Recovered</option>
+                <option value="critical">Critical</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-section">
+            <h3>Vaccination Details</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="lastVaccination">Last Vaccination Date</label>
+                <input type="date" id="lastVaccination">
+              </div>
+              <div class="form-group">
+                <label for="vaccinationType">Vaccination Type</label>
+                <select id="vaccinationType">
+                  <option value="">Select Type</option>
+                  <option value="rabies">Rabies</option>
+                  <option value="dhpp">DHPP</option>
+                  <option value="fvrcp">FVRCP</option>
+                  <option value="bordetella">Bordetella</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Sterilization Status</h3>
+            <div class="form-group">
+              <label for="sterilizationStatus">Status</label>
+              <select id="sterilizationStatus">
+                <option value="">Select Status</option>
+                <option value="done">Done</option>
+                <option value="scheduled">Scheduled</option>
+                <option value="not-done">Not Done</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="sterilizationDate">Date (if done/scheduled)</label>
+              <input type="date" id="sterilizationDate">
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Additional Notes</h3>
+            <div class="form-group">
+              <label for="medicalNotes">Medical Notes</label>
+              <textarea id="medicalNotes" rows="4" placeholder="Enter any additional medical information..."></textarea>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" onclick="closeNewRecordModal()">Cancel</button>
+            <button type="submit" class="btn-primary">Save Record</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <footer>
+      <div class="container">
+        <div class="footer-top">
+          <p>
+            © <span id="year">2025</span> StrayCare
+            • <a href="contact.html">Contact</a>
+            • <a href="donate.html">Donate</a>
+          </p>
+          <div class="social-links" aria-label="Social media">
+            <a href="#" aria-label="Follow on Twitter">🐦</a>
+            <a href="#" aria-label="Follow on Instagram">📸</a>
+            <a href="#" aria-label="Follow on Facebook">📘</a>
+            <a href="#" aria-label="Follow on YouTube">▶️</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="medical-records.js"></script>
+</body>
+</html>

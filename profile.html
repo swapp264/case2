@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — Profile</title>
+    <meta name="description" content="User Profile - StrayCare">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" aria-label="StrayCare Home">
+                <h1>StrayCare</h1>
+            </a>
+            <nav aria-label="Primary">
+                <ul>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="adopt.html">Adopt</a></li>
+                    <li><a href="donate.html">Donate</a></li>
+                    <li><a href="volunteer.html">Volunteer</a></li>
+                    <li><a href="emergency.html">Emergency</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li class="ngo-section" style="display: none;">
+                        <a href="dashboard.html">NGO Dashboard</a>
+                        <ul class="submenu">
+                            <li><a href="dashboard.html">Overview</a></li>
+                            <li><a href="rescue-cases.html">Rescue Cases</a></li>
+                            <li><a href="medical-records.html">Medical Records</a></li>
+                            <li><a href="volunteers.html">Volunteer Management</a></li>
+                            <li><a href="collaboration.html">Collaboration Hub</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <div class="user-dropdown">
+                    <button class="user-icon" aria-label="User Menu">👤</button>
+                    <div class="dropdown-menu">
+                        <a href="login.html">Login</a>
+                        <a href="register.html">Register (User)</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="profile-section">
+                <h2>User Profile</h2>
+                <div id="profile-content">
+                    <!-- Profile content will be populated by JavaScript -->
+                    <div class="profile-card">
+                        <div class="profile-info">
+                            <h3 id="user-name">Loading...</h3>
+                            <p id="user-email">Loading...</p>
+                            <p id="user-type">Loading...</p>
+                            <p id="user-id">Loading...</p>
+                        </div>
+                        <div class="profile-actions">
+                            <button class="btn-primary" onclick="editProfile()">Edit Profile</button>
+                            <button class="btn-secondary" onclick="authManager.logout()">Logout</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="no-profile" style="display: none;">
+                    <p>Please login to view your profile.</p>
+                    <a href="login.html" class="btn-primary">Login</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <p>
+                    © <span id="year">2025</span> StrayCare
+                    • <a href="contact.html">Contact</a>
+                    • <a href="donate.html">Donate</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script>
+        function loadProfile() {
+            if (authManager.isLoggedIn()) {
+                const user = authManager.getCurrentUser();
+                const userType = authManager.getUserType();
+                
+                document.getElementById('user-name').textContent = user.name || 'N/A';
+                document.getElementById('user-email').textContent = user.email || 'N/A';
+                document.getElementById('user-type').textContent = `Account Type: ${userType.toUpperCase()}`;
+                document.getElementById('user-id').textContent = `ID: ${user.id || 'N/A'}`;
+                
+                document.getElementById('profile-content').style.display = 'block';
+                document.getElementById('no-profile').style.display = 'none';
+            } else {
+                document.getElementById('profile-content').style.display = 'none';
+                document.getElementById('no-profile').style.display = 'block';
+            }
+        }
+
+        function editProfile() {
+            alert('Edit profile functionality would be implemented here.');
+        }
+
+        // Load profile on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProfile();
+        });
+
+        // Set year
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

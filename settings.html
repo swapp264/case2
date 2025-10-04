@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — Settings</title>
+    <meta name="description" content="Settings - StrayCare">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" aria-label="StrayCare Home">
+                <h1>StrayCare</h1>
+            </a>
+            <nav aria-label="Primary">
+                <ul>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="adopt.html">Adopt</a></li>
+                    <li><a href="donate.html">Donate</a></li>
+                    <li><a href="volunteer.html">Volunteer</a></li>
+                    <li><a href="emergency.html">Emergency</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li class="ngo-section" style="display: none;">
+                        <a href="dashboard.html">NGO Dashboard</a>
+                        <ul class="submenu">
+                            <li><a href="dashboard.html">Overview</a></li>
+                            <li><a href="rescue-cases.html">Rescue Cases</a></li>
+                            <li><a href="medical-records.html">Medical Records</a></li>
+                            <li><a href="volunteers.html">Volunteer Management</a></li>
+                            <li><a href="collaboration.html">Collaboration Hub</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <div class="user-dropdown">
+                    <button class="user-icon" aria-label="User Menu">👤</button>
+                    <div class="dropdown-menu">
+                        <a href="login.html">Login</a>
+                        <a href="register.html">Register (User)</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="settings-section">
+                <h2>Settings</h2>
+                <div id="settings-content">
+                    <!-- Settings content will be populated by JavaScript -->
+                    <div class="settings-card">
+                        <h3>NGO/Admin Settings</h3>
+                        <div class="settings-group">
+                            <h4>Organization Information</h4>
+                            <div class="form-group">
+                                <label for="org-name">Organization Name:</label>
+                                <input type="text" id="org-name" placeholder="Enter organization name">
+                            </div>
+                            <div class="form-group">
+                                <label for="org-email">Contact Email:</label>
+                                <input type="email" id="org-email" placeholder="Enter contact email">
+                            </div>
+                            <div class="form-group">
+                                <label for="org-phone">Phone Number:</label>
+                                <input type="tel" id="org-phone" placeholder="Enter phone number">
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <h4>Notification Preferences</h4>
+                            <div class="checkbox-group">
+                                <label>
+                                    <input type="checkbox" id="email-notifications" checked>
+                                    Email notifications for new rescue cases
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label>
+                                    <input type="checkbox" id="sms-notifications">
+                                    SMS notifications for urgent cases
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label>
+                                    <input type="checkbox" id="volunteer-notifications" checked>
+                                    Notifications for volunteer activities
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <h4>Dashboard Preferences</h4>
+                            <div class="checkbox-group">
+                                <label>
+                                    <input type="checkbox" id="show-stats" checked>
+                                    Show statistics on dashboard
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label>
+                                    <input type="checkbox" id="auto-refresh" checked>
+                                    Auto-refresh dashboard data
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-actions">
+                            <button class="btn-primary" onclick="saveSettings()">Save Settings</button>
+                            <button class="btn-secondary" onclick="resetSettings()">Reset to Default</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="no-access" style="display: none;">
+                    <p>Access denied. NGO or Admin login required to access settings.</p>
+                    <a href="login.html" class="btn-primary">Login</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <p>
+                    © <span id="year">2025</span> StrayCare
+                    • <a href="contact.html">Contact</a>
+                    • <a href="donate.html">Donate</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script>
+        function loadSettings() {
+            if (authManager.isNGOOrAdmin()) {
+                const user = authManager.getCurrentUser();
+                
+                // Populate form with user data
+                document.getElementById('org-name').value = user.name || '';
+                document.getElementById('org-email').value = user.email || '';
+                
+                document.getElementById('settings-content').style.display = 'block';
+                document.getElementById('no-access').style.display = 'none';
+            } else {
+                document.getElementById('settings-content').style.display = 'none';
+                document.getElementById('no-access').style.display = 'block';
+            }
+        }
+
+        function saveSettings() {
+            if (!authManager.isNGOOrAdmin()) {
+                alert('Access denied. NGO or Admin login required.');
+                return;
+            }
+
+            // Get form values
+            const orgName = document.getElementById('org-name').value;
+            const orgEmail = document.getElementById('org-email').value;
+            const orgPhone = document.getElementById('org-phone').value;
+            const emailNotifications = document.getElementById('email-notifications').checked;
+            const smsNotifications = document.getElementById('sms-notifications').checked;
+            const volunteerNotifications = document.getElementById('volunteer-notifications').checked;
+            const showStats = document.getElementById('show-stats').checked;
+            const autoRefresh = document.getElementById('auto-refresh').checked;
+
+            // Save settings (in a real app, this would be sent to a server)
+            const settings = {
+                orgName,
+                orgEmail,
+                orgPhone,
+                notifications: {
+                    email: emailNotifications,
+                    sms: smsNotifications,
+                    volunteer: volunteerNotifications
+                },
+                dashboard: {
+                    showStats,
+                    autoRefresh
+                }
+            };
+
+            localStorage.setItem('straycare_settings', JSON.stringify(settings));
+            alert('Settings saved successfully!');
+        }
+
+        function resetSettings() {
+            if (confirm('Are you sure you want to reset all settings to default?')) {
+                localStorage.removeItem('straycare_settings');
+                
+                // Reset form to defaults
+                document.getElementById('org-name').value = '';
+                document.getElementById('org-email').value = '';
+                document.getElementById('org-phone').value = '';
+                document.getElementById('email-notifications').checked = true;
+                document.getElementById('sms-notifications').checked = false;
+                document.getElementById('volunteer-notifications').checked = true;
+                document.getElementById('show-stats').checked = true;
+                document.getElementById('auto-refresh').checked = true;
+                
+                alert('Settings reset to default values.');
+            }
+        }
+
+        function loadSavedSettings() {
+            const savedSettings = localStorage.getItem('straycare_settings');
+            if (savedSettings) {
+                const settings = JSON.parse(savedSettings);
+                
+                document.getElementById('org-name').value = settings.orgName || '';
+                document.getElementById('org-email').value = settings.orgEmail || '';
+                document.getElementById('org-phone').value = settings.orgPhone || '';
+                
+                if (settings.notifications) {
+                    document.getElementById('email-notifications').checked = settings.notifications.email;
+                    document.getElementById('sms-notifications').checked = settings.notifications.sms;
+                    document.getElementById('volunteer-notifications').checked = settings.notifications.volunteer;
+                }
+                
+                if (settings.dashboard) {
+                    document.getElementById('show-stats').checked = settings.dashboard.showStats;
+                    document.getElementById('auto-refresh').checked = settings.dashboard.autoRefresh;
+                }
+            }
+        }
+
+        // Load settings on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            loadSavedSettings();
+        });
+
+        // Set year
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+
+    <style>
+        .settings-section {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .settings-card {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .settings-group {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .settings-group:last-of-type {
+            border-bottom: none;
+        }
+
+        .settings-group h4 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .checkbox-group {
+            margin-bottom: 0.75rem;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+
+        .settings-actions {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        #no-access {
+            text-align: center;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+    </style>
+</body>
+</html>

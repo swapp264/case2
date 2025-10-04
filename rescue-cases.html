@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — Rescue Cases Management</title>
+    <meta name="description" content="Manage rescue cases, track status, and assign volunteers">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="rescue-cases.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" aria-label="StrayCare Home">
+                <h1>StrayCare</h1>
+            </a>
+            <nav aria-label="Primary">
+                <ul>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="rescue-cases.html" class="active">Rescue Cases</a></li>
+                    <li><a href="volunteers.html">Volunteers</a></li>
+                    <li><a href="medical-records.html">Medical Records</a></li>
+                    <li><a href="collaboration.html">Collaboration</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <div class="user-dropdown">
+                    <button class="user-icon" aria-label="User Menu">👤 NGO Admin</button>
+                    <div class="dropdown-menu">
+                        <a href="profile.html">Profile</a>
+                        <a href="settings.html">Settings</a>
+                        <a href="#" onclick="authManager.logout()">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Page Header -->
+            <section class="page-header">
+                <div class="header-content">
+                    <h1>Rescue Cases Management</h1>
+                    <p>Track and manage all rescue cases, assign volunteers, and update status</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-primary" onclick="openNewCaseModal()">+ New Case</button>
+                    <button class="btn-secondary" onclick="exportCases()">Export Data</button>
+                </div>
+            </section>
+
+            <!-- Filters and Search -->
+            <section class="filters-section">
+                <div class="filters-grid">
+                    <div class="search-box">
+                        <input type="text" placeholder="Search cases..." id="searchCases">
+                        <button class="search-btn">🔍</button>
+                    </div>
+                    <div class="filter-group">
+                        <select id="statusFilter">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="rescued">Rescued</option>
+                            <option value="treated">Treated</option>
+                            <option value="adopted">Adopted</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <select id="locationFilter">
+                            <option value="">All Locations</option>
+                            <option value="bandra">Bandra</option>
+                            <option value="andheri">Andheri</option>
+                            <option value="juhu">Juhu</option>
+                            <option value="dadar">Dadar</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <select id="priorityFilter">
+                            <option value="">All Priorities</option>
+                            <option value="high">High Priority</option>
+                            <option value="medium">Medium Priority</option>
+                            <option value="low">Low Priority</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cases Grid -->
+            <section class="cases-section">
+                <div class="cases-header">
+                    <h2>All Rescue Cases</h2>
+                    <div class="cases-stats">
+                        <span class="stat">Total: 24</span>
+                        <span class="stat pending">Pending: 8</span>
+                        <span class="stat in-progress">In Progress: 12</span>
+                        <span class="stat rescued">Rescued: 4</span>
+                    </div>
+                </div>
+                
+                <div class="cases-grid" id="casesGrid">
+                    <!-- Case Card 1 -->
+                    <div class="case-card" data-status="pending" data-location="bandra" data-priority="high">
+                        <div class="case-image">
+                            <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=200&fit=crop" alt="Injured dog">
+                            <span class="status-badge pending">Pending</span>
+                            <span class="priority-badge high">High Priority</span>
+                        </div>
+                        <div class="case-info">
+                            <h3>Injured Dog - Bandra West</h3>
+                            <div class="case-details">
+                                <p><strong>Reported by:</strong> Priya Sharma</p>
+                                <p><strong>Location:</strong> Bandra West, Mumbai</p>
+                                <p><strong>Reported:</strong> 2 hours ago</p>
+                                <p><strong>Animal Type:</strong> Dog (Mixed Breed)</p>
+                                <p><strong>Condition:</strong> Injured leg, limping</p>
+                            </div>
+                            <div class="case-actions">
+                                <button class="btn-primary" onclick="assignVolunteer('case1')">Assign Volunteer</button>
+                                <button class="btn-secondary" onclick="viewCaseDetails('case1')">View Details</button>
+                                <button class="btn-secondary" onclick="updateStatus('case1')">Update Status</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Case Card 2 -->
+                    <div class="case-card" data-status="in-progress" data-location="andheri" data-priority="medium">
+                        <div class="case-image">
+                            <img src="https://images.unsplash.com/photo-1514888286974-6c03e2a1a220?w=300&h=200&fit=crop" alt="Sick cat">
+                            <span class="status-badge in-progress">In Progress</span>
+                            <span class="priority-badge medium">Medium Priority</span>
+                        </div>
+                        <div class="case-info">
+                            <h3>Sick Cat - Andheri East</h3>
+                            <div class="case-details">
+                                <p><strong>Reported by:</strong> Amit Patel</p>
+                                <p><strong>Location:</strong> Andheri East, Mumbai</p>
+                                <p><strong>Assigned to:</strong> Dr. Meera</p>
+                                <p><strong>Animal Type:</strong> Cat (Domestic)</p>
+                                <p><strong>Condition:</strong> Respiratory infection</p>
+                            </div>
+                            <div class="case-actions">
+                                <button class="btn-primary" onclick="updateStatus('case2')">Update Status</button>
+                                <button class="btn-secondary" onclick="viewCaseDetails('case2')">View Details</button>
+                                <button class="btn-secondary" onclick="addMedicalRecord('case2')">Medical Record</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Case Card 3 -->
+                    <div class="case-card" data-status="rescued" data-location="juhu" data-priority="low">
+                        <div class="case-image">
+                            <img src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=300&h=200&fit=crop" alt="Abandoned puppies">
+                            <span class="status-badge rescued">Rescued</span>
+                            <span class="priority-badge low">Low Priority</span>
+                        </div>
+                        <div class="case-info">
+                            <h3>Abandoned Puppies - Juhu Beach</h3>
+                            <div class="case-details">
+                                <p><strong>Reported by:</strong> Neha Sharma</p>
+                                <p><strong>Location:</strong> Juhu Beach, Mumbai</p>
+                                <p><strong>Rescued by:</strong> Rahul Kumar</p>
+                                <p><strong>Animal Type:</strong> Puppies (3)</p>
+                                <p><strong>Condition:</strong> Healthy, need vaccination</p>
+                            </div>
+                            <div class="case-actions">
+                                <button class="btn-primary" onclick="scheduleVaccination('case3')">Schedule Vaccination</button>
+                                <button class="btn-secondary" onclick="viewCaseDetails('case3')">View Details</button>
+                                <button class="btn-secondary" onclick="prepareAdoption('case3')">Prepare for Adoption</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Case Card 4 -->
+                    <div class="case-card" data-status="treated" data-location="dadar" data-priority="medium">
+                        <div class="case-image">
+                            <img src="https://images.unsplash.com/photo-1543852786-1cf6624b998d?w=300&h=200&fit=crop" alt="Recovering dog">
+                            <span class="status-badge treated">Treated</span>
+                            <span class="priority-badge medium">Medium Priority</span>
+                        </div>
+                        <div class="case-info">
+                            <h3>Recovering Dog - Dadar</h3>
+                            <div class="case-details">
+                                <p><strong>Reported by:</strong> Rajesh Kumar</p>
+                                <p><strong>Location:</strong> Dadar, Mumbai</p>
+                                <p><strong>Treated by:</strong> Dr. Priya Singh</p>
+                                <p><strong>Animal Type:</strong> Dog (Labrador Mix)</p>
+                                <p><strong>Condition:</strong> Post-surgery recovery</p>
+                            </div>
+                            <div class="case-actions">
+                                <button class="btn-primary" onclick="scheduleFollowUp('case4')">Schedule Follow-up</button>
+                                <button class="btn-secondary" onclick="viewCaseDetails('case4')">View Details</button>
+                                <button class="btn-secondary" onclick="prepareAdoption('case4')">Prepare for Adoption</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                    <button class="page-btn" disabled>Previous</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">Next</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- New Case Modal -->
+    <div id="newCaseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create New Rescue Case</h2>
+                <button class="close-btn" onclick="closeNewCaseModal()">&times;</button>
+            </div>
+            <form class="case-form">
+                <div class="form-group">
+                    <label for="caseTitle">Case Title</label>
+                    <input type="text" id="caseTitle" required placeholder="e.g., Injured Dog - Bandra West">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="animalType">Animal Type</label>
+                        <select id="animalType" required>
+                            <option value="">Select Animal Type</option>
+                            <option value="dog">Dog</option>
+                            <option value="cat">Cat</option>
+                            <option value="puppy">Puppy</option>
+                            <option value="kitten">Kitten</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="priority">Priority</label>
+                        <select id="priority" required>
+                            <option value="">Select Priority</option>
+                            <option value="high">High Priority</option>
+                            <option value="medium">Medium Priority</option>
+                            <option value="low">Low Priority</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" required placeholder="e.g., Bandra West, Mumbai">
+                </div>
+                <div class="form-group">
+                    <label for="condition">Condition Description</label>
+                    <textarea id="condition" rows="3" required placeholder="Describe the animal's condition..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="reporterName">Reporter Name</label>
+                    <input type="text" id="reporterName" required placeholder="Name of person who reported">
+                </div>
+                <div class="form-group">
+                    <label for="reporterPhone">Reporter Contact</label>
+                    <input type="tel" id="reporterPhone" required placeholder="Phone number">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeNewCaseModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Create Case</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <p>
+                    © <span id="year">2025</span> StrayCare
+                    • <a href="contact.html">Contact</a>
+                    • <a href="donate.html">Donate</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="rescue-cases.js"></script>
+</body>
+</html>

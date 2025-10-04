@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — NGO Dashboard</title>
+    <meta name="description" content="NGO Dashboard for managing rescue cases, volunteers, and collaborations">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" aria-label="StrayCare Home">
+                <h1>StrayCare</h1>
+            </a>
+            <nav aria-label="Primary">
+                <ul>
+                    <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                    <li><a href="rescue-cases.html">Rescue Cases</a></li>
+                    <li><a href="volunteers.html">Volunteers</a></li>
+                    <li><a href="medical-records.html">Medical Records</a></li>
+                    <li><a href="collaboration.html">Collaboration</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <div class="user-dropdown">
+                    <button class="user-icon" aria-label="User Menu">👤 NGO Admin</button>
+                    <div class="dropdown-menu">
+                        <a href="profile.html">Profile</a>
+                        <a href="settings.html">Settings</a>
+                        <a href="#" onclick="authManager.logout()">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Dashboard Overview -->
+            <section class="dashboard-overview">
+                <h2>Dashboard Overview</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🚨</div>
+                        <div class="stat-content">
+                            <h3>Active Cases</h3>
+                            <p class="stat-number">24</p>
+                            <p class="stat-change positive">+3 this week</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏥</div>
+                        <div class="stat-content">
+                            <h3>Under Treatment</h3>
+                            <p class="stat-number">12</p>
+                            <p class="stat-change">5 need follow-up</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏠</div>
+                        <div class="stat-content">
+                            <h3>Ready for Adoption</h3>
+                            <p class="stat-number">8</p>
+                            <p class="stat-change positive">2 adopted this week</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-content">
+                            <h3>Active Volunteers</h3>
+                            <p class="stat-number">45</p>
+                            <p class="stat-change positive">+5 new volunteers</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recent Rescue Cases -->
+            <section class="recent-cases">
+                <div class="section-header">
+                    <h2>Recent Rescue Cases</h2>
+                    <a href="rescue-cases.html" class="view-all">View All Cases</a>
+                </div>
+                <div class="cases-grid">
+                    <!-- Cases will be loaded dynamically by dashboard.js -->
+                    <div class="loading-message">
+                        <p>Loading recent cases...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Volunteer Schedule -->
+            <section class="volunteer-schedule">
+                <div class="section-header">
+                    <h2>Today's Volunteer Schedule</h2>
+                    <a href="volunteers.html" class="view-all">Manage Schedule</a>
+                </div>
+                <div class="schedule-grid">
+                    <div class="schedule-card">
+                        <div class="schedule-time">09:00 AM</div>
+                        <div class="schedule-info">
+                            <h3>Morning Feeding Round</h3>
+                            <p>Volunteer: Rahul Kumar</p>
+                            <p>Location: Bandra West Area</p>
+                            <span class="schedule-status confirmed">Confirmed</span>
+                        </div>
+                    </div>
+                    <div class="schedule-card">
+                        <div class="schedule-time">02:00 PM</div>
+                        <div class="schedule-info">
+                            <h3>Vet Visit - Vaccination Drive</h3>
+                            <p>Volunteer: Dr. Priya Singh</p>
+                            <p>Location: Andheri Shelter</p>
+                            <span class="schedule-status confirmed">Confirmed</span>
+                        </div>
+                    </div>
+                    <div class="schedule-card">
+                        <div class="schedule-time">06:00 PM</div>
+                        <div class="schedule-info">
+                            <h3>Evening Feeding Round</h3>
+                            <p>Volunteer: Neha Sharma</p>
+                            <p>Location: Juhu Beach Area</p>
+                            <span class="schedule-status pending">Pending</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Medical Reminders -->
+            <section class="medical-reminders">
+                <div class="section-header">
+                    <h2>Medical Reminders</h2>
+                    <a href="medical-records.html" class="view-all">View All Records</a>
+                </div>
+                <div class="reminders-list">
+                    <div class="reminder-item urgent">
+                        <div class="reminder-icon">⚠️</div>
+                        <div class="reminder-content">
+                            <h3>Buddy - Vaccination Due</h3>
+                            <p>Second vaccination due in 2 days</p>
+                            <p>Last vaccination: 2 weeks ago</p>
+                        </div>
+                        <button class="btn-primary" onclick="openMedicalScheduler('buddy-vaccination', 'Buddy - Vaccination Due', 'vaccination')">Schedule</button>
+                    </div>
+                    <div class="reminder-item">
+                        <div class="reminder-icon">💉</div>
+                        <div class="reminder-content">
+                            <h3>Luna - Deworming</h3>
+                            <p>Deworming due in 1 week</p>
+                            <p>Last deworming: 3 weeks ago</p>
+                        </div>
+                        <button class="btn-secondary" onclick="openMedicalScheduler('luna-deworming', 'Luna - Deworming', 'deworming')">Schedule</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Collaboration Requests -->
+            <section class="collaboration-requests">
+                <div class="section-header">
+                    <h2>Collaboration Requests</h2>
+                    <a href="collaboration.html" class="view-all">View All</a>
+                </div>
+                <div class="collaboration-list">
+                    <div class="collaboration-item">
+                        <div class="collaboration-info">
+                            <h3>Joint Adoption Drive</h3>
+                            <p>From: Pawsome Rescue, Thane</p>
+                            <p>Proposal: Joint adoption event this weekend</p>
+                            <p>Shared resources: Venue, volunteers, marketing</p>
+                        </div>
+                        <div class="collaboration-actions">
+                            <button class="btn-primary">Accept</button>
+                            <button class="btn-secondary">Discuss</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <p>
+                    © <span id="year">2025</span> StrayCare
+                    • <a href="contact.html">Contact</a>
+                    • <a href="donate.html">Donate</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

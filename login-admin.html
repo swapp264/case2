@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — Admin Login</title>
+    <meta name="description" content="Login to StrayCare admin dashboard.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <a href="index.html" aria-label="StrayCare Home">
+          <h1>StrayCare</h1>
+        </a>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="adopt.html">Adopt</a></li>
+            <li><a href="donate.html">Donate</a></li>
+            <li><a href="volunteer.html">Volunteer</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="login-admin.html" aria-current="page">Admin Login</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <section class="auth-section" aria-labelledby="login-title">
+          <h2 id="login-title">Admin Sign In</h2>
+          <p>Secure access for StrayCare administrators.</p>
+
+          <form class="auth-form" id="admin-login-form">
+            <label>
+              Admin Email or ID
+              <input type="text" name="adminId" placeholder="admin@example.com or ADMIN-001" required>
+            </label>
+            <label>
+              Password
+              <input type="password" name="password" placeholder="Enter your password" required>
+            </label>
+            <div class="form-options">
+              <label class="checkbox-label">
+                <input type="checkbox" name="remember">
+                Remember me
+              </label>
+              <a href="#" class="forgot-link">Forgot password?</a>
+            </div>
+            <button type="submit">Sign In as Admin</button>
+          </form>
+          
+          <div class="auth-footer">
+            <p>Admin access is managed by StrayCare. Registration is not available here.</p>
+            <div class="login-links" style="margin-top: 1.5rem; display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+              <a href="login-user.html" class="login-link-btn">User Login</a>
+              <a href="login-ngo.html" class="login-link-btn">NGO Login</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>
+          © <span id="year">2025</span> StrayCare
+          • <a href="contact.html">Contact</a>
+          • <a href="donate.html">Donate</a>
+        </p>
+      </div>
+    </footer>
+
+    <style>
+      .login-link-btn {
+        display: inline-block;
+        padding: 0.5rem 1.5rem;
+        background: linear-gradient(135deg, #FF8C00 0%, #FF6347 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(255, 140, 0, 0.3);
+      }
+      .login-link-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 140, 0, 0.5);
+      }
+    </style>
+
+    <script>
+      // Form submission
+      document.getElementById('admin-login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const adminId = this.adminId.value;
+        const password = this.password.value;
+        
+        // Simulate admin login
+        console.log('Admin login:', adminId);
+        alert('Admin login successful! Redirecting to admin dashboard...');
+        window.location.href = 'dashboard.html';
+      });
+
+      // Set year
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

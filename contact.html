@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — Contact</title>
+    <meta name="description" content="Contact StrayCare for rescue, adoption, and support.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <a href="index.html" aria-label="StrayCare Home">
+          <h1>StrayCare</h1>
+        </a>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="adopt.html">Adopt</a></li>
+            <li><a href="donate.html">Donate</a></li>
+            <li><a href="volunteer.html">Volunteer</a></li>
+            <li><a href="emergency.html">Emergency</a></li>
+            <li><a href="contact.html" aria-current="page">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="user-actions">
+          <div class="user-dropdown">
+            <button class="user-icon" aria-label="User Menu">👤</button>
+            <div class="dropdown-menu">
+              <a href="login.html">Login</a>
+              <a href="register.html">Register (User)</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <section aria-labelledby="get-in-touch-title">
+          <h2 id="get-in-touch-title">Get in touch</h2>
+          <form>
+            <label>
+              Name
+              <input type="text" name="name" placeholder="Your full name">
+            </label>
+            <label>
+              Email
+              <input type="email" name="email" placeholder="you@example.com">
+            </label>
+            <label>
+              Message
+              <textarea name="message" rows="5" placeholder="How can we help?"></textarea>
+            </label>
+            <button type="submit">Send</button>
+          </form>
+        </section>
+
+        <section aria-labelledby="details-title" class="contact-details">
+          <div class="contact-info">
+            <h2 id="details-title">Details</h2>
+            <address>
+              StrayCare Shelter<br>
+              123 Paw Lane, City, State<br>
+              Phone: <a href="tel:+10000000000">+1 000 000 0000</a><br>
+              Email: <a href="mailto:hello@stray.care">hello@stray.care</a>
+            </address>
+          </div>
+          <div class="contact-image">
+            <img src="https://images.unsplash.com/photo-1587764379873-97837921fd44?w=400&h=300&fit=crop&crop=center" alt="StrayCare shelter" loading="lazy">
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>
+          © <span id="year">2025</span> StrayCare
+          • <a href="contact.html" aria-current="page">Contact</a>
+          • <a href="donate.html">Donate</a>
+        </p>
+      </div>
+    </footer>
+    
+    <style>
+      /* Fix input text visibility */
+      input, textarea, select {
+        background: rgba(255, 255, 255, 0.95) !important;
+        color: #333 !important;
+        border: 2px solid #e1e8ed !important;
+      }
+      
+      input::placeholder, textarea::placeholder {
+        color: #666 !important;
+      }
+      
+      /* Fix contact details visibility */
+      .contact-details address {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 1.5rem;
+        border-radius: 12px;
+        border-left: 4px solid #FF8C00;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      }
+      
+      .contact-details address a {
+        color: #FF8C00 !important;
+        font-weight: 600 !important;
+        text-decoration: underline !important;
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        background: rgba(255, 140, 0, 0.1);
+        border-radius: 6px;
+        margin: 0.25rem 0;
+      }
+      
+      .contact-details address a:hover {
+        color: #FF6347 !important;
+        background: rgba(255, 99, 71, 0.15) !important;
+        text-decoration: none !important;
+        transform: translateY(-1px);
+      }
+      
+      .contact-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        align-items: start;
+      }
+      
+      .contact-image img {
+        width: 100%;
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      }
+      
+      @media (max-width: 768px) {
+        .contact-details {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+      }
+    </style>
+  </body>
+</html>
+
+

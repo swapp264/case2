@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — Emergency Care Directory</title>
+    <meta name="description" content="Find nearby animal hospitals and NGOs in Mumbai and Pune by region for emergencies.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation" />
+        <label for="nav-toggle" class="hamburger" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </label>
+        <a href="index.html" aria-label="StrayCare Home">
+          <h1>StrayCare</h1>
+        </a>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="adopt.html">Adopt</a></li>
+            <li><a href="donate.html">Donate</a></li>
+            <li><a href="volunteer.html">Volunteer</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="emergency.html" aria-current="page">Emergency</a></li>
+          </ul>
+        </nav>
+        <div class="user-actions">
+          <div class="user-dropdown">
+            <button class="user-icon" aria-label="User Menu">👤</button>
+            <div class="dropdown-menu">
+              <a href="login.html">Login</a>
+              <a href="register.html">Register (User)</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <section class="hero-section fade-in-up" aria-labelledby="emergency-title">
+          <div class="hero-content">
+            <h2 id="emergency-title">Emergency Animal Care — Mumbai & Pune</h2>
+            <p>Use filters below to find the nearest animal hospitals and NGOs by city and region. In an emergency, call ahead and use the map link for directions.</p>
+            <p>
+              <a href="#directory" class="cta-button">Find Care Near You</a>
+              <a href="tel:102" aria-label="Dial 102">Emergency Dial 102</a>
+            </p>
+          </div>
+          <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=600&h=400&fit=crop&crop=center" alt="Vet caring for a dog" loading="lazy">
+          </div>
+        </section>
+
+        <section id="directory" class="fade-in-up" aria-labelledby="dir-title">
+          <h2 id="dir-title">Directory</h2>
+          <div id="map" class="map"></div>
+          <div class="dir-filters" role="search">
+            <div class="filter-row">
+              <label>
+                <span>City</span>
+                <select id="citySelect" aria-label="Select city">
+                  <option value="mumbai">Mumbai</option>
+                  <option value="pune">Pune</option>
+                </select>
+              </label>
+              <label>
+                <span>Region</span>
+                <select id="regionSelect" aria-label="Select region"></select>
+              </label>
+              <label class="grow">
+                <span>Search</span>
+                <input id="searchInput" type="search" placeholder="Name, area, service..." aria-label="Search directory" />
+              </label>
+            </div>
+            <div class="filter-chips" id="chipRow" aria-live="polite"></div>
+          </div>
+
+          <div id="results" class="dir-grid" aria-live="polite"></div>
+        </section>
+
+        <section class="fade-in-up" aria-labelledby="report-title">
+          <h2 id="report-title">Report a Stray</h2>
+          <form id="reportForm" class="report-form" enctype="multipart/form-data">
+            <div class="form-grid">
+              <label>
+                <span>Animal type</span>
+                <select name="type" required>
+                  <option value="dog">Dog</option>
+                  <option value="cat">Cat</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
+              <label>
+                <span>Condition</span>
+                <select name="condition" required>
+                  <option value="injured">Injured</option>
+                  <option value="sick">Sick</option>
+                  <option value="abandoned">Abandoned</option>
+                  <option value="aggressive">Aggressive</option>
+                </select>
+              </label>
+            </div>
+            <label>
+              <span>Location details (optional)</span>
+              <input name="locationText" type="text" placeholder="Landmark, street, building ...">
+            </label>
+            <label>
+              <span>Photo</span>
+              <input name="photo" type="file" accept="image/*" capture="environment">
+            </label>
+            <input type="hidden" name="lat" id="reportLat">
+            <input type="hidden" name="lng" id="reportLng">
+            <div class="report-actions">
+              <button type="button" id="useLocationBtn">Use my location</button>
+              <button type="submit" class="cta-button">Submit report</button>
+            </div>
+            <p class="small">Your coordinates are only used to help rescuers reach faster. No account required.</p>
+          </form>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-top">
+          <p>
+            © <span id="year">2025</span> StrayCare
+            • <a href="contact.html">Contact</a>
+            • <a href="donate.html">Donate</a>
+          </p>
+          <div class="social-links" aria-label="Social media">
+            <a href="#" aria-label="Follow on Twitter">🐦</a>
+            <a href="#" aria-label="Follow on Instagram">📸</a>
+            <a href="#" aria-label="Follow on Facebook">📘</a>
+            <a href="#" aria-label="Follow on YouTube">▶️</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <a href="tel:102" class="sos-button" aria-label="Call emergency 102">🚑 SOS</a>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+      const data = {
+        mumbai: {
+          regions: [
+            { id: 'south', name: 'South Mumbai' },
+            { id: 'western', name: 'Western Suburbs' },
+            { id: 'central', name: 'Central Mumbai' },
+            { id: 'harbour', name: 'Harbour Line' },
+            { id: 'thane', name: 'Thane' },
+            { id: 'navi', name: 'Navi Mumbai' }
+          ],
+          places: [
+            { name: 'Bai Sakarbai Dinshaw Petit Hospital for Animals', type: 'Hospital', region: 'south', area: 'Parel', phone: '+912224186900', address: 'Dr. S.S. Rao Rd, Parel, Mumbai', maps: 'https://maps.google.com/?q=Bai+Sakarbai+Dinshaw+Petit+Hospital+for+Animals+Mumbai' },
+            { name: 'TMC Veterinary Hospital', type: 'Hospital', region: 'thane', area: 'Thane West', phone: '+912225820000', address: 'Panchpakhadi, Thane West', maps: 'https://maps.google.com/?q=TMC+Veterinary+Hospital+Thane' },
+            { name: 'The Animal Care Clinic', type: 'Clinic', region: 'western', area: 'Bandra West', phone: '+912226401234', address: 'Bandra West, Mumbai', maps: 'https://maps.google.com/?q=Animal+Care+Clinic+Bandra' },
+            { name: 'C.U.P.A Mumbai Network', type: 'NGO', region: 'western', area: 'Andheri', phone: '+919820000000', address: 'Andheri West, Mumbai', maps: 'https://maps.google.com/?q=Andheri+West+Mumbai' },
+            { name: 'PAWS Mumbai', type: 'NGO', region: 'central', area: 'Mulund', phone: '+919820234567', address: 'Mulund East, Mumbai', maps: 'https://maps.google.com/?q=PAWS+Mumbai' },
+            { name: 'IDAA (In Defence of Animals)', type: 'NGO', region: 'navi', area: 'CBD Belapur', phone: '+919987654321', address: 'CBD Belapur, Navi Mumbai', maps: 'https://maps.google.com/?q=In+Defence+of+Animals+Belapur' },
+            { name: 'Welfare Of Stray Dogs (WSD)', type: 'NGO', region: 'south', area: 'Fort/Colaba', phone: '+912222876543', address: 'Fort, Mumbai', maps: 'https://maps.google.com/?q=WSD+Mumbai' },
+            { name: 'Pets 24x7 Emergency Vet', type: 'Hospital', region: 'western', area: 'Borivali', phone: '+919987001122', address: 'Borivali West, Mumbai', maps: 'https://maps.google.com/?q=Borivali+West+Mumbai' },
+            { name: 'Mumbai Veterinary College OPD', type: 'Hospital', region: 'central', area: 'Parel', phone: '+912224100000', address: 'Parel, Mumbai', maps: 'https://maps.google.com/?q=Mumbai+Veterinary+College+Parel' },
+            { name: 'Navi Mumbai Municipal Vet Hospital', type: 'Hospital', region: 'navi', area: 'Vashi', phone: '+912227600000', address: 'Vashi, Navi Mumbai', maps: 'https://maps.google.com/?q=Vashi+Navi+Mumbai+Municipal+Vet' }
+          ]
+        },
+        pune: {
+          regions: [
+            { id: 'central', name: 'Central Pune' },
+            { id: 'east', name: 'East Pune' },
+            { id: 'west', name: 'West Pune' },
+            { id: 'south', name: 'South Pune' },
+            { id: 'pcmc', name: 'Pimpri–Chinchwad (PCMC)' }
+          ],
+          places: [
+            { name: 'Katraj Animal Rescue & Rehabilitation Center (KAR)', type: 'NGO', region: 'south', area: 'Katraj', phone: '+919850000000', address: 'Katraj, Pune', maps: 'https://maps.google.com/?q=Katraj+Animal+Rescue+Pune' },
+            { name: 'Pet Practitioners Association of Pune (PPA)', type: 'Clinic Network', region: 'central', area: 'Deccan/JM Road', phone: '+912025555555', address: 'Deccan Gymkhana, Pune', maps: 'https://maps.google.com/?q=Deccan+Gymkhana+Pune' },
+            { name: 'Blue Cross Society of Pune', type: 'NGO', region: 'east', area: 'Koregaon Park', phone: '+912026789000', address: 'Koregaon Park, Pune', maps: 'https://maps.google.com/?q=Blue+Cross+Pune' },
+            { name: 'Mission Possible Foundation', type: 'NGO', region: 'pcmc', area: 'Nigdi', phone: '+919921234567', address: 'Nigdi, PCMC', maps: 'https://maps.google.com/?q=Nigdi+PCMC' },
+            { name: 'CUPA Pune Helpline', type: 'NGO', region: 'west', area: 'Kothrud', phone: '+919860123456', address: 'Kothrud, Pune', maps: 'https://maps.google.com/?q=Kothrud+Pune' },
+            { name: 'PetVet 24x7 Emergency Care', type: 'Hospital', region: 'central', area: 'Shivajinagar', phone: '+919325556666', address: 'Shivajinagar, Pune', maps: 'https://maps.google.com/?q=Shivajinagar+Pune' },
+            { name: 'PetZone Animal Hospital', type: 'Hospital', region: 'east', area: 'Viman Nagar', phone: '+919561234321', address: 'Viman Nagar, Pune', maps: 'https://maps.google.com/?q=Viman+Nagar+Pune' },
+            { name: 'PCMC Municipal Veterinary Clinic', type: 'Hospital', region: 'pcmc', area: 'Pimpri', phone: '+912027700000', address: 'Pimpri, PCMC', maps: 'https://maps.google.com/?q=PCMC+Veterinary+Clinic+Pimpri' }
+          ]
+        }
+      };
+
+      const citySelect = document.getElementById('citySelect');
+      const regionSelect = document.getElementById('regionSelect');
+      const searchInput = document.getElementById('searchInput');
+      const resultsEl = document.getElementById('results');
+      const chipRow = document.getElementById('chipRow');
+
+      function setRegions(city) {
+        const regions = data[city].regions;
+        regionSelect.innerHTML = '<option value="all">All regions</option>' + regions.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+      }
+
+      function chip(text, id) {
+        return `<button class="chip" data-id="${id}">${text}<span aria-hidden="true">×</span></button>`;
+      }
+
+      function renderChips(city, region, query) {
+        const cityLabel = city === 'mumbai' ? 'Mumbai' : 'Pune';
+        const regionMap = Object.fromEntries(data[city].regions.map(r => [r.id, r.name]));
+        const regionLabel = region === 'all' ? 'All regions' : (regionMap[region] || region);
+        const chips = [chip(cityLabel, 'city')];
+        chips.push(chip(regionLabel, 'region'));
+        if (query) chips.push(chip(`“${query}”`, 'query'));
+        chipRow.innerHTML = chips.join('');
+      }
+
+      function matchesQuery(place, q) {
+        if (!q) return true;
+        const t = (q || '').toLowerCase();
+        return [place.name, place.type, place.area, place.address].some(x => (x || '').toLowerCase().includes(t));
+      }
+
+      function render(city, region, query) {
+        const { places } = data[city];
+        const filtered = places.filter(p => (region === 'all' || p.region === region) && matchesQuery(p, query));
+        if (filtered.length === 0) {
+          resultsEl.innerHTML = `<p>No results. Try a different region or search term.</p>`;
+          return;
+        }
+        // Sort by distance if we have user geolocation cached
+        const lat = parseFloat(document.getElementById('reportLat').value);
+        const lng = parseFloat(document.getElementById('reportLng').value);
+        let enriched = filtered.map(p => ({
+          ...p,
+          coords: randomFallback(city, p)
+        }));
+        if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
+          enriched = enriched.map(e => ({ ...e, dist: distanceKm(lat, lng, e.coords[0], e.coords[1]) }))
+                             .sort((a, b) => (a.dist ?? 0) - (b.dist ?? 0));
+        }
+        resultsEl.innerHTML = enriched.map(p => `
+          <article class="dir-card">
+            <div class="dir-card-head">
+              <h3>${p.name}</h3>
+              <span class="badge">${p.type}</span>
+            </div>
+            <p class="dir-meta">${p.area} • ${p.address}${p.dist ? ` • ~${p.dist.toFixed(1)} km` : ''}</p>
+            <div class="dir-actions">
+              <a class="mini-btn" href="${p.maps}" target="_blank" rel="noopener" aria-label="Open in Google Maps">Open in Maps</a>
+              ${p.phone ? `<a class="mini-btn outline" href="tel:${p.phone}" aria-label="Call ${p.name}">Call</a>` : ''}
+            </div>
+          </article>
+        `).join('');
+      }
+
+      // Haversine distance in km
+      function distanceKm(lat1, lon1, lat2, lon2) {
+        const toRad = v => v * Math.PI / 180;
+        const R = 6371;
+        const dLat = toRad(lat2 - lat1);
+        const dLon = toRad(lon2 - lon1);
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+      }
+
+      let map, userMarker, markersLayer;
+
+      function initMap() {
+        map = L.map('map');
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        markersLayer = L.layerGroup().addTo(map);
+        map.setView([19.076, 72.8777], 10);
+
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition((pos) => {
+            const { latitude, longitude } = pos.coords;
+            map.setView([latitude, longitude], 13);
+            userMarker = L.marker([latitude, longitude], { title: 'You are here' }).addTo(map);
+            document.getElementById('reportLat').value = latitude;
+            document.getElementById('reportLng').value = longitude;
+            populateMarkers();
+          }, () => populateMarkers(), { enableHighAccuracy: true, timeout: 5000 });
+        } else {
+          populateMarkers();
+        }
+      }
+
+      function clearMarkers() { markersLayer.clearLayers(); }
+
+      function populateMarkers() {
+        clearMarkers();
+        const city = citySelect.value;
+        const { places } = data[city];
+        places.forEach(p => {
+          const m = L.marker(randomFallback(city, p));
+          m.bindPopup(`<strong>${p.name}</strong><br>${p.type} — ${p.area}<br><a href='${p.maps}' target='_blank' rel='noopener'>Open in Maps</a>`);
+          markersLayer.addLayer(m);
+        });
+      }
+
+      // Fallback coordinates per city/region (approximate centroids) to plot markers without exact lat/lng data
+      function randomFallback(city, place) {
+        const cityCenters = {
+          mumbai: { lat: 19.076, lng: 72.8777 },
+          pune: { lat: 18.5204, lng: 73.8567 }
+        };
+        const jitter = () => (Math.random() - 0.5) * 0.04; // ~ few km jitter
+        const c = cityCenters[city];
+        return [c.lat + jitter(), c.lng + jitter()];
+      }
+
+      function init() {
+        const defaultCity = 'mumbai';
+        citySelect.value = defaultCity;
+        setRegions(defaultCity);
+        regionSelect.value = 'all';
+        renderChips(defaultCity, 'all', '');
+        render(defaultCity, 'all', '');
+        initMap();
+      }
+
+      citySelect.addEventListener('change', () => {
+        const city = citySelect.value;
+        setRegions(city);
+        regionSelect.value = 'all';
+        renderChips(city, 'all', searchInput.value.trim());
+        render(city, 'all', searchInput.value.trim());
+      });
+
+      regionSelect.addEventListener('change', () => {
+        const city = citySelect.value;
+        const region = regionSelect.value;
+        renderChips(city, region, searchInput.value.trim());
+        render(city, region, searchInput.value.trim());
+      });
+
+      searchInput.addEventListener('input', () => {
+        const city = citySelect.value;
+        const region = regionSelect.value;
+        renderChips(city, region, searchInput.value.trim());
+        render(city, region, searchInput.value.trim());
+      });
+
+      chipRow.addEventListener('click', (e) => {
+        const btn = e.target.closest('.chip');
+        if (!btn) return;
+        const id = btn.getAttribute('data-id');
+        if (id === 'city') {
+          citySelect.value = citySelect.value === 'mumbai' ? 'pune' : 'mumbai';
+          setRegions(citySelect.value);
+          regionSelect.value = 'all';
+        } else if (id === 'region') {
+          regionSelect.value = 'all';
+        } else if (id === 'query') {
+          searchInput.value = '';
+        }
+        renderChips(citySelect.value, regionSelect.value, searchInput.value.trim());
+        render(citySelect.value, regionSelect.value, searchInput.value.trim());
+      });
+
+      // SOS floating button uses tel: link already in HTML
+
+      // Report form handlers
+      document.getElementById('useLocationBtn').addEventListener('click', () => {
+        if (!navigator.geolocation) return alert('Geolocation not supported');
+        navigator.geolocation.getCurrentPosition((pos) => {
+          const { latitude, longitude } = pos.coords;
+          document.getElementById('reportLat').value = latitude;
+          document.getElementById('reportLng').value = longitude;
+          alert('Location attached to report.');
+        }, () => alert('Could not get location.')); 
+      });
+
+      document.getElementById('reportForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const fd = new FormData(form);
+        const payload = Object.fromEntries(fd.entries());
+        console.log('Report submitted:', payload);
+        alert('Thank you! Your report has been recorded.');
+        form.reset();
+      });
+
+      init();
+    </script>
+  </body>
+  </html>
+
+

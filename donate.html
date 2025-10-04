@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — Donate</title>
+    <meta name="description" content="Support StrayCare's rescue and care programs.">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Razorpay SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <a href="index.html" aria-label="StrayCare Home">
+          <h1>StrayCare</h1>
+        </a>
+        <form class="site-search" role="search" aria-label="Site search" action="search.html" method="get">
+          <input type="search" name="q" placeholder="Search pets, services, help…" aria-label="Search" />
+          <button type="submit" aria-label="Search">🔍</button>
+        </form>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="adopt.html">Adopt</a></li>
+            <li><a href="donate.html" aria-current="page">Donate</a></li>
+            <li><a href="volunteer.html">Volunteer</a></li>
+            <li><a href="emergency.html">Emergency</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="user-actions">
+          <div class="user-dropdown">
+            <button class="user-icon" aria-label="User Menu">👤</button>
+            <div class="dropdown-menu">
+              <a href="login.html">Login</a>
+              <a href="register.html">Register (User)</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <section aria-labelledby="why-donate-title" class="donate-hero">
+          <div class="donate-content">
+            <h2 id="why-donate-title">Why donate?</h2>
+            <p>Your support funds medical care, food, shelter, and adoption programs.</p>
+          </div>
+          <div class="donate-image">
+            <img src="https://images.unsplash.com/photo-1587764379873-97837921fd44?w=500&h=300&fit=crop&crop=center" alt="Animals receiving care" loading="lazy">
+          </div>
+        </section>
+
+        <section aria-labelledby="ways-to-give-title">
+          <h2 id="ways-to-give-title">Ways to give</h2>
+          <div class="donation-options">
+            <div class="option-item">
+              <div class="option-icon">💝</div>
+              <h3>One-time donation</h3>
+            </div>
+            <div class="option-item">
+              <div class="option-icon">📅</div>
+              <h3>Monthly support</h3>
+            </div>
+            <div class="option-item">
+              <div class="option-icon">📦</div>
+              <h3>In-kind supplies</h3>
+            </div>
+            <div class="option-item">
+              <div class="option-icon">🏢</div>
+              <h3>Corporate matching</h3>
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="donation-form-title">
+          <h2 id="donation-form-title">Make a Donation</h2>
+          
+          <!-- Quick Amount Selection -->
+          <div class="amount-selection">
+            <h3>Select Amount</h3>
+            <div class="amount-buttons">
+              <button type="button" class="amount-btn" data-amount="100">₹100</button>
+              <button type="button" class="amount-btn" data-amount="250">₹250</button>
+              <button type="button" class="amount-btn" data-amount="500">₹500</button>
+              <button type="button" class="amount-btn" data-amount="1000">₹1000</button>
+              <button type="button" class="amount-btn" data-amount="2500">₹2500</button>
+              <button type="button" class="amount-btn" data-amount="5000">₹5000</button>
+            </div>
+          </div>
+
+          <form id="donation-form">
+            <label>
+              Amount (₹)
+              <input type="number" id="amount" name="amount" min="10" step="10" placeholder="500" required>
+            </label>
+            <label>
+              Full Name
+              <input type="text" id="name" name="name" placeholder="Your full name" required>
+            </label>
+            <label>
+              Email Address
+              <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            </label>
+            <label>
+              Phone Number
+              <input type="tel" id="phone" name="phone" placeholder="+91XXXXXXXXXX" required>
+            </label>
+            <div class="donation-purpose">
+              <label>
+                Donation Purpose (Optional)
+                <select id="purpose" name="purpose">
+                  <option value="general">General Support</option>
+                  <option value="medical">Medical Care</option>
+                  <option value="food">Food & Shelter</option>
+                  <option value="rescue">Rescue Operations</option>
+                  <option value="adoption">Adoption Programs</option>
+                </select>
+              </label>
+            </div>
+            <button type="submit" id="donate-btn">Donate Now</button>
+          </form>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="newsletter">
+          <h3>Join our community</h3>
+          <p>Get stories, adoption drives, and rescue tips in your inbox.</p>
+          <form class="newsletter-form" aria-label="Newsletter subscription" onsubmit="event.preventDefault(); this.reset();">
+            <input type="email" placeholder="Your email address" aria-label="Email" required>
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+        <p>
+          © <span id="year">2025</span> StrayCare
+          • <a href="contact.html">Contact</a>
+          • <a href="donate.html" aria-current="page">Donate</a>
+        </p>
+      </div>
+    </footer>
+    <!-- Donation Styles -->
+    <style>
+      .amount-selection {
+        margin: 2rem 0;
+        text-align: center;
+      }
+      .amount-buttons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 1rem;
+        margin: 1rem 0;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .amount-btn {
+        padding: 1rem;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        background: #fff;
+        color: #333;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      /* Fix input visibility */
+      #donation-form input, #donation-form select {
+        background: rgba(255, 255, 255, 0.95) !important;
+        color: #333 !important;
+        border: 2px solid #e1e8ed !important;
+      }
+      
+      #donation-form input::placeholder {
+        color: #666 !important;
+      }
+      .amount-btn:hover {
+        border-color: #007bff;
+        background: #f8f9fa;
+      }
+      .amount-btn.selected {
+        border-color: #007bff;
+        background: #007bff;
+        color: white;
+      }
+      .donation-purpose {
+        margin: 1rem 0;
+      }
+      #donate-btn {
+        background: #28a745;
+        color: white;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 100%;
+        transition: background 0.3s ease;
+      }
+      #donate-btn:hover {
+        background: #218838;
+      }
+    </style>
+
+    <!-- Razorpay Integration Script -->
+    <script>
+      // Razorpay configuration
+      const RAZORPAY_KEY = 'rzp_test_1234567890'; // Replace with your actual Razorpay key
+      
+      // Amount selection functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        const amountButtons = document.querySelectorAll('.amount-btn');
+        const amountInput = document.getElementById('amount');
+        
+        amountButtons.forEach(btn => {
+          btn.addEventListener('click', function() {
+            // Remove selected class from all buttons
+            amountButtons.forEach(b => b.classList.remove('selected'));
+            // Add selected class to clicked button
+            this.classList.add('selected');
+            // Update amount input
+            amountInput.value = this.getAttribute('data-amount');
+          });
+        });
+        
+        // Clear selection when user types custom amount
+        amountInput.addEventListener('input', function() {
+          amountButtons.forEach(b => b.classList.remove('selected'));
+        });
+      });
+      
+      // Razorpay payment integration
+      document.getElementById('donation-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const amount = document.getElementById('amount').value;
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const purpose = document.getElementById('purpose').value;
+        
+        if (!amount || !name || !email || !phone) {
+          alert('Please fill in all required fields.');
+          return;
+        }
+        
+        if (amount < 10) {
+          alert('Minimum donation amount is ₹10.');
+          return;
+        }
+        
+        // Razorpay options
+        const options = {
+          key: RAZORPAY_KEY,
+          amount: amount * 100, // Amount in paise
+          currency: 'INR',
+          name: 'StrayCare',
+          description: `Donation for ${purpose}`,
+          image: 'https://via.placeholder.com/100x100?text=SC', // Replace with your logo
+          order_id: '', // Generate order_id from backend
+          handler: function(response) {
+            // Payment success callback
+            alert('Thank you for your donation! Payment ID: ' + response.razorpay_payment_id);
+            
+            // Here you would typically send the payment details to your backend
+            console.log('Payment successful:', response);
+            
+            // Reset form
+            document.getElementById('donation-form').reset();
+            document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+          },
+          prefill: {
+            name: name,
+            email: email,
+            contact: phone
+          },
+          notes: {
+            purpose: purpose,
+            donor_name: name
+          },
+          theme: {
+            color: '#007bff'
+          },
+          modal: {
+            ondismiss: function() {
+              console.log('Payment cancelled by user');
+            }
+          }
+        };
+        
+        // Create Razorpay instance and open checkout
+        const rzp = new Razorpay(options);
+        rzp.open();
+        
+        rzp.on('payment.failed', function(response) {
+          alert('Payment failed: ' + response.error.description);
+          console.error('Payment failed:', response.error);
+        });
+      });
+    </script>
+  </body>
+</html>
+
+

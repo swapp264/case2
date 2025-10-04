@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — User Login</title>
+    <meta name="description" content="Login to your StrayCare user account.">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <a href="index.html" aria-label="StrayCare Home">
+          <h1>StrayCare</h1>
+        </a>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="adopt.html">Adopt</a></li>
+            <li><a href="donate.html">Donate</a></li>
+            <li><a href="volunteer.html">Volunteer</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="login-user.html" aria-current="page">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <section class="auth-section" aria-labelledby="login-title">
+          <h2 id="login-title">User Sign In</h2>
+          <p>Login to access your StrayCare account.</p>
+
+          <form class="auth-form" id="user-login-form">
+            <label>
+              Email Address
+              <input type="email" name="email" placeholder="you@example.com" required>
+            </label>
+            <label>
+              Password
+              <input type="password" name="password" placeholder="Enter your password" required>
+            </label>
+            <div class="form-options">
+              <label class="checkbox-label">
+                <input type="checkbox" name="remember">
+                Remember me
+              </label>
+              <a href="#" class="forgot-link">Forgot password?</a>
+            </div>
+            <button type="submit">Sign In</button>
+          </form>
+          
+          <div class="or-divider"><span>OR</span></div>
+          
+          <div class="social-login">
+            <button type="button" class="social-btn google" data-provider="google" aria-label="Continue with Google">
+              <span class="icon">
+                <img src="google.png" alt="Google" width="20" height="20" />
+              </span>
+              <span>Continue with Google</span>
+            </button>
+          </div>
+          
+          <div class="auth-footer">
+            <p>Don't have an account? <a href="register.html">Sign up here</a></p>
+            <div class="login-links" style="margin-top: 1.5rem; display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+              <a href="login-admin.html" class="login-link-btn">Admin Login</a>
+              <a href="login-ngo.html" class="login-link-btn">NGO Login</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>
+          © <span id="year">2025</span> StrayCare
+          • <a href="contact.html">Contact</a>
+          • <a href="donate.html">Donate</a>
+        </p>
+      </div>
+    </footer>
+
+    <div id="recaptcha-container" style="position: fixed; bottom: -1000px; right: -1000px;"></div>
+
+    <style>
+      .login-link-btn {
+        display: inline-block;
+        padding: 0.5rem 1.5rem;
+        background: linear-gradient(135deg, #FF8C00 0%, #FF6347 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(255, 140, 0, 0.3);
+      }
+      .login-link-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 140, 0, 0.5);
+      }
+    </style>
+
+    <script>
+      // Firebase Configuration
+      window.FIREBASE_CONFIG = {
+        apiKey: "AIzaSyAhesk1IN6Q0QuaQbrFAmHAuULomYrZVGY",
+        authDomain: "straycare-b9e59.firebaseapp.com",
+        projectId: "straycare-b9e59",
+        storageBucket: "straycare-b9e59.firebasestorage.app",
+        messagingSenderId: "511847623347",
+        appId: "1:511847623347:web:f7d9bc81cd6a6a3674dec6",
+        measurementId: "G-0YMFELM3C9"
+      };
+
+      // Initialize Firebase
+      try {
+        if (window.FIREBASE_CONFIG && firebase?.apps?.length === 0) {
+          firebase.initializeApp(window.FIREBASE_CONFIG);
+        }
+      } catch(e) { console.warn('Firebase init skipped:', e); }
+
+      // Form submission
+      document.getElementById('user-login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = this.email.value;
+        const password = this.password.value;
+        
+        // Simulate login
+        console.log('User login:', email);
+        alert('Login successful! Welcome back.');
+        window.location.href = 'index.html';
+      });
+
+      // Social login
+      async function firebaseSocialSignIn(providerName){
+        if (!window.firebase || firebase.apps.length === 0) {
+          alert('Social sign-in not configured yet.');
+          return;
+        }
+        const auth = firebase.auth();
+        let provider;
+        if (providerName === 'google') {
+          provider = new firebase.auth.GoogleAuthProvider();
+          provider.setCustomParameters({ prompt: 'select_account' });
+        }
+        try {
+          const result = await auth.signInWithPopup(provider);
+          if (result?.user) {
+            window.location.href = 'index.html';
+          }
+        } catch (err) {
+          console.error('Auth error:', err);
+          alert(err?.message || 'Unable to sign in.');
+        }
+      }
+
+      document.querySelectorAll('.social-btn').forEach(b=>{
+        b.addEventListener('click', ()=> firebaseSocialSignIn(b.getAttribute('data-provider')));
+      });
+
+      // Set year
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

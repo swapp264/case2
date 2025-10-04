@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — About</title>
+    <meta name="description" content="About StrayCare: our mission, vision, and team.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <a href="index.html" aria-label="StrayCare Home">
+          <h1>StrayCare</h1>
+        </a>
+        <form class="site-search" role="search" aria-label="Site search" action="search.html" method="get">
+          <input type="search" name="q" placeholder="Search pets, services, help…" aria-label="Search" />
+          <button type="submit" aria-label="Search">🔍</button>
+        </form>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="about.html" aria-current="page">About</a></li>
+            <li><a href="adopt.html">Adopt</a></li>
+            <li><a href="donate.html">Donate</a></li>
+            <li><a href="volunteer.html">Volunteer</a></li>
+            <li><a href="emergency.html">Emergency</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="user-actions">
+          <div class="user-dropdown">
+            <button class="user-icon" aria-label="User Menu">👤</button>
+            <div class="dropdown-menu">
+              <a href="login.html">Login</a>
+              <a href="register.html">Register (User)</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <section aria-labelledby="mission-title">
+          <h2 id="mission-title">Our mission</h2>
+          <p>To provide compassionate care and permanent homes for stray animals through rescue, rehabilitation, and community partnerships.</p>
+        </section>
+
+        <section aria-labelledby="vision-title">
+          <h2 id="vision-title">Our vision</h2>
+          <p>A world where every animal is safe, healthy, and loved.</p>
+        </section>
+
+        <section aria-labelledby="team-title">
+          <h2 id="team-title">Team</h2>
+          <div class="team-grid">
+            <article class="team-member">
+              <div class="member-info">
+                <h3>Sujal Khole</h3>
+                <p>Developer • Focused on clean UI and smooth user journeys.</p>
+              </div>
+            </article>
+            <article class="team-member">
+              <div class="member-info">
+                <h3>Saurabh Yamgar</h3>
+                <p>Developer • Building reliable features that help animals faster.</p>
+              </div>
+            </article>
+            <article class="team-member">
+              <div class="member-info">
+                <h3>Swapnil Raskar</h3>
+                <p>Developer • Compassionate, responsive experiences for animal care.</p>
+              </div>
+            </article>
+            <article class="team-member">
+              <div class="member-info">
+                <h3>Shardul Thasale</h3>
+                <p>Developer • Crafting modern, accessible UI for community impact.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="newsletter">
+          <h3>Join our community</h3>
+          <p>Get stories, adoption drives, and rescue tips in your inbox.</p>
+          <form class="newsletter-form" aria-label="Newsletter subscription" onsubmit="event.preventDefault(); this.reset();">
+            <input type="email" placeholder="Your email address" aria-label="Email" required>
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+        <p>
+          © <span id="year">2025</span> StrayCare
+          • <a href="contact.html">Contact</a>
+          • <a href="donate.html">Donate</a>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+

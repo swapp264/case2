@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — Lost & Found Pets</title>
+    <meta name="description" content="Report lost pets or found animals with photos and geolocation">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="lost-found.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" aria-label="StrayCare Home">
+                <h1>StrayCare</h1>
+            </a>
+            <nav aria-label="Primary">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="lost-found.html" class="active">Lost & Found</a></li>
+                    <li><a href="adopt.html">Adopt</a></li>
+                    <li><a href="helpline.html">Helpline</a></li>
+                    <li><a href="rewards.html">Rewards</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <div class="user-dropdown">
+                    <button class="user-icon" aria-label="User Menu">👤</button>
+                    <div class="dropdown-menu">
+                        <a href="login.html">Login</a>
+                        <a href="register.html">Register (User)</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Page Header -->
+            <section class="page-header">
+                <div class="header-content">
+                    <h1>Lost & Found Pets</h1>
+                    <p>Report lost pets or found animals. Help reunite families with their beloved companions.</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-primary" onclick="openReportModal('lost')">Report Lost Pet</button>
+                    <button class="btn-secondary" onclick="openReportModal('found')">Report Found Animal</button>
+                </div>
+            </section>
+
+            <!-- Search and Filters -->
+            <section class="search-section">
+                <div class="search-container">
+                    <div class="search-box">
+                        <input type="text" placeholder="Search by location, pet type, or description..." id="searchReports">
+                        <button class="search-btn">🔍</button>
+                    </div>
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" onclick="filterReports('all')">All Reports</button>
+                        <button class="filter-tab" onclick="filterReports('lost')">Lost Pets</button>
+                        <button class="filter-tab" onclick="filterReports('found')">Found Animals</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Map View -->
+            <section class="map-section">
+                <div class="map-container">
+                    <div class="map-header">
+                        <h2>Map View</h2>
+                        <div class="map-controls">
+                            <button class="map-btn" onclick="toggleMapView()">📍 List View</button>
+                            <button class="map-btn" onclick="getCurrentLocation()">📍 My Location</button>
+                        </div>
+                    </div>
+                    <div class="map-area" id="mapArea">
+                        <!-- Map will be loaded here -->
+                        <div class="map-placeholder">
+                            <div class="map-content">
+                                <h3>Interactive Map</h3>
+                                <p>View all lost and found reports in your area</p>
+                                <div class="map-legend">
+                                    <div class="legend-item">
+                                        <span class="legend-icon lost">📍</span>
+                                        <span>Lost Pets</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-icon found">🏠</span>
+                                        <span>Found Animals</span>
+                                    </div>
+                                </div>
+                                <button class="btn-primary" onclick="loadMap()">Load Map</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports List -->
+            <section class="reports-section">
+                <div class="reports-header">
+                    <h2>Recent Reports</h2>
+                    <div class="reports-stats">
+                        <span class="stat">Total: 156</span>
+                        <span class="stat lost">Lost: 89</span>
+                        <span class="stat found">Found: 67</span>
+                    </div>
+                </div>
+                
+                <div class="reports-grid" id="reportsGrid">
+                    <!-- Lost Pet Report -->
+                    <div class="report-card lost" data-type="lost" data-location="bandra">
+                        <div class="report-image">
+                            <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=200&fit=crop" alt="Lost Golden Retriever">
+                            <span class="report-badge lost">Lost Pet</span>
+                            <span class="report-time">2 hours ago</span>
+                        </div>
+                        <div class="report-info">
+                            <h3>Golden Retriever - Bandra West</h3>
+                            <div class="pet-details">
+                                <p><strong>Pet Name:</strong> Buddy</p>
+                                <p><strong>Breed:</strong> Golden Retriever</p>
+                                <p><strong>Color:</strong> Golden</p>
+                                <p><strong>Last Seen:</strong> Bandra West, Mumbai</p>
+                                <p><strong>Contact:</strong> Priya Sharma (98765-43210)</p>
+                            </div>
+                            <div class="report-description">
+                                <p>Buddy went missing from our home in Bandra West. He's very friendly and responds to his name. Please contact if found.</p>
+                            </div>
+                            <div class="report-actions">
+                                <button class="btn-primary" onclick="contactReporter('report1')">Contact Owner</button>
+                                <button class="btn-secondary" onclick="viewOnMap('report1')">View on Map</button>
+                                <button class="btn-secondary" onclick="shareReport('report1')">Share</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Found Animal Report -->
+                    <div class="report-card found" data-type="found" data-location="andheri">
+                        <div class="report-image">
+                            <img src="https://images.unsplash.com/photo-1514888286974-6c03e2a1a220?w=300&h=200&fit=crop" alt="Found Cat">
+                            <span class="report-badge found">Found Animal</span>
+                            <span class="report-time">5 hours ago</span>
+                        </div>
+                        <div class="report-info">
+                            <h3>Domestic Cat - Andheri East</h3>
+                            <div class="pet-details">
+                                <p><strong>Animal Type:</strong> Cat</p>
+                                <p><strong>Breed:</strong> Domestic Short Hair</p>
+                                <p><strong>Color:</strong> Orange Tabby</p>
+                                <p><strong>Found:</strong> Andheri East, Mumbai</p>
+                                <p><strong>Contact:</strong> Amit Patel (98765-43211)</p>
+                            </div>
+                            <div class="report-description">
+                                <p>Found this friendly cat near Andheri station. She seems well-cared for and might be someone's lost pet.</p>
+                            </div>
+                            <div class="report-actions">
+                                <button class="btn-primary" onclick="contactReporter('report2')">Contact Finder</button>
+                                <button class="btn-secondary" onclick="viewOnMap('report2')">View on Map</button>
+                                <button class="btn-secondary" onclick="shareReport('report2')">Share</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lost Pet Report -->
+                    <div class="report-card lost" data-type="lost" data-location="juhu">
+                        <div class="report-image">
+                            <img src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=300&h=200&fit=crop" alt="Lost Puppy">
+                            <span class="report-badge lost">Lost Pet</span>
+                            <span class="report-time">1 day ago</span>
+                        </div>
+                        <div class="report-info">
+                            <h3>Puppy - Juhu Beach Area</h3>
+                            <div class="pet-details">
+                                <p><strong>Pet Name:</strong> Luna</p>
+                                <p><strong>Breed:</strong> Mixed Breed</p>
+                                <p><strong>Color:</strong> White with brown spots</p>
+                                <p><strong>Last Seen:</strong> Juhu Beach, Mumbai</p>
+                                <p><strong>Contact:</strong> Neha Sharma (98765-43212)</p>
+                            </div>
+                            <div class="report-description">
+                                <p>Luna is a 3-month-old puppy who got separated from us at Juhu Beach. She's very playful and loves treats.</p>
+                            </div>
+                            <div class="report-actions">
+                                <button class="btn-primary" onclick="contactReporter('report3')">Contact Owner</button>
+                                <button class="btn-secondary" onclick="viewOnMap('report3')">View on Map</button>
+                                <button class="btn-secondary" onclick="shareReport('report3')">Share</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Load More -->
+                <div class="load-more">
+                    <button class="btn-secondary" onclick="loadMoreReports()">Load More Reports</button>
+                </div>
+            </section>
+
+            <!-- Success Stories -->
+            <section class="success-stories">
+                <div class="section-header">
+                    <h2>Success Stories</h2>
+                    <p>Happy reunions made possible by our community</p>
+                </div>
+                <div class="stories-grid">
+                    <div class="story-card">
+                        <div class="story-image">
+                            <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=200&fit=crop" alt="Reunited family">
+                        </div>
+                        <div class="story-content">
+                            <h3>Buddy's Happy Return</h3>
+                            <p>After 3 days of searching, Buddy was found and reunited with his family. Thanks to the quick response from our community!</p>
+                            <div class="story-meta">
+                                <span>Reunited on: Jan 10, 2025</span>
+                                <span>Location: Bandra West</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="story-card">
+                        <div class="story-image">
+                            <img src="https://images.unsplash.com/photo-1514888286974-6c03e2a1a220?w=300&h=200&fit=crop" alt="Reunited cat">
+                        </div>
+                        <div class="story-content">
+                            <h3>Mittens Found Her Way Home</h3>
+                            <p>Mittens was missing for a week before being found and safely returned to her grateful family.</p>
+                            <div class="story-meta">
+                                <span>Reunited on: Jan 8, 2025</span>
+                                <span>Location: Andheri East</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Report Modal -->
+    <div id="reportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Report Lost Pet</h2>
+                <button class="close-btn" onclick="closeReportModal()">&times;</button>
+            </div>
+            <form class="report-form" id="reportForm">
+                <div class="form-group">
+                    <label for="reportType">Report Type</label>
+                    <select id="reportType" required onchange="updateModalTitle()">
+                        <option value="lost">Lost Pet</option>
+                        <option value="found">Found Animal</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="petName">Pet Name (if known)</label>
+                    <input type="text" id="petName" placeholder="Enter pet name">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="animalType">Animal Type</label>
+                        <select id="animalType" required>
+                            <option value="">Select Animal Type</option>
+                            <option value="dog">Dog</option>
+                            <option value="cat">Cat</option>
+                            <option value="bird">Bird</option>
+                            <option value="rabbit">Rabbit</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="breed">Breed</label>
+                        <input type="text" id="breed" placeholder="e.g., Golden Retriever">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="color">Color</label>
+                        <input type="text" id="color" placeholder="e.g., Golden, Black, White">
+                    </div>
+                    <div class="form-group">
+                        <label for="size">Size</label>
+                        <select id="size">
+                            <option value="">Select Size</option>
+                            <option value="small">Small</option>
+                            <option value="medium">Medium</option>
+                            <option value="large">Large</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" required placeholder="e.g., Bandra West, Mumbai">
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" rows="4" required placeholder="Describe the pet, any identifying features, and circumstances..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="contactName">Your Name</label>
+                    <input type="text" id="contactName" required placeholder="Your full name">
+                </div>
+                <div class="form-group">
+                    <label for="contactPhone">Phone Number</label>
+                    <input type="tel" id="contactPhone" required placeholder="Your phone number">
+                </div>
+                <div class="form-group">
+                    <label for="petPhoto">Upload Photo</label>
+                    <input type="file" id="petPhoto" accept="image/*" onchange="previewImage()">
+                    <div id="imagePreview" class="image-preview"></div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeReportModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Submit Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <p>
+                    © <span id="year">2025</span> StrayCare
+                    • <a href="contact.html">Contact</a>
+                    • <a href="donate.html">Donate</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="lost-found.js"></script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NGO Collaboration — StrayCare</title>
+    <meta name="description" content="Connect with other NGOs, share rescue cases, and organize joint campaigns.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="collaboration.css">
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation" />
+        <label for="nav-toggle" class="hamburger" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </label>
+        <a href="index.html" aria-label="StrayCare Home">
+          <h1>StrayCare</h1>
+        </a>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="rescue-cases.html">Rescue Cases</a></li>
+            <li><a href="volunteers.html">Volunteers</a></li>
+            <li><a href="medical-records.html">Medical Records</a></li>
+            <li><a href="collaboration.html" class="active">Collaboration</a></li>
+          </ul>
+        </nav>
+        <div class="user-actions">
+          <div class="user-dropdown">
+            <button class="user-icon" aria-label="User Menu">👤 NGO Admin</button>
+            <div class="dropdown-menu">
+              <a href="profile.html">Profile</a>
+              <a href="settings.html">Settings</a>
+              <a href="#" onclick="authManager.logout()">Logout</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <!-- Page Header -->
+        <section class="page-header">
+          <div class="header-content">
+            <h1>NGO Collaboration Hub</h1>
+            <p>Connect with other organizations, share resources, and create impactful partnerships</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn-primary" onclick="openNewCollaborationModal()">+ Start Collaboration</button>
+            <button class="btn-secondary">Find Partners</button>
+          </div>
+        </section>
+
+        <!-- Collaboration Stats -->
+        <section class="collab-stats">
+          <div class="stat-card">
+            <div class="stat-icon">🤝</div>
+            <div class="stat-content">
+              <h3>Active Partnerships</h3>
+              <p class="stat-number">24</p>
+              <span class="stat-change positive">+3 this month</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📋</div>
+            <div class="stat-content">
+              <h3>Shared Cases</h3>
+              <p class="stat-number">156</p>
+              <span class="stat-change positive">+12 this week</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-content">
+              <h3>Joint Campaigns</h3>
+              <p class="stat-number">8</p>
+              <span class="stat-change positive">Active now</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-content">
+              <h3>Funds Raised</h3>
+              <p class="stat-number">₹2.4L</p>
+              <span class="stat-change positive">This quarter</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Shared Cases -->
+        <section class="shared-cases">
+          <div class="section-header">
+            <h2>Rescue Cases Shared by Partners</h2>
+            <div class="filters">
+              <select id="caseStatusFilter">
+                <option value="">All Status</option>
+                <option value="urgent">Urgent</option>
+                <option value="moderate">Moderate</option>
+                <option value="stable">Stable</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="cases-grid">
+            <div class="case-card urgent">
+              <div class="case-header">
+                <h3>Injured Puppy - Mumbai</h3>
+                <span class="priority-badge urgent">Urgent</span>
+              </div>
+              <div class="case-details">
+                <p><strong>Shared by:</strong> Pawsome Rescue Mumbai</p>
+                <p><strong>Location:</strong> Bandra West, Mumbai</p>
+                <p><strong>Issue:</strong> Hit by vehicle, needs immediate surgery</p>
+                <p><strong>Resources needed:</strong> Medical funding, post-op care</p>
+              </div>
+              <div class="case-actions">
+                <button class="btn-small">Offer Help</button>
+                <button class="btn-small outline">View Details</button>
+                <span class="response-count">3 offers received</span>
+              </div>
+            </div>
+
+            <div class="case-card moderate">
+              <div class="case-header">
+                <h3>Senior Cat Colony - Pune</h3>
+                <span class="priority-badge moderate">Moderate</span>
+              </div>
+              <div class="case-details">
+                <p><strong>Shared by:</strong> Cat Care Pune</p>
+                <p><strong>Location:</strong> Koregaon Park, Pune</p>
+                <p><strong>Issue:</strong> 15 senior cats need long-term foster homes</p>
+                <p><strong>Resources needed:</strong> Foster homes, food supplies</p>
+              </div>
+              <div class="case-actions">
+                <button class="btn-small">Offer Help</button>
+                <button class="btn-small outline">View Details</button>
+                <span class="response-count">1 offer received</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Joint Campaigns -->
+        <section class="joint-campaigns">
+          <div class="section-header">
+            <h2>Active Joint Campaigns</h2>
+            <button class="btn-primary" onclick="openNewCampaignModal()">+ Create Campaign</button>
+          </div>
+          
+          <div class="campaigns-grid">
+            <div class="campaign-card active">
+              <div class="campaign-header">
+                <h3>National Sterilization Drive</h3>
+                <span class="campaign-status active">Active</span>
+              </div>
+              <div class="campaign-progress">
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 75%"></div>
+                </div>
+                <span class="progress-text">75% Complete</span>
+              </div>
+              <div class="campaign-details">
+                <p><strong>Partners:</strong> 12 NGOs across India</p>
+                <p><strong>Goal:</strong> Sterilize 1000 animals</p>
+                <p><strong>Current:</strong> 750 animals sterilized</p>
+                <p><strong>Deadline:</strong> December 31, 2024</p>
+              </div>
+              <div class="campaign-actions">
+                <button class="btn-small">Join Campaign</button>
+                <button class="btn-small outline">View Progress</button>
+              </div>
+            </div>
+
+            <div class="campaign-card active">
+              <div class="campaign-header">
+                <h3>Emergency Fund Drive</h3>
+                <span class="campaign-status active">Active</span>
+              </div>
+              <div class="campaign-progress">
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 45%"></div>
+                </div>
+                <span class="progress-text">45% Complete</span>
+              </div>
+              <div class="campaign-details">
+                <p><strong>Partners:</strong> 8 NGOs</p>
+                <p><strong>Goal:</strong> ₹5,00,000 for emergency care</p>
+                <p><strong>Current:</strong> ₹2,25,000 raised</p>
+                <p><strong>Deadline:</strong> November 15, 2024</p>
+              </div>
+              <div class="campaign-actions">
+                <button class="btn-small">Join Campaign</button>
+                <button class="btn-small outline">View Progress</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-top">
+          <p>
+            © <span id="year">2025</span> StrayCare
+            • <a href="contact.html">Contact</a>
+            • <a href="donate.html">Donate</a>
+          </p>
+          <div class="social-links" aria-label="Social media">
+            <a href="#" aria-label="Follow on Twitter">🐦</a>
+            <a href="#" aria-label="Follow on Instagram">📸</a>
+            <a href="#" aria-label="Follow on Facebook">📘</a>
+            <a href="#" aria-label="Follow on YouTube">▶️</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="collaboration.js"></script>
+  </body>
+</html>

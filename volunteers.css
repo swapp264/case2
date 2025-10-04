@@ -1,0 +1,797 @@
+/* Volunteer Scheduling Specific Styles */
+
+/* Schedule Tabs */
+.schedule-tabs {
+    margin-bottom: 2rem;
+}
+
+.tab-buttons {
+    display: flex;
+    gap: 0.5rem;
+    background: white;
+    padding: 0.5rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.tab-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background: transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+    background: rgba(255, 140, 0, 0.1);
+    color: #FF8C00;
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, #FF8C00, #FF6347);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+}
+
+/* Schedule Sections */
+.schedule-section {
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.schedule-section.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.date-display {
+    background: rgba(255, 140, 0, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    color: #8B4513;
+}
+
+/* Timeline */
+.schedule-timeline {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-item {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-left: 3px solid rgba(255, 140, 0, 0.2);
+    padding-left: 2rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -0.5rem;
+    top: 2rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background: #FF8C00;
+    border: 3px solid white;
+    box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2);
+}
+
+.timeline-item.completed {
+    border-left-color: #28a745;
+}
+
+.timeline-item.completed::before {
+    background: #28a745;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
+}
+
+.timeline-item.active {
+    border-left-color: #17a2b8;
+}
+
+.timeline-item.active::before {
+    background: #17a2b8;
+    box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.2);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.2); }
+    50% { box-shadow: 0 0 0 6px rgba(23, 162, 184, 0.1); }
+    100% { box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.2); }
+}
+
+.timeline-item.upcoming {
+    border-left-color: #ffc107;
+}
+
+.timeline-item.upcoming::before {
+    background: #ffc107;
+    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+}
+
+.timeline-time {
+    background: linear-gradient(135deg, #FF8C00, #FF6347);
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    min-width: 80px;
+    text-align: center;
+    height: fit-content;
+}
+
+.timeline-content {
+    flex: 1;
+}
+
+.timeline-content h3 {
+    margin-bottom: 1rem;
+    color: #8B4513;
+    font-size: 1.2rem;
+}
+
+.timeline-content p {
+    margin-bottom: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.timeline-content strong {
+    color: #8B4513;
+}
+
+.status {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+.status.completed {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.status.active {
+    background: rgba(23, 162, 184, 0.1);
+    color: #17a2b8;
+}
+
+.status.upcoming {
+    background: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+}
+
+.timeline-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+/* Available Slots */
+.slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.slot-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.slot-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.slot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.slot-header h3 {
+    color: #8B4513;
+    margin: 0;
+}
+
+.slot-type {
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+}
+
+.slot-type.feeding {
+    background: #28a745;
+}
+
+.slot-type.fostering {
+    background: #17a2b8;
+}
+
+.slot-type.medical {
+    background: #dc3545;
+}
+
+.slot-type.cleaning {
+    background: #6f42c1;
+}
+
+.slot-type.transport {
+    background: #fd7e14;
+}
+
+.slot-details p {
+    margin-bottom: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.slot-details strong {
+    color: #8B4513;
+}
+
+.slot-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+/* Volunteer Directory */
+.volunteer-directory {
+    margin-top: 3rem;
+}
+
+.volunteers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.volunteer-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.volunteer-card:hover {
+    transform: translateY(-3px);
+}
+
+.volunteer-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.volunteer-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.volunteer-info {
+    flex: 1;
+}
+
+.volunteer-info h3 {
+    margin-bottom: 0.5rem;
+    color: #8B4513;
+}
+
+.volunteer-role {
+    color: #FF8C00;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.volunteer-stats {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+}
+
+.volunteer-skills {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.skill-tag {
+    background: rgba(255, 140, 0, 0.1);
+    color: #FF8C00;
+    padding: 0.25rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.volunteer-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Form Styles for Slot Creation */
+.slot-form {
+    padding: 1.5rem;
+}
+
+.slot-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.slot-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.slot-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #8B4513;
+}
+
+.slot-form input,
+.slot-form select,
+.slot-form textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid rgba(255, 140, 0, 0.2);
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.slot-form input:focus,
+.slot-form select:focus,
+.slot-form textarea:focus {
+    outline: none;
+    border-color: #FF8C00;
+    box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.1);
+}
+
+.slot-form textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .tab-buttons {
+        flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+        flex: 1;
+        min-width: 120px;
+    }
+    
+    .timeline-item {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .timeline-time {
+        align-self: flex-start;
+    }
+    
+    .timeline-actions {
+        flex-direction: column;
+    }
+    
+    .slots-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .volunteers-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .volunteer-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .volunteer-actions {
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .slot-form .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Loading States */
+.timeline-item.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.slot-card.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Empty States */
+.no-slots {
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+}
+
+.no-slots h3 {
+    margin-bottom: 1rem;
+    color: #8B4513;
+}
+
+/* Success States */
+.slot-card.booked {
+    border-left: 4px solid #28a745;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(40, 167, 69, 0.05) 100%);
+}
+
+.slot-card.booked .slot-actions .btn-primary {
+    background: #28a745;
+    pointer-events: none;
+}
+
+.slot-card.booked .slot-actions .btn-primary::after {
+    content: ' ✓ Booked';
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 0;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #FF8C00 0%, #FF6347 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 15px 15px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.close-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Form Styles */
+.volunteer-form,
+.slot-form {
+    padding: 2rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #8B4513;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid rgba(255, 140, 0, 0.2);
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #FF8C00;
+    box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.1);
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+/* Contact Modal */
+.contact-info {
+    padding: 2rem;
+}
+
+.volunteer-details {
+    margin-bottom: 2rem;
+}
+
+.volunteer-details h4 {
+    color: #8B4513;
+    margin-bottom: 1rem;
+}
+
+.volunteer-details p {
+    margin-bottom: 0.5rem;
+    color: #654321;
+}
+
+.contact-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Report Modal */
+.report-content {
+    padding: 2rem;
+}
+
+.report-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 140, 0, 0.2);
+}
+
+.report-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.report-section h4 {
+    color: #8B4513;
+    margin-bottom: 1rem;
+}
+
+.report-section p {
+    margin-bottom: 0.5rem;
+    color: #654321;
+}
+
+/* Profile Modal */
+.profile-content {
+    padding: 2rem;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 140, 0, 0.2);
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info h3 {
+    color: #8B4513;
+    margin-bottom: 0.5rem;
+}
+
+.profile-role {
+    color: #FF8C00;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 1rem;
+    color: #654321;
+    font-size: 0.9rem;
+}
+
+.profile-details {
+    margin-bottom: 2rem;
+}
+
+.detail-section {
+    margin-bottom: 1.5rem;
+}
+
+.detail-section h4 {
+    color: #8B4513;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.detail-section p {
+    margin-bottom: 0.25rem;
+    color: #654321;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+/* Task Assignment Modal */
+.task-assignment-modal .modal-content {
+    max-width: 700px;
+}
+
+.task-assignment-modal .form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.task-assignment-modal .form-group select {
+    cursor: pointer;
+}
+
+/* Priority indicators */
+.task-assignment-modal .form-group select option[value="high"] {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.task-assignment-modal .form-group select option[value="medium"] {
+    color: #ffc107;
+    font-weight: 600;
+}
+
+.task-assignment-modal .form-group select option[value="low"] {
+    color: #28a745;
+    font-weight: 600;
+}
+
+/* Responsive Design for Modals */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact-actions {
+        flex-direction: column;
+    }
+    
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .profile-stats {
+        justify-content: center;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .profile-actions {
+        flex-direction: column;
+    }
+    
+    .task-assignment-modal .modal-content {
+        max-width: 95%;
+    }
+}

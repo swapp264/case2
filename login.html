@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — Login</title>
+    <meta name="description" content="Login to your StrayCare account.">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Firebase SDKs (Compat for simpler usage). To enable, set window.FIREBASE_CONFIG before this page loads. -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <a href="index.html" aria-label="StrayCare Home">
+          <h1>StrayCare</h1>
+        </a>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="adopt.html">Adopt</a></li>
+            <li><a href="donate.html">Donate</a></li>
+            <li><a href="volunteer.html">Volunteer</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="login.html" aria-current="page">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <section class="auth-section" aria-labelledby="login-title">
+          <h2 id="login-title">Sign in — <span id="roleLabel">User</span></h2>
+          <p>Choose your role to continue.</p>
+
+          <div class="role-tabs" role="tablist" aria-label="Select role">
+            <button class="role-tab" role="tab" aria-selected="true" data-role="user">User</button>
+            <button class="role-tab" role="tab" aria-selected="false" data-role="admin">Admin</button>
+            <button class="role-tab" role="tab" aria-selected="false" data-role="ngo">NGO</button>
+          </div>
+
+          <div class="role-panels">
+            <div class="role-panel" data-role="user">
+              <form class="auth-form">
+                <label>
+                  Email Address
+                  <input type="email" name="email" placeholder="you@example.com" required>
+                </label>
+                <label>
+                  Password
+                  <input type="password" name="password" placeholder="Enter your password" required>
+                </label>
+                <div class="form-options">
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="remember">
+                    Remember me
+                  </label>
+                  <a href="#" class="forgot-link">Forgot password?</a>
+                </div>
+                <button type="submit">Sign In</button>
+              </form>
+              <div class="or-divider"><span>OR</span></div>
+              <div class="social-login">
+                <button type="button" class="social-btn google" data-provider="google" aria-label="Continue with Google">
+                  <span class="icon">
+                    <img src="google.png" alt="Google" width="20" height="20" />
+                  </span>
+                  <span>Continue with Google</span>
+                </button>
+              </div>
+              <div class="auth-footer">
+                <p>Don't have an account? <a href="register.html">Sign up here</a></p>
+              </div>
+            </div>
+
+            <div class="role-panel" data-role="admin" hidden>
+              <form class="auth-form">
+                <label>
+                  Admin Email or ID
+                  <input type="text" name="adminId" placeholder="admin@example.com or ADMIN-001" required>
+                </label>
+                <label>
+                  Password
+                  <input type="password" name="password" placeholder="Enter your password" required>
+                </label>
+                <div class="form-options">
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="remember">
+                    Remember me
+                  </label>
+                  <a href="#" class="forgot-link">Forgot password?</a>
+                </div>
+                <button type="submit">Sign In</button>
+              </form>
+              <div class="auth-footer">
+                <p>Admin access is managed by StrayCare. Registration is not available here.</p>
+              </div>
+            </div>
+
+            <div class="role-panel" data-role="ngo" hidden>
+              <form class="auth-form">
+                <label>
+                  NGO Email or ID
+                  <input type="text" name="ngoId" placeholder="ngo@example.org or NGO-001" required>
+                </label>
+                <label>
+                  Password
+                  <input type="password" name="password" placeholder="Enter your password" required>
+                </label>
+                <div class="form-options">
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="remember">
+                    Remember me
+                  </label>
+                  <a href="#" class="forgot-link">Forgot password?</a>
+                </div>
+                <button type="submit">Sign In</button>
+              </form>
+              <div class="auth-footer">
+                <p>NGO accounts are provisioned by StrayCare. Registration is not available here.</p>
+              </div>
+            </div>
+          </div>
+
+          <style>
+            .role-tabs { display: flex; gap: .5rem; margin: 1rem 0 1.25rem; flex-wrap: wrap; }
+            .role-tab { padding: .5rem .9rem; border: 1px solid #ddd; border-radius: 999px; background: #fff; cursor: pointer; }
+            .role-tab[aria-selected="true"] { background: #111; color: #fff; border-color: #111; }
+          </style>
+
+          <script>
+            // Firebase Configuration
+            window.FIREBASE_CONFIG = {
+              apiKey: "AIzaSyAhesk1IN6Q0QuaQbrFAmHAuULomYrZVGY",
+              authDomain: "straycare-b9e59.firebaseapp.com",
+              projectId: "straycare-b9e59",
+              storageBucket: "straycare-b9e59.firebasestorage.app",
+              messagingSenderId: "511847623347",
+              appId: "1:511847623347:web:f7d9bc81cd6a6a3674dec6",
+              measurementId: "G-0YMFELM3C9"
+            };
+
+            (function(){
+              // Initialize Firebase if config is present
+              try {
+                if (window.FIREBASE_CONFIG && firebase?.apps?.length === 0) {
+                  firebase.initializeApp(window.FIREBASE_CONFIG);
+                }
+              } catch(e) { console.warn('Firebase init skipped:', e); }
+
+              function selectRole(role){
+                const valid = ['user','admin','ngo'];
+                if(!valid.includes(role)) role = 'user';
+                const tabs = document.querySelectorAll('.role-tab');
+                const panels = document.querySelectorAll('.role-panel');
+                const label = document.getElementById('roleLabel');
+                tabs.forEach(t => t.setAttribute('aria-selected', t.getAttribute('data-role') === role ? 'true' : 'false'));
+                panels.forEach(p => p.hidden = (p.getAttribute('data-role') !== role));
+                if(label) label.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+              }
+              const params = new URLSearchParams(window.location.search);
+              const initial = params.get('role') || 'user';
+              selectRole(initial.toLowerCase());
+              document.querySelectorAll('.role-tab').forEach(btn=>{
+                btn.addEventListener('click', ()=>{
+                  const role = btn.getAttribute('data-role');
+                  selectRole(role);
+                  const url = new URL(window.location);
+                  url.searchParams.set('role', role);
+                  window.history.replaceState({}, '', url);
+                });
+              });
+
+              async function firebaseSocialSignIn(providerName){
+                if (!window.firebase || firebase.apps.length === 0) {
+                  alert('Social sign-in not configured yet. Please set Firebase config.');
+                  return;
+                }
+                const auth = firebase.auth();
+                let provider;
+                if (providerName === 'google') {
+                  provider = new firebase.auth.GoogleAuthProvider();
+                  provider.setCustomParameters({ prompt: 'select_account' });
+                } else if (providerName === 'phone') {
+                  try {
+                    // Clear any existing reCAPTCHA instance first
+                    if (window._recaptchaVerifier) {
+                      try {
+                        window._recaptchaVerifier.clear();
+                      } catch(e) { console.warn('Error clearing reCAPTCHA:', e); }
+                      window._recaptchaVerifier = null;
+                    }
+                    // Create new reCAPTCHA instance
+                    window._recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { 
+                      size: 'invisible',
+                      callback: function(response) {
+                        console.log('reCAPTCHA solved');
+                      }
+                    });
+                    let phoneNumber = prompt('Enter your phone number (with country code), e.g. +91XXXXXXXXXX');
+                    if (!phoneNumber) return;
+                    
+                    // Clean and validate phone number
+                    phoneNumber = phoneNumber.trim().replace(/\s+/g, '');
+                    if (!phoneNumber.startsWith('+')) {
+                      alert('Phone number must include country code (e.g. +91XXXXXXXXXX)');
+                      return;
+                    }
+                    if (phoneNumber.length < 10) {
+                      alert('Phone number is too short. Please include country code and full number.');
+                      return;
+                    }
+                    const confirmationResult = await auth.signInWithPhoneNumber(phoneNumber, window._recaptchaVerifier);
+                    const code = prompt('Enter the OTP sent to ' + phoneNumber);
+                    if (!code) return;
+                    await confirmationResult.confirm(code);
+                    window.location.href = 'index.html';
+                    return;
+                  } catch (err) {
+                    console.error('Phone auth error:', err);
+                    alert(err?.message || 'Unable to sign in with phone.');
+                    try { window._recaptchaVerifier && window._recaptchaVerifier.clear && window._recaptchaVerifier.clear(); window._recaptchaVerifier = null; } catch(_){}
+                    return;
+                  }
+                } else {
+                  alert('Unsupported provider: ' + providerName);
+                  return;
+                }
+                try {
+                  const result = await auth.signInWithPopup(provider);
+                  if (result?.user) {
+                    window.location.href = 'index.html';
+                  }
+                } catch (err) {
+                  console.error('Auth error:', err);
+                  alert(err?.message || 'Unable to sign in.');
+                }
+              }
+
+              document.querySelectorAll('.social-btn').forEach(b=>{
+                b.addEventListener('click', ()=> firebaseSocialSignIn(b.getAttribute('data-provider')));
+              });
+            })();
+          </script>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>
+          © <span id="year">2025</span> StrayCare
+          • <a href="contact.html">Contact</a>
+          • <a href="donate.html">Donate</a>
+        </p>
+      </div>
+    </footer>
+    <!-- Invisible reCAPTCHA container for Firebase Phone Auth -->
+    <div id="recaptcha-container" style="position: fixed; bottom: -1000px; right: -1000px;"></div>
+  </body>
+</html>

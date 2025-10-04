@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — Volunteer</title>
+    <meta name="description" content="Volunteer opportunities at StrayCare.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <a href="index.html" aria-label="StrayCare Home">
+          <h1>StrayCare</h1>
+        </a>
+        <form class="site-search" role="search" aria-label="Site search" action="adopt.html" method="get">
+          <input type="search" name="q" placeholder="Search pets, services, help…" aria-label="Search" />
+          <button type="submit" aria-label="Search">🔍</button>
+        </form>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="adopt.html">Adopt</a></li>
+            <li><a href="donate.html">Donate</a></li>
+            <li><a href="volunteer.html" aria-current="page">Volunteer</a></li>
+            <li><a href="emergency.html">Emergency</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="user-actions">
+          <div class="user-dropdown">
+            <button class="user-icon" aria-label="User Menu">👤</button>
+            <div class="dropdown-menu">
+              <a href="login-user.html">Login</a>
+              <a href="register.html">Register (User)</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <section aria-labelledby="roles-title">
+          <h2 id="roles-title">Volunteer roles</h2>
+          <div class="volunteer-roles">
+            <div class="role-item" data-role="animal-care">
+              <div class="role-image">
+                <img src="https://images.unsplash.com/photo-1587764379873-97837921fd44?w=300&h=200&fit=crop&crop=center" alt="Animal care at shelter" loading="lazy">
+              </div>
+              <h3>Animal care at shelter</h3>
+              <p class="role-preview">Daily care, feeding, and socialization of rescued animals</p>
+              <button class="view-details-btn">View Details</button>
+            </div>
+            <div class="role-item" data-role="foster-care">
+              <div class="role-image">
+                <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=300&h=200&fit=crop&crop=center" alt="Foster caregiver" loading="lazy">
+              </div>
+              <h3>Foster caregiver</h3>
+              <p class="role-preview">Provide temporary homes for animals in recovery</p>
+              <button class="view-details-btn">View Details</button>
+            </div>
+            <div class="role-item" data-role="transport">
+              <div class="role-image">
+                <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=300&h=200&fit=crop&crop=center" alt="Transport and logistics" loading="lazy">
+              </div>
+              <h3>Transport and logistics</h3>
+              <p class="role-preview">Help with rescue operations and vet visits</p>
+              <button class="view-details-btn">View Details</button>
+            </div>
+            <div class="role-item" data-role="fundraising">
+              <div class="role-image">
+                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop&crop=center" alt="Fundraising and events" loading="lazy">
+              </div>
+              <h3>Fundraising and events</h3>
+              <p class="role-preview">Organize events and campaigns to raise funds</p>
+              <button class="view-details-btn">View Details</button>
+            </div>
+            <div class="role-item" data-role="outreach">
+              <div class="role-image">
+                <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=300&h=200&fit=crop&crop=center" alt="Content and outreach" loading="lazy">
+              </div>
+              <h3>Content and outreach</h3>
+              <p class="role-preview">Create content and manage social media presence</p>
+              <button class="view-details-btn">View Details</button>
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="scheduling-title">
+          <h2 id="scheduling-title">Volunteer Management</h2>
+          <div class="management-options">
+            <div class="management-card">
+              <h3>📅 NGO Dashboard</h3>
+              <p>Access the complete volunteer management system with scheduling, directory, and all management features.</p>
+              <a href="login-ngo.html" class="btn-primary">Open Dashboard</a>
+            </div>
+            <div class="management-card">
+              <h3>👥 Volunteer Directory</h3>
+              <p>View volunteer profiles, assign tasks, and manage volunteer information.</p>
+              <button onclick="openDirectoryModal()" class="btn-secondary">View Directory</button>
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="apply-title">
+          <h2 id="apply-title">Apply to volunteer</h2>
+          <form id="volunteer-form">
+            <div class="form-row">
+              <label>
+                Full Name *
+                <input type="text" id="name" name="name" placeholder="Your full name" required>
+              </label>
+              <label>
+                Email Address *
+                <input type="email" id="email" name="email" placeholder="you@example.com" required>
+              </label>
+            </div>
+            <div class="form-row">
+              <label>
+                Phone Number *
+                <input type="tel" id="phone" name="phone" placeholder="+91XXXXXXXXXX" required>
+              </label>
+              <label>
+                Age
+                <input type="number" id="age" name="age" placeholder="25" min="16" max="80">
+              </label>
+            </div>
+            <div class="form-row">
+              <label>
+                Preferred Role *
+                <select id="role" name="role" required>
+                  <option value="">Select a role</option>
+                  <option value="animal-care">Animal care at shelter</option>
+                  <option value="foster-care">Foster caregiver</option>
+                  <option value="transport">Transport and logistics</option>
+                  <option value="fundraising">Fundraising and events</option>
+                  <option value="outreach">Content and outreach</option>
+                </select>
+              </label>
+              <label>
+                Availability *
+                <select id="availability" name="availability" required>
+                  <option value="">Select availability</option>
+                  <option value="weekdays">Weekdays</option>
+                  <option value="weekends">Weekends</option>
+                  <option value="flexible">Flexible</option>
+                  <option value="evenings">Evenings only</option>
+                </select>
+              </label>
+            </div>
+            <label>
+              Experience with animals
+              <textarea id="experience" name="experience" placeholder="Tell us about your experience with animals (optional)" rows="3"></textarea>
+            </label>
+            <label>
+              Why do you want to volunteer?
+              <textarea id="motivation" name="motivation" placeholder="What motivates you to help stray animals?" rows="3" required></textarea>
+            </label>
+            <div class="form-checkbox">
+              <label class="checkbox-label">
+                <input type="checkbox" id="terms" name="terms" required>
+                I agree to the terms and conditions and commit to volunteering responsibly
+              </label>
+            </div>
+            <button type="submit" id="submit-btn">Submit Application</button>
+          </form>
+        </section>
+    </div>
+  </main>
+
+    <footer>
+      <div class="container">
+        <div class="newsletter">
+          <h3>Join our community</h3>
+          <p>Get stories, adoption drives, and rescue tips in your inbox.</p>
+          <form class="newsletter-form" aria-label="Newsletter subscription" onsubmit="event.preventDefault(); this.reset();">
+            <input type="email" placeholder="Your email address" aria-label="Email" required>
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+        <p>
+          © <span id="year">2025</span> StrayCare
+          • <a href="contact.html">Contact</a>
+          • <a href="donate.html">Donate</a>
+        </p>
+      </div>
+    </footer>
+    <!-- Role Details Modal -->
+    <div id="role-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="modal-body">
+          <!-- Content will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Volunteer Directory Modal -->
+    <div id="directory-modal" class="modal">
+      <div class="modal-content" style="max-width: 900px;">
+        <span class="close" onclick="closeDirectoryModal()">&times;</span>
+        <div id="directory-modal-body">
+          <h2 style="color: #FF8C00; margin-bottom: 1.5rem;">👥 Volunteer Directory</h2>
+          <div class="directory-grid">
+            <div class="directory-card">
+              <div class="directory-avatar">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="Rahul Kumar" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face';">
+              </div>
+              <div class="directory-info">
+                <h3>Rahul Kumar</h3>
+                <p class="directory-role">Feeding Specialist</p>
+                <p class="directory-contact">📧 rahul.kumar@email.com</p>
+                <p class="directory-contact">📱 +91 98765-43210</p>
+                <p class="directory-stats">15 shifts completed • 4.8★ rating</p>
+                <div class="directory-skills">
+                  <span class="skill-tag">Feeding</span>
+                  <span class="skill-tag">Basic Care</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="directory-card">
+              <div class="directory-avatar">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop&crop=face" alt="Dr. Priya Singh" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop&crop=face';">
+              </div>
+              <div class="directory-info">
+                <h3>Dr. Priya Singh</h3>
+                <p class="directory-role">Veterinarian</p>
+                <p class="directory-contact">📧 priya.singh@email.com</p>
+                <p class="directory-contact">📱 +91 98765-43211</p>
+                <p class="directory-stats">28 shifts completed • 5.0★ rating</p>
+                <div class="directory-skills">
+                  <span class="skill-tag">Medical</span>
+                  <span class="skill-tag">Vaccination</span>
+                  <span class="skill-tag">Surgery</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="directory-card">
+              <div class="directory-avatar">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face" alt="Neha Sharma" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face';">
+              </div>
+              <div class="directory-info">
+                <h3>Neha Sharma</h3>
+                <p class="directory-role">Foster Care Specialist</p>
+                <p class="directory-contact">📧 neha.sharma@email.com</p>
+                <p class="directory-contact">📱 +91 98765-43212</p>
+                <p class="directory-stats">22 shifts completed • 4.9★ rating</p>
+                <div class="directory-skills">
+                  <span class="skill-tag">Fostering</span>
+                  <span class="skill-tag">Socialization</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="directory-card">
+              <div class="directory-avatar">
+                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&crop=face" alt="Amit Patel" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&h=100&fit=crop&crop=face';">
+              </div>
+              <div class="directory-info">
+                <h3>Amit Patel</h3>
+                <p class="directory-role">Transport & Logistics</p>
+                <p class="directory-contact">📧 amit.patel@email.com</p>
+                <p class="directory-contact">📱 +91 98765-43213</p>
+                <p class="directory-stats">18 shifts completed • 4.7★ rating</p>
+                <div class="directory-skills">
+                  <span class="skill-tag">Transport</span>
+                  <span class="skill-tag">Rescue Operations</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="directory-card">
+              <div class="directory-avatar">
+                <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=100&h=100&fit=crop&crop=face" alt="Kavya Reddy" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&crop=face';">
+              </div>
+              <div class="directory-info">
+                <h3>Kavya Reddy</h3>
+                <p class="directory-role">Content & Outreach</p>
+                <p class="directory-contact">📧 kavya.reddy@email.com</p>
+                <p class="directory-contact">📱 +91 98765-43214</p>
+                <p class="directory-stats">25 shifts completed • 4.9★ rating</p>
+                <div class="directory-skills">
+                  <span class="skill-tag">Social Media</span>
+                  <span class="skill-tag">Photography</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="directory-card">
+              <div class="directory-avatar">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="Rohan Mehta" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop&crop=face';">
+              </div>
+              <div class="directory-info">
+                <h3>Rohan Mehta</h3>
+                <p class="directory-role">Fundraising Coordinator</p>
+                <p class="directory-contact">📧 rohan.mehta@email.com</p>
+                <p class="directory-contact">📱 +91 98765-43215</p>
+                <p class="directory-stats">20 shifts completed • 4.8★ rating</p>
+                <div class="directory-skills">
+                  <span class="skill-tag">Event Planning</span>
+                  <span class="skill-tag">Fundraising</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Styles -->
+    <style>
+      .role-item {
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 1rem;
+        background: white;
+      }
+      .role-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      }
+      .role-preview {
+        color: #666;
+        font-size: 0.9rem;
+        margin: 0.5rem 0;
+      }
+      .view-details-btn {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+      }
+      .view-details-btn:hover {
+        background: #0056b3;
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+      .form-checkbox {
+        margin: 1rem 0;
+      }
+      .checkbox-label {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+      }
+      #submit-btn {
+        background: #28a745;
+        color: white;
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        width: 100%;
+      }
+      #submit-btn:hover {
+        background: #218838;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+      }
+      .modal-content {
+        background-color: white;
+        margin: 5% auto;
+        padding: 2rem;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 600px;
+        position: relative;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+      .close {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        font-size: 2rem;
+        cursor: pointer;
+        color: #999;
+      }
+      .close:hover {
+        color: #333;
+      }
+      .role-details h3 {
+        color: #007bff;
+        margin-bottom: 1rem;
+      }
+      .role-details ul {
+        margin: 1rem 0;
+        padding-left: 1.5rem;
+      }
+      .role-details li {
+        margin: 0.5rem 0;
+      }
+      .management-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+      
+      .management-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 140, 0, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .management-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, #FF8C00 0%, #FF6347 100%);
+      }
+      
+      .management-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+      }
+      
+      .management-card h3 {
+        color: #FF8C00;
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+      }
+      
+      .management-card p {
+        color: #654321;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+      }
+      
+      .btn-primary, .btn-secondary {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+      
+      .btn-primary {
+        background: linear-gradient(135deg, #FF8C00 0%, #FF6347 100%);
+        color: white;
+      }
+      
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 140, 0, 0.4);
+      }
+      
+      .btn-secondary {
+        background: #6c757d;
+        color: white;
+      }
+      
+      .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+      }
+
+      /* Directory Modal Styles */
+      .directory-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1rem;
+      }
+      
+      .directory-card {
+        background: #f9fafb;
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid #e5e7eb;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      
+      .directory-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      }
+      
+      .directory-avatar {
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+      
+      .directory-avatar img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #FF8C00;
+      }
+      
+      .directory-info h3 {
+        color: #1f2937;
+        font-size: 1.1rem;
+        margin: 0.5rem 0;
+        text-align: center;
+      }
+      
+      .directory-role {
+        color: #FF8C00;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-align: center;
+        margin: 0.25rem 0;
+      }
+      
+      .directory-contact {
+        color: #6b7280;
+        font-size: 0.85rem;
+        margin: 0.25rem 0;
+      }
+      
+      .directory-stats {
+        color: #6b7280;
+        font-size: 0.8rem;
+        margin: 0.5rem 0;
+        text-align: center;
+      }
+      
+      .directory-skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        margin-top: 0.75rem;
+        justify-content: center;
+      }
+
+      @media (max-width: 768px) {
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+        .modal-content {
+          width: 95%;
+          margin: 10% auto;
+        }
+        .management-options {
+          grid-template-columns: 1fr;
+        }
+        .directory-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+
+    <!-- JavaScript -->
+    <script>
+      // Role details data
+      const roleDetails = {
+        'animal-care': {
+          title: 'Animal Care at Shelter',
+          description: 'Provide direct care and support to rescued animals at our shelter facilities.',
+          responsibilities: [
+            'Feed animals according to dietary requirements',
+            'Clean kennels and maintain hygiene standards',
+            'Provide socialization and exercise for animals',
+            'Monitor animal health and report concerns',
+            'Assist with basic medical care under supervision',
+            'Help with adoption events and meet-and-greets'
+          ],
+          requirements: [
+            'Love for animals and patience',
+            'Physical ability to handle animals safely',
+            'Commitment to regular volunteer schedule',
+            'Basic understanding of animal behavior',
+            'Willingness to follow safety protocols'
+          ],
+          timeCommitment: 'Minimum 4 hours per week, flexible scheduling available'
+        },
+        'foster-care': {
+          title: 'Foster Caregiver',
+          description: 'Provide temporary homes for animals recovering from medical procedures or awaiting adoption.',
+          responsibilities: [
+            'Provide safe, loving temporary homes',
+            'Administer medications as prescribed',
+            'Monitor recovery progress and report updates',
+            'Socialize animals to prepare for adoption',
+            'Transport to vet appointments when needed',
+            'Help with adoption screening process'
+          ],
+          requirements: [
+            'Suitable home environment for animals',
+            'Experience with pet care preferred',
+            'Reliable transportation',
+            'Flexibility for emergency fostering',
+            'Emotional resilience for temporary placements'
+          ],
+          timeCommitment: 'Variable duration from 2 weeks to 6 months per animal'
+        },
+        'transport': {
+          title: 'Transport and Logistics',
+          description: 'Help with rescue operations, vet visits, and transportation needs.',
+          responsibilities: [
+            'Transport animals to/from vet appointments',
+            'Assist with rescue operations',
+            'Help with adoption event logistics',
+            'Deliver supplies to foster homes',
+            'Emergency transport when needed',
+            'Coordinate with other volunteers'
+          ],
+          requirements: [
+            'Valid driving license and reliable vehicle',
+            'Comfortable handling animals during transport',
+            'Flexible schedule for emergency calls',
+            'Good communication skills',
+            'Basic knowledge of animal safety during transport'
+          ],
+          timeCommitment: 'On-call basis, typically 2-6 hours per week'
+        },
+        'fundraising': {
+          title: 'Fundraising and Events',
+          description: 'Organize events and campaigns to raise funds for animal care and rescue operations.',
+          responsibilities: [
+            'Plan and organize fundraising events',
+            'Coordinate adoption drives and awareness campaigns',
+            'Manage event logistics and volunteer coordination',
+            'Develop partnerships with local businesses',
+            'Create promotional materials for events',
+            'Handle event registration and donations'
+          ],
+          requirements: [
+            'Event planning or organizational experience',
+            'Strong communication and networking skills',
+            'Creative thinking for fundraising ideas',
+            'Basic computer skills for event management',
+            'Ability to work with teams and delegate tasks'
+          ],
+          timeCommitment: '5-10 hours per week, with intensive periods during events'
+        },
+        'outreach': {
+          title: 'Content and Outreach',
+          description: 'Create content and manage social media to raise awareness about animal welfare.',
+          responsibilities: [
+            'Create engaging social media content',
+            'Write blog posts and newsletters',
+            'Photograph animals for adoption profiles',
+            'Manage social media accounts',
+            'Develop educational materials',
+            'Coordinate with media for coverage'
+          ],
+          requirements: [
+            'Strong writing and communication skills',
+            'Social media management experience',
+            'Basic photography skills',
+            'Creative content creation abilities',
+            'Understanding of animal welfare issues'
+          ],
+          timeCommitment: '3-8 hours per week, flexible remote work possible'
+        }
+      };
+
+      // Modal functionality
+      const modal = document.getElementById('role-modal');
+      const modalBody = document.getElementById('modal-body');
+      const closeBtn = document.querySelector('.close');
+
+      // Add click listeners to role items
+      document.addEventListener('DOMContentLoaded', function() {
+        const roleItems = document.querySelectorAll('.role-item');
+        roleItems.forEach(item => {
+          item.addEventListener('click', function() {
+            const roleKey = this.getAttribute('data-role');
+            showRoleDetails(roleKey);
+          });
+        });
+
+        // Close modal functionality
+        closeBtn.addEventListener('click', function() {
+          modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+          if (event.target === modal) {
+            modal.style.display = 'none';
+          }
+        });
+      });
+
+      function showRoleDetails(roleKey) {
+        const role = roleDetails[roleKey];
+        if (!role) return;
+
+        modalBody.innerHTML = `
+          <div class="role-details">
+            <h3>${role.title}</h3>
+            <p><strong>Description:</strong> ${role.description}</p>
+            
+            <h4>Key Responsibilities:</h4>
+            <ul>
+              ${role.responsibilities.map(resp => `<li>${resp}</li>`).join('')}
+            </ul>
+            
+            <h4>Requirements:</h4>
+            <ul>
+              ${role.requirements.map(req => `<li>${req}</li>`).join('')}
+            </ul>
+            
+            <p><strong>Time Commitment:</strong> ${role.timeCommitment}</p>
+            
+            <div style="margin-top: 2rem; text-align: center;">
+              <button onclick="selectRole('${roleKey}')" style="background: #28a745; color: white; padding: 0.8rem 2rem; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem;">Apply for this Role</button>
+            </div>
+          </div>
+        `;
+        
+        modal.style.display = 'block';
+      }
+
+      function selectRole(roleKey) {
+        // Close modal and scroll to application form
+        modal.style.display = 'none';
+        document.getElementById('role').value = roleKey;
+        document.getElementById('apply-title').scrollIntoView({ behavior: 'smooth' });
+      }
+
+      // Directory modal functions
+      function openDirectoryModal() {
+        const directoryModal = document.getElementById('directory-modal');
+        if (directoryModal) {
+          directoryModal.style.display = 'block';
+        }
+      }
+
+      function closeDirectoryModal() {
+        const directoryModal = document.getElementById('directory-modal');
+        if (directoryModal) {
+          directoryModal.style.display = 'none';
+        }
+      }
+
+      // Close directory modal when clicking outside
+      window.addEventListener('click', function(event) {
+        const directoryModal = document.getElementById('directory-modal');
+        if (event.target === directoryModal) {
+          closeDirectoryModal();
+        }
+      });
+
+      // Form submission
+      document.getElementById('volunteer-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = {
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+          phone: document.getElementById('phone').value,
+          age: document.getElementById('age').value,
+          role: document.getElementById('role').value,
+          availability: document.getElementById('availability').value,
+          experience: document.getElementById('experience').value,
+          motivation: document.getElementById('motivation').value,
+          terms: document.getElementById('terms').checked,
+          applicationDate: new Date().toISOString(),
+          status: 'pending'
+        };
+
+        // Validate required fields
+        if (!formData.name || !formData.email || !formData.phone || !formData.role || !formData.availability || !formData.motivation || !formData.terms) {
+          alert('Please fill in all required fields and accept the terms.');
+          return;
+        }
+
+        // Store in localStorage
+        const applications = JSON.parse(localStorage.getItem('volunteerApplications') || '[]');
+        applications.push(formData);
+        localStorage.setItem('volunteerApplications', JSON.stringify(applications));
+
+        // Show success message
+        alert('✅ Thank you for your application, ' + formData.name + '!\n\nWe have received your volunteer application and will review it shortly. You will be contacted at ' + formData.email + ' within 2-3 business days.\n\nThank you for your interest in helping animals!');
+        
+        // Reset form
+        document.getElementById('volunteer-form').reset();
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    </script>
+  </body>
+</html>
+
+

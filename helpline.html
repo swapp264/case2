@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — Pet Care Helpline</title>
+    <meta name="description" content="Get first-aid guidance, pet care tips, and connect with experts through our AI chatbot">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="helpline.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" aria-label="StrayCare Home">
+                <h1>StrayCare</h1>
+            </a>
+            <nav aria-label="Primary">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="lost-found.html">Lost & Found</a></li>
+                    <li><a href="adopt.html">Adopt</a></li>
+                    <li><a href="helpline.html" class="active">Helpline</a></li>
+                    <li><a href="rewards.html">Rewards</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <div class="user-dropdown">
+                    <button class="user-icon" aria-label="User Menu">👤</button>
+                    <div class="dropdown-menu">
+                        <a href="login.html">Login</a>
+                        <a href="register.html">Register (User)</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Page Header -->
+            <section class="page-header">
+                <div class="header-content">
+                    <h1>Pet Care Helpline</h1>
+                    <p>Get immediate guidance for pet emergencies, first-aid tips, and expert advice through our AI assistant</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-primary" onclick="startChat()">Start Chat</button>
+                    <button class="btn-secondary" onclick="callEmergency()">Emergency Contact</button>
+                </div>
+            </section>
+
+            <!-- Emergency Quick Actions -->
+            <section class="emergency-section">
+                <div class="emergency-header">
+                    <h2>🚨 Emergency Quick Actions</h2>
+                    <p>Immediate help for urgent situations</p>
+                </div>
+                <div class="emergency-grid">
+                    <div class="emergency-card critical">
+                        <div class="emergency-icon">🩸</div>
+                        <div class="emergency-content">
+                            <h3>Bleeding</h3>
+                            <p>Apply pressure with clean cloth, elevate if possible</p>
+                            <button class="btn-primary" onclick="getFirstAid('bleeding')">Get Instructions</button>
+                        </div>
+                    </div>
+                    <div class="emergency-card critical">
+                        <div class="emergency-icon">🤢</div>
+                        <div class="emergency-content">
+                            <h3>Poisoning</h3>
+                            <p>Don't induce vomiting, call vet immediately</p>
+                            <button class="btn-primary" onclick="getFirstAid('poisoning')">Get Instructions</button>
+                        </div>
+                    </div>
+                    <div class="emergency-card urgent">
+                        <div class="emergency-icon">😰</div>
+                        <div class="emergency-content">
+                            <h3>Heat Stroke</h3>
+                            <p>Move to cool area, apply wet towels</p>
+                            <button class="btn-primary" onclick="getFirstAid('heatstroke')">Get Instructions</button>
+                        </div>
+                    </div>
+                    <div class="emergency-card urgent">
+                        <div class="emergency-icon">💔</div>
+                        <div class="emergency-content">
+                            <h3>Not Breathing</h3>
+                            <p>Check airway, perform pet CPR if trained</p>
+                            <button class="btn-primary" onclick="getFirstAid('breathing')">Get Instructions</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chat Interface -->
+            <section class="chat-section">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <div class="chat-info">
+                            <h2>🤖 StrayCare AI Assistant</h2>
+                            <p>Ask me anything about pet care, first-aid, or emergency situations</p>
+                        </div>
+                        <div class="chat-status">
+                            <span class="status-indicator online"></span>
+                            <span>Online</span>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message bot-message">
+                            <div class="message-avatar">🤖</div>
+                            <div class="message-content">
+                                <p>Hello! I'm your StrayCare AI assistant. I can help you with:</p>
+                                <ul>
+                                    <li>First-aid guidance for pets</li>
+                                    <li>Feeding and nutrition advice</li>
+                                    <li>Behavioral issues</li>
+                                    <li>Emergency situations</li>
+                                    <li>General pet care tips</li>
+                                </ul>
+                                <p>What can I help you with today?</p>
+                            </div>
+                            <div class="message-time">Just now</div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input">
+                        <div class="input-container">
+                            <input type="text" id="chatInput" placeholder="Type your question here..." onkeypress="handleChatInput(event)">
+                            <button class="send-btn" onclick="sendMessage()">📤</button>
+                        </div>
+                        <div class="quick-actions">
+                            <button class="quick-btn" onclick="askQuestion('How to feed a stray dog?')">Feeding Guide</button>
+                            <button class="quick-btn" onclick="askQuestion('What to do if a pet is injured?')">Injury Help</button>
+                            <button class="quick-btn" onclick="askQuestion('How to approach a scared animal?')">Behavior Tips</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <section class="faq-section">
+                <div class="section-header">
+                    <h2>Frequently Asked Questions</h2>
+                    <p>Quick answers to common pet care questions</p>
+                </div>
+                
+                <div class="faq-categories">
+                    <div class="faq-category">
+                        <h3>🐕 Feeding & Nutrition</h3>
+                        <div class="faq-list">
+                            <div class="faq-item">
+                                <div class="faq-question" onclick="toggleFAQ(this)">
+                                    <span>What should I feed a stray dog?</span>
+                                    <span class="faq-icon">+</span>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>For stray dogs, provide clean water and high-quality dog food. Avoid human food like chocolate, onions, or grapes. If you can't get dog food immediately, boiled rice with boiled chicken (no spices) is a safe temporary option.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item">
+                                <div class="faq-question" onclick="toggleFAQ(this)">
+                                    <span>How often should I feed a stray animal?</span>
+                                    <span class="faq-icon">+</span>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Feed adult dogs 1-2 times daily, puppies 3-4 times. Cats prefer small, frequent meals. Always provide fresh water. Adjust portions based on the animal's size and condition.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-category">
+                        <h3>🏥 Health & First Aid</h3>
+                        <div class="faq-list">
+                            <div class="faq-item">
+                                <div class="faq-question" onclick="toggleFAQ(this)">
+                                    <span>How to treat minor wounds on pets?</span>
+                                    <span class="faq-icon">+</span>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Clean the wound with mild soap and water. Apply antiseptic solution (diluted betadine). Cover with clean bandage if possible. Monitor for signs of infection (redness, swelling, discharge). Seek veterinary care for deep wounds.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item">
+                                <div class="faq-question" onclick="toggleFAQ(this)">
+                                    <span>What are signs of a sick animal?</span>
+                                    <span class="faq-icon">+</span>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Look for: lethargy, loss of appetite, vomiting, diarrhea, coughing, sneezing, limping, unusual behavior, discharge from eyes/nose, changes in drinking/urination. Contact a vet if symptoms persist.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-category">
+                        <h3>🏠 Shelter & Care</h3>
+                        <div class="faq-list">
+                            <div class="faq-item">
+                                <div class="faq-question" onclick="toggleFAQ(this)">
+                                    <span>How to provide temporary shelter?</span>
+                                    <span class="faq-icon">+</span>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Use cardboard boxes, plastic containers, or build simple shelters with wood and tarpaulin. Ensure they're waterproof, elevated from ground, and insulated. Provide clean bedding (old blankets, straw).</p>
+                                </div>
+                            </div>
+                            <div class="faq-item">
+                                <div class="faq-question" onclick="toggleFAQ(this)">
+                                    <span>How to approach a scared animal?</span>
+                                    <span class="faq-icon">+</span>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Move slowly, avoid direct eye contact, speak softly. Offer food from a distance. Don't chase or corner them. Let them come to you. Use treats to build trust gradually.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Expert Contacts -->
+            <section class="experts-section">
+                <div class="section-header">
+                    <h2>Connect with Experts</h2>
+                    <p>Get in touch with veterinary professionals and animal care experts</p>
+                </div>
+                
+                <div class="experts-grid">
+                    <div class="expert-card">
+                        <div class="expert-avatar">
+                            <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=100&h=100&fit=crop&crop=face" alt="Dr. Priya Singh">
+                        </div>
+                        <div class="expert-info">
+                            <h3>Dr. Priya Singh</h3>
+                            <p class="expert-specialty">Veterinarian</p>
+                            <p class="expert-description">Specializes in emergency care and surgery. Available for urgent consultations.</p>
+                            <div class="expert-contact">
+                                <span>📞 98765-43210</span>
+                                <span>📧 dr.priya@straycare.com</span>
+                            </div>
+                        </div>
+                        <div class="expert-actions">
+                            <button class="btn-primary" onclick="contactExpert('dr-priya')">Contact</button>
+                            <button class="btn-secondary" onclick="bookConsultation('dr-priya')">Book Consultation</button>
+                        </div>
+                    </div>
+                    
+                    <div class="expert-card">
+                        <div class="expert-avatar">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="Rahul Kumar">
+                        </div>
+                        <div class="expert-info">
+                            <h3>Rahul Kumar</h3>
+                            <p class="expert-specialty">Animal Behaviorist</p>
+                            <p class="expert-description">Expert in handling aggressive or traumatized animals. Provides rehabilitation guidance.</p>
+                            <div class="expert-contact">
+                                <span>📞 98765-43211</span>
+                                <span>📧 rahul@straycare.com</span>
+                            </div>
+                        </div>
+                        <div class="expert-actions">
+                            <button class="btn-primary" onclick="contactExpert('rahul')">Contact</button>
+                            <button class="btn-secondary" onclick="bookConsultation('rahul')">Book Consultation</button>
+                        </div>
+                    </div>
+                    
+                    <div class="expert-card">
+                        <div class="expert-avatar">
+                            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face" alt="Neha Sharma">
+                        </div>
+                        <div class="expert-info">
+                            <h3>Neha Sharma</h3>
+                            <p class="expert-specialty">Rescue Coordinator</p>
+                            <p class="expert-description">Coordinates rescue operations and provides guidance on animal welfare laws.</p>
+                            <div class="expert-contact">
+                                <span>📞 98765-43212</span>
+                                <span>📧 neha@straycare.com</span>
+                            </div>
+                        </div>
+                        <div class="expert-actions">
+                            <button class="btn-primary" onclick="contactExpert('neha')">Contact</button>
+                            <button class="btn-secondary" onclick="bookConsultation('neha')">Book Consultation</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Emergency Numbers -->
+            <section class="emergency-numbers">
+                <div class="section-header">
+                    <h2>Emergency Contact Numbers</h2>
+                    <p>Save these numbers for urgent situations</p>
+                </div>
+                
+                <div class="numbers-grid">
+                    <div class="number-card">
+                        <div class="number-icon">🚨</div>
+                        <div class="number-info">
+                            <h3>24/7 Emergency Helpline</h3>
+                            <p class="number">1800-STRAYCARE</p>
+                            <p>Available round the clock for emergencies</p>
+                        </div>
+                    </div>
+                    <div class="number-card">
+                        <div class="number-icon">🏥</div>
+                        <div class="number-info">
+                            <h3>Nearest Veterinary Hospital</h3>
+                            <p class="number">022-12345678</p>
+                            <p>Mumbai Veterinary Hospital, Andheri</p>
+                        </div>
+                    </div>
+                    <div class="number-card">
+                        <div class="number-icon">👮</div>
+                        <div class="number-info">
+                            <h3>Animal Welfare Board</h3>
+                            <p class="number">1800-ANIMAL</p>
+                            <p>For cruelty complaints and legal issues</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <p>
+                    © <span id="year">2025</span> StrayCare
+                    • <a href="contact.html">Contact</a>
+                    • <a href="donate.html">Donate</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="helpline.js"></script>
+</body>
+</html>

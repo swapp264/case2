@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — Services & Features</title>
+    <meta name="description" content="Comprehensive animal rescue services including medical care, fostering, adoption, and community support.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation" />
+        <label for="nav-toggle" class="hamburger" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </label>
+        <a href="index.html" aria-label="StrayCare Home">
+          <h1>StrayCare</h1>
+        </a>
+        <form class="site-search" role="search" aria-label="Site search" action="search.html" method="get">
+          <input type="search" name="q" placeholder="Search pets, services, help…" aria-label="Search" />
+          <button type="submit" aria-label="Search">🔍</button>
+        </form>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="adopt.html">Adopt</a></li>
+            <li><a href="services.html" aria-current="page">Services</a></li>
+            <li><a href="donate.html">Donate</a></li>
+            <li><a href="volunteer.html">Volunteer</a></li>
+            <li><a href="emergency.html">Emergency</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="user-actions">
+          <div class="user-dropdown">
+            <button class="user-icon" aria-label="User Menu">👤</button>
+            <div class="dropdown-menu">
+              <a href="login.html">Login</a>
+              <a href="register.html">Register (User)</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <section aria-labelledby="hero-title" class="hero-section fade-in-up">
+          <div class="hero-content">
+            <h2 id="hero-title">Our Services & Features</h2>
+            <p>Comprehensive care for every animal in need. From rescue to rehabilitation, we're here every step of the way.</p>
+          </div>
+          <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1514888286974-6c03e2a1a220?w=600&h=400&fit=crop&crop=center" 
+                 alt="Luna the cat - our featured success story" 
+                 loading="lazy"
+                 data-fallback="https://images.unsplash.com/photo-1574158622682-e40e69881006?w=600&h=400&fit=crop&crop=center"
+                 data-final-fallback="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?w=600&h=400&fit=crop&crop=center"
+                 onload="this.style.opacity='1'"
+                 style="opacity:0; transition: opacity 0.3s ease;" referrerpolicy="no-referrer">
+          </div>
+        </section>
+
+        <section aria-labelledby="features-title" class="fade-in-up">
+          <h2 id="features-title">What We Offer</h2>
+          <div class="features-grid">
+            <article class="feature-card">
+              <div class="feature-icon">🚑</div>
+              <h3>Emergency Rescue</h3>
+              <p>24/7 emergency response for injured or distressed animals. Our trained team responds quickly to rescue calls.</p>
+              <a href="emergency.html" class="feature-link">Learn More</a>
+            </article>
+            
+            <article class="feature-card">
+              <div class="feature-icon">🏥</div>
+              <h3>Medical Care</h3>
+              <p>Complete veterinary services including vaccinations, spaying/neutering, and treatment for injuries and illnesses.</p>
+              <a href="contact.html" class="feature-link">Contact Us</a>
+            </article>
+            
+            <article class="feature-card">
+              <div class="feature-icon">🏠</div>
+              <h3>Foster Program</h3>
+              <p>Safe, loving temporary homes for animals during their recovery and preparation for adoption.</p>
+              <a href="volunteer.html" class="feature-link">Become a Foster</a>
+            </article>
+            
+            <article class="feature-card">
+              <div class="feature-icon">❤️</div>
+              <h3>Adoption Services</h3>
+              <p>Find your perfect companion through our carefully matched adoption process with ongoing support.</p>
+              <a href="adopt.html" class="feature-link">View Pets</a>
+            </article>
+            
+            <article class="feature-card">
+              <div class="feature-icon">👥</div>
+              <h3>Community Support</h3>
+              <p>Educational programs, volunteer opportunities, and community events to promote animal welfare.</p>
+              <a href="volunteer.html" class="feature-link">Get Involved</a>
+            </article>
+            
+            <article class="feature-card">
+              <div class="feature-icon">📱</div>
+              <h3>Digital Platform</h3>
+              <p>Easy-to-use online platform for reporting, tracking, and managing animal care and adoption processes.</p>
+              <a href="register.html" class="feature-link">Sign Up</a>
+            </article>
+          </div>
+        </section>
+
+        <section aria-labelledby="success-story-title" class="fade-in-up">
+          <h2 id="success-story-title">Success Story: Luna</h2>
+          <div class="service-card">
+            <div class="service-image">
+              <img src="https://images.unsplash.com/photo-1514888286974-6c03e2a1a220?w=500&h=400&fit=crop&crop=center" 
+                   alt="Luna the cat - before and after rescue" 
+                   loading="lazy"
+                   data-fallback="https://images.unsplash.com/photo-1574158622682-e40e69881006?w=500&h=400&fit=crop&crop=center"
+                   data-final-fallback="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?w=500&h=400&fit=crop&crop=center"
+                   onload="this.style.opacity='1'"
+                   style="opacity:0; transition: opacity 0.3s ease;" referrerpolicy="no-referrer">
+            </div>
+            <div class="service-content">
+              <h3>From Street to Home</h3>
+              <p>Luna was found injured and malnourished on the streets. Through our comprehensive care program, she received medical treatment, rehabilitation, and found her forever home with the Sharma family.</p>
+              <p><strong>Timeline:</strong></p>
+              <ul>
+                <li>Day 1: Emergency rescue and initial medical assessment</li>
+                <li>Week 1-2: Intensive medical care and nutrition program</li>
+                <li>Month 1-2: Socialization and behavioral training</li>
+                <li>Month 3: Successful adoption to loving family</li>
+              </ul>
+              <p>Luna's story represents our commitment to every animal's complete journey from rescue to rehabilitation to rehoming.</p>
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="impact-title" class="impact-section fade-in-up">
+          <h2 id="impact-title">Our Impact</h2>
+          <div class="impact-grid" aria-live="polite">
+            <div class="impact-card">
+              <div class="impact-number" data-target="1000">0</div>
+              <p>animals rescued</p>
+            </div>
+            <div class="impact-card">
+              <div class="impact-number" data-target="500">0</div>
+              <p>successful adoptions</p>
+            </div>
+            <div class="impact-card">
+              <div class="impact-number" data-target="300">0</div>
+              <p>active volunteers</p>
+            </div>
+            <div class="impact-card">
+              <div class="impact-number" data-target="50">0</div>
+              <p>partner NGOs</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="newsletter">
+          <h3>Join our community</h3>
+          <p>Get stories, adoption drives, and rescue tips in your inbox.</p>
+          <form class="newsletter-form" aria-label="Newsletter subscription" onsubmit="event.preventDefault(); this.reset();">
+            <input type="email" placeholder="Your email address" aria-label="Email" required>
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+        <div class="footer-top">
+          <p>
+            © <span id="year">2025</span> StrayCare
+            • <a href="contact.html">Contact</a>
+            • <a href="donate.html">Donate</a>
+          </p>
+          <div class="social-links" aria-label="Social media">
+            <a href="#" aria-label="Follow on Twitter">🐦</a>
+            <a href="#" aria-label="Follow on Instagram">📸</a>
+            <a href="#" aria-label="Follow on Facebook">📘</a>
+            <a href="#" aria-label="Follow on YouTube">▶️</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    
+    <script>
+      // Image loading with multiple fallbacks
+      function setupImageFallbacks() {
+        const images = document.querySelectorAll('img[data-fallback]');
+        images.forEach(img => {
+          img.addEventListener('error', function() {
+            if (this.dataset.fallback) {
+              this.src = this.dataset.fallback;
+              this.dataset.fallback = null; // Prevent infinite loop
+            } else if (this.dataset.finalFallback) {
+              this.src = this.dataset.finalFallback;
+              this.dataset.finalFallback = null;
+            } else {
+              // Show placeholder if all images fail
+              this.style.display = 'none';
+              const placeholder = document.createElement('div');
+              placeholder.innerHTML = '🐱';
+              placeholder.style.cssText = 'font-size: 4rem; text-align: center; padding: 2rem; background: #f0f0f0; border-radius: 10px;';
+              this.parentNode.insertBefore(placeholder, this);
+            }
+          });
+        });
+      }
+
+      // Impact counters
+      (function(){
+        const nums = document.querySelectorAll('.impact-number');
+        if(!nums.length) return;
+        const io = new IntersectionObserver((entries)=>{
+          entries.forEach(e=>{
+            if(e.isIntersecting){
+              const el = e.target; const target = +el.getAttribute('data-target');
+              let cur = 0; const step = Math.ceil(target/60);
+              const inc = ()=>{ cur += step; if(cur >= target){ el.textContent = target + '+'; } else { el.textContent = cur; requestAnimationFrame(inc); } };
+              inc(); io.unobserve(el);
+            }
+          })
+        },{threshold:0.4});
+        nums.forEach(n=>io.observe(n));
+      })();
+
+      // Set year
+      (function(){ var y = document.getElementById('year'); if(y){ y.textContent = new Date().getFullYear(); } })();
+
+      // Initialize image fallbacks when DOM is loaded
+      document.addEventListener('DOMContentLoaded', setupImageFallbacks);
+    </script>
+  </body>
+</html>
+
+

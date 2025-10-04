@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — NGO Login</title>
+    <meta name="description" content="Login to StrayCare NGO dashboard.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <a href="index.html" aria-label="StrayCare Home">
+          <h1>StrayCare</h1>
+        </a>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="adopt.html">Adopt</a></li>
+            <li><a href="donate.html">Donate</a></li>
+            <li><a href="volunteer.html">Volunteer</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="login-ngo.html" aria-current="page">NGO Login</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <section class="auth-section" aria-labelledby="login-title">
+          <h2 id="login-title">NGO Sign In</h2>
+          <p>Access your NGO dashboard and volunteer management system.</p>
+
+          <form class="auth-form" id="ngo-login-form">
+            <label>
+              NGO Email or ID
+              <input type="text" name="ngoId" placeholder="ngo@example.org or NGO-001" required>
+            </label>
+            <label>
+              Password
+              <input type="password" name="password" placeholder="Enter your password" required>
+            </label>
+            <div class="form-options">
+              <label class="checkbox-label">
+                <input type="checkbox" name="remember">
+                Remember me
+              </label>
+              <a href="#" class="forgot-link">Forgot password?</a>
+            </div>
+            <button type="submit">Sign In as NGO</button>
+          </form>
+          
+          <div class="auth-footer">
+            <p>NGO accounts are provisioned by StrayCare. Registration is not available here.</p>
+            <div class="login-links" style="margin-top: 1.5rem; display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+              <a href="login-user.html" class="login-link-btn">User Login</a>
+              <a href="login-admin.html" class="login-link-btn">Admin Login</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>
+          © <span id="year">2025</span> StrayCare
+          • <a href="contact.html">Contact</a>
+          • <a href="donate.html">Donate</a>
+        </p>
+      </div>
+    </footer>
+
+    <style>
+      .login-link-btn {
+        display: inline-block;
+        padding: 0.5rem 1.5rem;
+        background: linear-gradient(135deg, #FF8C00 0%, #FF6347 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(255, 140, 0, 0.3);
+      }
+      .login-link-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 140, 0, 0.5);
+      }
+    </style>
+
+    <script>
+      // Form submission
+      document.getElementById('ngo-login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const ngoId = this.ngoId.value;
+        const password = this.password.value;
+        
+        // Simulate NGO login
+        console.log('NGO login:', ngoId);
+        alert('NGO login successful! Redirecting to NGO dashboard...');
+        window.location.href = 'dashboard.html';
+      });
+
+      // Set year
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

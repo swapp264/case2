@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — Home</title>
+    <meta name="description" content="StrayCare helps rescue, rehabilitate, and rehome stray animals.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation" />
+        <label for="nav-toggle" class="hamburger" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </label>
+        <a href="index.html" aria-label="StrayCare Home">
+          <h1>StrayCare</h1>
+        </a>
+        <form class="site-search" role="search" aria-label="Site search" action="search.html" method="get">
+          <input type="search" name="q" placeholder="Search pets, services, help…" aria-label="Search" />
+          <button type="submit" aria-label="Search">
+            🔍
+          </button>
+        </form>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="adopt.html">Adopt</a></li>
+            <li><a href="donate.html">Donate</a></li>
+            <li><a href="volunteer.html">Volunteer</a></li>
+            <li><a href="emergency.html">Emergency</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="user-actions">
+          <div class="user-dropdown">
+            <button class="user-icon" aria-label="User Menu">👤</button>
+            <div class="dropdown-menu">
+              <a href="login.html">Login</a>
+              <a href="register.html">Register (User)</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <section aria-labelledby="hero-title" class="hero-section fade-in-up">
+          <div class="hero-content">
+            <h2 id="hero-title"><span id="typing-text" aria-live="polite">Together, we change lives</span></h2>
+            <p>Join us in rescuing, rehabilitating, and rehoming animals in need.</p>
+            <p>
+              <a href="adopt.html">Explore Adoptables</a>
+              <a href="donate.html">Donate</a>
+              <a href="register.html" class="cta-button">Join StrayCare</a>
+            </p>
+            <!-- Demo Login Buttons for Testing -->
+            <div style="margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 8px;">
+              <p><strong>Demo Login (for testing):</strong></p>
+              <button onclick="demoLoginAsNGO()" style="margin: 5px; padding: 8px 16px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Login as NGO</button>
+              <button onclick="demoLoginAsUser()" style="margin: 5px; padding: 8px 16px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Login as User</button>
+              <button onclick="demoLoginAsAdmin()" style="margin: 5px; padding: 8px 16px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Login as Admin</button>
+              <button onclick="authManager.logout()" style="margin: 5px; padding: 8px 16px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">Logout</button>
+            </div>
+          </div>
+          <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=600&h=400&fit=crop&crop=center" alt="Happy dog and cat together" loading="lazy">
+          </div>
+        </section>
+
+        <section aria-labelledby="how-it-works-title" class="fade-in-up">
+          <h2 id="how-it-works-title">How StrayCare works</h2>
+          <ol>
+            <li>Rescue and intake</li>
+            <li>Medical care and rehabilitation</li>
+            <li>Foster and socialization</li>
+            <li>Adoption and follow-up</li>
+          </ol>
+        </section>
+
+
+        <section aria-labelledby="featured-pets-title" class="fade-in-up">
+          <h2 id="featured-pets-title">Featured pets</h2>
+          <div class="pets-grid">
+            <article class="pet-card">
+              <div class="pet-image">
+                <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&h=300&fit=crop&crop=center" alt="Buddy the dog" loading="lazy">
+              </div>
+              <div class="pet-info">
+                <h3>Buddy</h3>
+                <p>Playful, 2-year-old mixed breed. Great with families.</p>
+                <a href="adopt.html">Learn more</a>
+              </div>
+            </article>
+            <article class="pet-card">
+              <div class="pet-image">
+                <img src="https://images.unsplash.com/photo-1514888286974-6c03e2a1a220?w=400&h=300&fit=crop&crop=center" alt="Luna the cat" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1574158622682-e40e69881006?w=400&h=300&fit=crop&crop=center';">
+              </div>
+              <div class="pet-info">
+                <h3>Luna</h3>
+                <p>Calm, 1-year-old cat. Loves quiet naps and window views.</p>
+                <a href="adopt.html">Learn more</a>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section aria-labelledby="impact-title" class="impact-section fade-in-up">
+          <h2 id="impact-title">Our Impact</h2>
+          <div class="impact-grid" aria-live="polite">
+            <div class="impact-card">
+              <div class="impact-number" data-target="1000">0</div>
+              <p>animals rescued</p>
+            </div>
+            <div class="impact-card">
+              <div class="impact-number" data-target="500">0</div>
+              <p>successful adoptions</p>
+            </div>
+            <div class="impact-card">
+              <div class="impact-number" data-target="300">0</div>
+              <p>active volunteers</p>
+            </div>
+            <div class="impact-card">
+              <div class="impact-number" data-target="50">0</div>
+              <p>partner NGOs</p>
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="testimonials-title" class="testimonials-section fade-in-up">
+          <h2 id="testimonials-title">Happy Tails</h2>
+          <div class="carousel" role="region" aria-label="Testimonials carousel">
+            <button class="carousel-nav prev" aria-label="Previous">‹</button>
+            <div class="carousel-track">
+              <figure class="testimonial">
+                <img src="https://images.unsplash.com/photo-1525253013412-55c1a69a5738?w=200&h=200&fit=crop&crop=faces" alt="Adopted pet with family" loading="lazy">
+                <blockquote>We found our best friend through StrayCare. The process was smooth and full of love!</blockquote>
+                <figcaption>Priya & Max</figcaption>
+              </figure>
+              <figure class="testimonial">
+                <img src="https://images.unsplash.com/photo-1507149833265-60c372daea22?w=200&h=200&fit=crop&crop=faces" alt="Happy dog after adoption" loading="lazy">
+                <blockquote>Adopting from StrayCare changed our lives. Our home feels complete.</blockquote>
+                <figcaption>Rohan & Coco</figcaption>
+              </figure>
+              <figure class="testimonial">
+                <img src="https://images.unsplash.com/photo-1517849845537-4d257902454a?w=200&h=200&fit=crop&crop=faces" alt="Cat with new owner" loading="lazy">
+                <blockquote>The team guided us at every step. Luna is the sweetest companion!</blockquote>
+                <figcaption>Ananya & Luna</figcaption>
+              </figure>
+              <figure class="testimonial">
+                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop&crop=faces" alt="Happy family with adopted dog" loading="lazy">
+                <blockquote>StrayCare helped us rescue Buddy from the streets. He's now the happiest dog ever!</blockquote>
+                <figcaption>Rajesh & Buddy</figcaption>
+              </figure>
+              <figure class="testimonial">
+                <img src="https://images.unsplash.com/photo-1574158622682-e40e69881006?w=200&h=200&fit=crop&crop=faces" alt="Woman with adopted cat" loading="lazy">
+                <blockquote>Mittens was rescued from a construction site. Now she's our little princess!</blockquote>
+                <figcaption>Kavya & Mittens</figcaption>
+              </figure>
+              <figure class="testimonial">
+                <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=200&h=200&fit=crop&crop=faces" alt="Family with two adopted pets" loading="lazy">
+                <blockquote>We adopted both Charlie and Whiskers. Our family is now complete with these two angels!</blockquote>
+                <figcaption>The Sharma Family</figcaption>
+              </figure>
+              <figure class="testimonial">
+                <img src="https://images.unsplash.com/photo-1596492784531-6e6eb5ea9993?w=200&h=200&fit=crop&crop=faces" alt="Young couple with adopted dog" loading="lazy">
+                <blockquote>Rocky was found injured on the highway. StrayCare's medical care saved his life!</blockquote>
+                <figcaption>Arjun & Rocky</figcaption>
+              </figure>
+              <figure class="testimonial">
+                <img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=200&h=200&fit=crop&crop=faces" alt="Elderly couple with adopted cat" loading="lazy">
+                <blockquote>At 70, we thought we were too old to adopt. But Snowball proved us wrong!</blockquote>
+                <figcaption>Mr. & Mrs. Patel</figcaption>
+              </figure>
+            </div>
+            <button class="carousel-nav next" aria-label="Next">›</button>
+          </div>
+        </section>
+
+        <section aria-labelledby="team-title" class="fade-in-up">
+          <h2 id="team-title">Our Team</h2>
+          <div class="team-grid">
+            <article class="team-member">
+              <div class="member-info">
+                <h3>Sujal Khole</h3>
+                <p>Developer • Focused on clean UI and smooth user journeys.</p>
+              </div>
+            </article>
+            <article class="team-member">
+              <div class="member-info">
+                <h3>Saurabh Yamgar</h3>
+                <p>Developer • Building reliable features that help animals faster.</p>
+              </div>
+            </article>
+            <article class="team-member">
+              <div class="member-info">
+                <h3>Swapnil Raskar</h3>
+                <p>Developer • Compassionate, responsive experiences for animal care.</p>
+              </div>
+            </article>
+            <article class="team-member">
+              <div class="member-info">
+                <h3>Shardul Thasale</h3>
+                <p>Developer • Crafting modern, accessible UI for community impact.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="newsletter">
+          <h3>Join our community</h3>
+          <p>Get stories, adoption drives, and rescue tips in your inbox.</p>
+          <form class="newsletter-form" aria-label="Newsletter subscription" onsubmit="event.preventDefault(); this.reset();">
+            <input type="email" placeholder="Your email address" aria-label="Email" required>
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+        <div class="footer-top">
+          <p>
+            © <span id="year">2025</span> StrayCare
+            • <a href="contact.html">Contact</a>
+            • <a href="donate.html">Donate</a>
+          </p>
+          <div class="social-links" aria-label="Social media">
+            <a href="#" aria-label="Follow on Twitter">🐦</a>
+            <a href="#" aria-label="Follow on Instagram">📸</a>
+            <a href="#" aria-label="Follow on Facebook">📘</a>
+            <a href="#" aria-label="Follow on YouTube">▶️</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script src="auth.js"></script>
+    <script>
+  window.FIREBASE_CONFIG = {
+    apiKey: "AIzaSyAhesk1IN6Q0QuaQbrFAmHAuULomYrZVGY",
+    authDomain: "straycare-b9e59.firebaseapp.com",
+    projectId: "straycare-b9e59",
+    storageBucket: "straycare-b9e59.firebasestorage.app",
+    messagingSenderId: "511847623347",
+    appId: "1:511847623347:web:f7d9bc81cd6a6a3674dec6",
+    measurementId: "G-0YMFELM3C9"
+  }; 
+      // Hero typing effect without layout shifts
+      (function(){
+        const el = document.getElementById('typing-text');
+        if(!el) return;
+        const phrases = [
+          'Together, we change lives',
+          'Rescue. Heal. Rehome.',
+          'Every stray deserves love'
+        ];
+        let pi = 0, ci = 0, typing = true;
+        function tick(){
+          const phrase = phrases[pi];
+          el.textContent = typing ? phrase.slice(0, ++ci) : phrase.slice(0, --ci);
+          if(typing && ci === phrase.length){ typing = false; setTimeout(tick, 1400); return; }
+          if(!typing && ci === 0){ typing = true; pi = (pi+1)%phrases.length; }
+          setTimeout(tick, typing ? 70 : 40);
+        }
+        tick();
+      })();
+
+      // Impact counters
+      (function(){
+        const nums = document.querySelectorAll('.impact-number');
+        if(!nums.length) return;
+        const io = new IntersectionObserver((entries)=>{
+          entries.forEach(e=>{
+            if(e.isIntersecting){
+              const el = e.target; const target = +el.getAttribute('data-target');
+              let cur = 0; const step = Math.ceil(target/60);
+              const inc = ()=>{ cur += step; if(cur >= target){ el.textContent = target + '+'; } else { el.textContent = cur; requestAnimationFrame(inc); } };
+              inc(); io.unobserve(el);
+            }
+          })
+        },{threshold:0.4});
+        nums.forEach(n=>io.observe(n));
+      })();
+
+      // Simple carousel
+      (function(){
+        const carousel = document.querySelector('.carousel');
+        const track = document.querySelector('.carousel-track');
+        if(!carousel || !track) return;
+        const items = Array.from(track.children);
+        let index = 0;
+        
+        function update(){ 
+          // Since each testimonial is 12.5% wide, we move by 12.5% per item
+          track.style.transform = `translateX(${-index * 12.5}%)`; 
+        }
+        
+        const next = carousel.querySelector('.next');
+        const prev = carousel.querySelector('.prev');
+        
+        if (next) {
+          next.addEventListener('click', ()=>{ 
+            index = (index+1)%items.length; 
+            update(); 
+          });
+        }
+        
+        if (prev) {
+          prev.addEventListener('click', ()=>{ 
+            index = (index-1+items.length)%items.length; 
+            update(); 
+          });
+        }
+        
+        // Auto-advance every 4 seconds
+        let timer = setInterval(()=>{ 
+          index = (index+1)%items.length; 
+          update(); 
+        }, 4000);
+        
+        // Pause on hover
+        carousel.addEventListener('mouseenter', ()=> clearInterval(timer));
+        carousel.addEventListener('mouseleave', ()=>{ 
+          timer = setInterval(()=>{ 
+            index = (index+1)%items.length; 
+            update(); 
+          }, 4000); 
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', update);
+        
+        // Initialize
+        update();
+      })();
+
+      // Set year
+      (function(){ var y = document.getElementById('year'); if(y){ y.textContent = new Date().getFullYear(); } })();
+    </script>
+  </body>
+</html>
+
+

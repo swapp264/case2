@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrayCare — Volunteer Scheduling</title>
+    <meta name="description" content="Manage volunteer schedules, post slots, and coordinate activities">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="volunteers.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" aria-label="StrayCare Home">
+                <h1>StrayCare</h1>
+            </a>
+            <nav aria-label="Primary">
+                <ul>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="rescue-cases.html">Rescue Cases</a></li>
+                    <li><a href="volunteers.html" class="active">Volunteers</a></li>
+                    <li><a href="medical-records.html">Medical Records</a></li>
+                    <li><a href="collaboration.html">Collaboration</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <div class="user-dropdown">
+                    <button class="user-icon" aria-label="User Menu">👤 NGO Admin</button>
+                    <div class="dropdown-menu">
+                        <a href="profile.html">Profile</a>
+                        <a href="settings.html">Settings</a>
+                        <a href="#" onclick="authManager.logout()">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Page Header -->
+            <section class="page-header">
+                <div class="header-content">
+                    <h1>Volunteer Scheduling System</h1>
+                    <p>Post available slots, manage volunteer assignments, and coordinate activities</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-primary" onclick="openNewSlotModal()">+ Post New Slot</button>
+                    <button class="btn-secondary" onclick="exportSchedule()">Export Schedule</button>
+                </div>
+            </section>
+
+            <!-- Volunteer Stats -->
+            <section class="volunteer-stats">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-content">
+                            <h3>Total Volunteers</h3>
+                            <p class="stat-number">45</p>
+                            <p class="stat-change positive">+5 this month</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-content">
+                            <h3>Active Slots</h3>
+                            <p class="stat-number">12</p>
+                            <p class="stat-change">8 booked</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-content">
+                            <h3>Completed Today</h3>
+                            <p class="stat-number">6</p>
+                            <p class="stat-change positive">On track</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⏰</div>
+                        <div class="stat-content">
+                            <h3>Upcoming</h3>
+                            <p class="stat-number">8</p>
+                            <p class="stat-change">Next 24 hours</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Schedule Tabs -->
+            <section class="schedule-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="switchTab('today')">Today</button>
+                    <button class="tab-btn" onclick="switchTab('week')">This Week</button>
+                    <button class="tab-btn" onclick="switchTab('month')">This Month</button>
+                    <button class="tab-btn" onclick="switchTab('available')">Available Slots</button>
+                </div>
+            </section>
+
+            <!-- Today's Schedule -->
+            <section id="today-tab" class="schedule-section active">
+                <div class="section-header">
+                    <h2>Today's Schedule</h2>
+                    <div class="date-display">Monday, January 15, 2025</div>
+                </div>
+                
+                <div class="schedule-timeline">
+                    <div class="timeline-item completed">
+                        <div class="timeline-time">09:00 AM</div>
+                        <div class="timeline-content">
+                            <h3>Morning Feeding Round</h3>
+                            <p><strong>Volunteer:</strong> Rahul Kumar</p>
+                            <p><strong>Location:</strong> Bandra West Area</p>
+                            <p><strong>Status:</strong> <span class="status completed">Completed</span></p>
+                            <div class="timeline-actions">
+                                <button class="btn-secondary">View Report</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item active">
+                        <div class="timeline-time">02:00 PM</div>
+                        <div class="timeline-content">
+                            <h3>Vet Visit - Vaccination Drive</h3>
+                            <p><strong>Volunteer:</strong> Dr. Priya Singh</p>
+                            <p><strong>Location:</strong> Andheri Shelter</p>
+                            <p><strong>Status:</strong> <span class="status active">In Progress</span></p>
+                            <div class="timeline-actions">
+                                <button class="btn-primary">Update Status</button>
+                                <button class="btn-secondary">Contact Volunteer</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item upcoming">
+                        <div class="timeline-time">06:00 PM</div>
+                        <div class="timeline-content">
+                            <h3>Evening Feeding Round</h3>
+                            <p><strong>Volunteer:</strong> Neha Sharma</p>
+                            <p><strong>Location:</strong> Juhu Beach Area</p>
+                            <p><strong>Status:</strong> <span class="status upcoming">Upcoming</span></p>
+                            <div class="timeline-actions">
+                                <button class="btn-secondary">Send Reminder</button>
+                                <button class="btn-secondary">Reschedule</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Available Slots -->
+            <section id="available-tab" class="schedule-section">
+                <div class="section-header">
+                    <h2>Available Volunteer Slots</h2>
+                    <p>Open slots that volunteers can book</p>
+                </div>
+                
+                <div class="slots-grid">
+                    <div class="slot-card">
+                        <div class="slot-header">
+                            <h3>Feeding Duty - Bandra</h3>
+                            <span class="slot-type feeding">Feeding</span>
+                        </div>
+                        <div class="slot-details">
+                            <p><strong>Date:</strong> Tomorrow, 8:00 AM</p>
+                            <p><strong>Duration:</strong> 2 hours</p>
+                            <p><strong>Location:</strong> Bandra West Area</p>
+                            <p><strong>Requirements:</strong> Basic animal handling</p>
+                        </div>
+                        <div class="slot-actions">
+                            <button class="btn-primary">Book Slot</button>
+                            <button class="btn-secondary">View Details</button>
+                        </div>
+                    </div>
+                    
+                    <div class="slot-card">
+                        <div class="slot-header">
+                            <h3>Foster Care - Puppy Sitting</h3>
+                            <span class="slot-type fostering">Fostering</span>
+                        </div>
+                        <div class="slot-details">
+                            <p><strong>Date:</strong> Wednesday, 10:00 AM</p>
+                            <p><strong>Duration:</strong> 4 hours</p>
+                            <p><strong>Location:</strong> Andheri Shelter</p>
+                            <p><strong>Requirements:</strong> Experience with puppies</p>
+                        </div>
+                        <div class="slot-actions">
+                            <button class="btn-primary">Book Slot</button>
+                            <button class="btn-secondary">View Details</button>
+                        </div>
+                    </div>
+                    
+                    <div class="slot-card">
+                        <div class="slot-header">
+                            <h3>Vet Assistant - Vaccination</h3>
+                            <span class="slot-type medical">Medical</span>
+                        </div>
+                        <div class="slot-details">
+                            <p><strong>Date:</strong> Friday, 2:00 PM</p>
+                            <p><strong>Duration:</strong> 3 hours</p>
+                            <p><strong>Location:</strong> Dadar Clinic</p>
+                            <p><strong>Requirements:</strong> Medical background preferred</p>
+                        </div>
+                        <div class="slot-actions">
+                            <button class="btn-primary">Book Slot</button>
+                            <button class="btn-secondary">View Details</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Volunteer Directory -->
+            <section class="volunteer-directory">
+                <div class="section-header">
+                    <h2>Volunteer Directory</h2>
+                    <div class="header-actions">
+                        <button class="btn-secondary" onclick="refreshVolunteerDirectory()">🔄 Refresh</button>
+                        <button class="btn-secondary" onclick="forceDisplayVolunteers()">👥 Show Volunteers</button>
+                        <button class="btn-primary" onclick="openVolunteerModal()">+ Add Volunteer</button>
+                    </div>
+                </div>
+                
+                <div class="volunteers-grid">
+                    <div class="volunteer-card">
+                        <div class="volunteer-avatar">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="Rahul Kumar">
+                        </div>
+                        <div class="volunteer-info">
+                            <h3>Rahul Kumar</h3>
+                            <p class="volunteer-role">Feeding Specialist</p>
+                            <p class="volunteer-stats">15 shifts completed • 4.8★ rating</p>
+                            <div class="volunteer-skills">
+                                <span class="skill-tag">Feeding</span>
+                                <span class="skill-tag">Basic Care</span>
+                            </div>
+                        </div>
+                        <div class="volunteer-actions">
+                            <button class="btn-primary" onclick="assignTask('vol1')">Assign Task</button>
+                            <button class="btn-secondary" onclick="viewProfile('vol1')">View Profile</button>
+                        </div>
+                    </div>
+                    
+                    <div class="volunteer-card">
+                        <div class="volunteer-avatar">
+                            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face" alt="Dr. Priya Singh">
+                        </div>
+                        <div class="volunteer-info">
+                            <h3>Dr. Priya Singh</h3>
+                            <p class="volunteer-role">Veterinarian</p>
+                            <p class="volunteer-stats">28 shifts completed • 5.0★ rating</p>
+                            <div class="volunteer-skills">
+                                <span class="skill-tag">Medical</span>
+                                <span class="skill-tag">Vaccination</span>
+                                <span class="skill-tag">Surgery</span>
+                            </div>
+                        </div>
+                        <div class="volunteer-actions">
+                            <button class="btn-primary" onclick="assignTask('vol2')">Assign Task</button>
+                            <button class="btn-secondary" onclick="viewProfile('vol2')">View Profile</button>
+                        </div>
+                    </div>
+                    
+                    <div class="volunteer-card">
+                        <div class="volunteer-avatar">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face" alt="Neha Sharma">
+                        </div>
+                        <div class="volunteer-info">
+                            <h3>Neha Sharma</h3>
+                            <p class="volunteer-role">Foster Care</p>
+                            <p class="volunteer-stats">22 shifts completed • 4.9★ rating</p>
+                            <div class="volunteer-skills">
+                                <span class="skill-tag">Fostering</span>
+                                <span class="skill-tag">Socialization</span>
+                            </div>
+                        </div>
+                        <div class="volunteer-actions">
+                            <button class="btn-primary" onclick="assignTask('vol3')">Assign Task</button>
+                            <button class="btn-secondary" onclick="viewProfile('vol3')">View Profile</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- New Slot Modal -->
+    <div id="newSlotModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Post New Volunteer Slot</h2>
+                <button class="close-btn" onclick="closeNewSlotModal()">&times;</button>
+            </div>
+            <form class="slot-form" onsubmit="handlePostSlot(event)">
+                <div class="form-group">
+                    <label for="slotTitle">Slot Title</label>
+                    <input type="text" id="slotTitle" name="slotTitle" required placeholder="e.g., Morning Feeding Round">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="slotType">Slot Type</label>
+                        <select id="slotType" name="slotType" required>
+                            <option value="">Select Type</option>
+                            <option value="feeding">Feeding</option>
+                            <option value="fostering">Fostering</option>
+                            <option value="medical">Medical</option>
+                            <option value="cleaning">Cleaning</option>
+                            <option value="transport">Transport</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="slotDate">Date</label>
+                        <input type="date" id="slotDate" name="slotDate" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="slotTime">Start Time</label>
+                        <input type="time" id="slotTime" name="slotTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="slotDuration">Duration (hours)</label>
+                        <input type="number" id="slotDuration" name="slotDuration" min="1" max="8" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="slotLocation">Location</label>
+                    <input type="text" id="slotLocation" name="slotLocation" required placeholder="e.g., Bandra West Area">
+                </div>
+                <div class="form-group">
+                    <label for="slotRequirements">Requirements</label>
+                    <textarea id="slotRequirements" name="slotRequirements" rows="3" placeholder="Describe any specific requirements..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="maxVolunteers">Maximum Volunteers</label>
+                    <input type="number" id="maxVolunteers" name="maxVolunteers" min="1" max="10" value="1">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeNewSlotModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Post Slot</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <p>
+                    © <span id="year">2025</span> StrayCare
+                    • <a href="contact.html">Contact</a>
+                    • <a href="donate.html">Donate</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script>
+        // Immediate error cleanup script
+        (function() {
+            // Clear any existing error notifications
+            const allNotifications = document.querySelectorAll('.notification');
+            allNotifications.forEach(notification => {
+                notification.remove();
+            });
+            
+            // Clear any error messages in the header
+            const header = document.querySelector('header');
+            if (header) {
+                const headerErrors = header.querySelectorAll('*');
+                headerErrors.forEach(element => {
+                    if (element.textContent && element.textContent.includes('Error adding volunteer')) {
+                        element.remove();
+                    }
+                });
+            }
+            
+            console.log('Immediate error cleanup completed from HTML');
+        })();
+    </script>
+    <script src="volunteers.js"></script>
+    
+    <style>
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .volunteers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .volunteer-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .volunteer-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .volunteer-avatar img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .volunteer-info h3 {
+            margin: 0.5rem 0 0.25rem 0;
+            color: #1f2937;
+            font-size: 1.1rem;
+        }
+        
+        .volunteer-role {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin: 0.25rem 0;
+        }
+        
+        .volunteer-stats {
+            color: #6b7280;
+            font-size: 0.8rem;
+            margin: 0.25rem 0;
+        }
+        
+        .volunteer-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+            margin: 0.5rem 0;
+        }
+        
+        .skill-tag {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+        }
+        
+        .volunteer-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .btn-primary, .btn-secondary {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary {
+            background: #8B4513;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #6B3410;
+        }
+        
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+    </style>
+</body>
+</html>
