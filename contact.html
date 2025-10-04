@@ -142,6 +142,82 @@
         }
       }
     </style>
+    
+    <script>
+      // Contact form submission handler
+      document.addEventListener('DOMContentLoaded', function() {
+        const contactForm = document.querySelector('form');
+        
+        contactForm.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          
+          const submitButton = contactForm.querySelector('button[type="submit"]');
+          const originalButtonText = submitButton.textContent;
+          
+          // Get form data
+          const formData = {
+            name: contactForm.querySelector('input[name="name"]').value.trim(),
+            email: contactForm.querySelector('input[name="email"]').value.trim(),
+            message: contactForm.querySelector('textarea[name="message"]').value.trim()
+          };
+          
+          // Validate form data
+          if (!formData.name || !formData.email || !formData.message) {
+            alert('Please fill in all fields');
+            return;
+          }
+          
+          // Disable submit button
+          submitButton.disabled = true;
+          submitButton.textContent = 'Sending...';
+          
+          try {
+            console.log('Submitting form data:', formData);
+            
+            const response = await fetch('/api/contact', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(formData)
+            });
+            
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+            
+            // Check if response has content
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+              throw new Error('Server did not return JSON. Status: ' + response.status);
+            }
+            
+            const result = await response.json();
+            console.log('Response data:', result);
+            
+            if (response.ok && result.success) {
+              alert(result.message || 'Thank you for contacting us! We will get back to you soon.');
+              contactForm.reset();
+            } else {
+              console.error('Server error:', result);
+              alert(result.error || 'Failed to submit the form. Please try again.');
+            }
+          } catch (error) {
+            console.error('Error submitting contact form:', error);
+            if (error.message.includes('Failed to fetch')) {
+              alert('Cannot connect to server. Please make sure the server is running on http://localhost:3000');
+            } else if (error.message.includes('JSON')) {
+              alert('Server error: The server returned an invalid response. Please check the server console for errors.');
+            } else {
+              alert('An error occurred: ' + error.message);
+            }
+          } finally {
+            // Re-enable submit button
+            submitButton.disabled = false;
+            submitButton.textContent = originalButtonText;
+          }
+        });
+      });
+    </script>
   </body>
 </html>
 

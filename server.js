@@ -15,6 +15,12 @@ app.use(express.static(path.join(__dirname)));
 // MongoDB connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/straycare';
 
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('Connected to MongoDB'))
+.catch(err => console.error('MongoDB connection error:', err));
 let dbConnected = false;
 mongoose.set('strictQuery', true);
 // Uncomment to see queries during debugging
@@ -136,6 +142,7 @@ const medicalRecordSchema = new mongoose.Schema({
   lastVaccination: { type: Date },
   vaccinationType: { type: String },
   nextVaccinationDue: { type: Date },
+  sterilizationStatus: { type: String, enum: ['done', 'scheduled', 'not-done'], default: 'not-done' },
   sterilizationDate: { type: Date },
   medicalNotes: { type: String },
   createdAt: { type: Date, default: Date.now }
@@ -167,6 +174,90 @@ const adoptionInquirySchema = new mongoose.Schema({
 });
 
 const AdoptionInquiry = mongoose.model('AdoptionInquiry', adoptionInquirySchema);
+
+// Contact Form Schema
+const contactFormSchema = new mongoose.Schema({
+  name: { type: String, required: true, trim: true },
+  email: { type: String, required: true, trim: true, lowercase: true },
+  message: { type: String, required: true, trim: true },
+  status: { type: String, enum: ['new', 'read', 'responded'], default: 'new' },
+  createdAt: { type: Date, default: Date.now }
+});
+
+const ContactForm = mongoose.model('ContactForm', contactFormSchema);
+
+// Pet Schema
+const petSchema = new mongoose.Schema({
+  name: { type: String, required: true, trim: true },
+  species: { type: String, required: true, enum: ['dog', 'cat', 'other'] },
+  breed: { type: String, required: true, trim: true },
+  age: { type: String, required: true },
+  gender: { type: String, enum: ['male', 'female', 'unknown'] },
+  size: { type: String, enum: ['small', 'medium', 'large'] },
+  description: { type: String, trim: true },
+  healthStatus: { type: String, default: 'healthy' },
+  vaccinated: { type: Boolean, default: false },
+  sterilized: { type: Boolean, default: false },
+  adoptionStatus: { type: String, enum: ['available', 'pending', 'adopted'], default: 'available' },
+  imageUrl: { type: String },
+  location: { type: String },
+  createdAt: { type: Date, default: Date.now }
+});
+
+const Pet = mongoose.model('Pet', petSchema);
+
+// API Routes
+
+// Submit volunteer application
+app.post('/api/volunteer-applications', async (req, res) => {
+  try {
+    const applicationData = req.body;
+    
+    // Validate required fields
+    const requiredFields = ['name', 'email', 'phone', 'role', 'availability', 'motivation', 'terms'];
+    const missingFields = requiredFields.filter(field => !applicationData[field]);
+    
+    if (missingFields.length > 0) {
+      return res.status(400).json({
+        error: 'Missing required fields',
+        missingFields
+      });
+    }
+
+    // Check if email already exists
+    const existingApplication = await VolunteerApplication.findOne({ email: applicationData.email });
+    if (existingApplication) {
+      return res.status(409).json({
+        error: 'An application with this email already exists',
+        existingApplicationId: existingApplication._id
+      });
+    }
+
+    // Create new application
+    const newApplication = new VolunteerApplication(applicationData);
+    const savedApplication = await newApplication.save();
+
+    console.log('New volunteer application received:', {
+      id: savedApplication._id,
+      name: savedApplication.name,
+      email: savedApplication.email,
+      role: savedApplication.role
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Application submitted successfully',
+      applicationId: savedApplication._id
+    });
+
+  } catch (error) {
+    console.error('Error saving volunteer application:', error);
+    res.status(500).json({
+      error: 'Failed to submit application',
+      details: error.message
+    });
+  }
+});
 
 // Stray Report Schema
 const strayReportSchema = new mongoose.Schema({
@@ -534,6 +625,216 @@ app.get('/api/adoption-enquiries', async (req, res) => {
   }
 });
 
+// Contact Form API
+app.post('/api/contact', async (req, res) => {
+  try {
+    console.log('Received contact form request');
+    console.log('Request body:', req.body);
+    
+    const { name, email, message } = req.body;
+    
+    if (!name || !email || !message) {
+      console.log('Validation failed - missing fields');
+      return res.status(400).json({ success: false, error: 'Name, email, and message are required' });
+    }
+    
+    console.log('Creating contact form submission:', { name, email });
+    const contactSubmission = new ContactForm({ name, email, message });
+    const saved = await contactSubmission.save();
+    
+    console.log('Contact form saved successfully:', saved._id);
+    return res.status(201).json({ 
+      success: true, 
+      message: 'Thank you for contacting us! We will get back to you soon.', 
+      id: saved._id 
+    });
+  } catch (error) {
+    console.error('Error saving contact form:', error);
+    return res.status(500).json({ 
+      success: false, 
+      error: 'Failed to submit contact form', 
+      details: error.message 
+    });
+  }
+});
+
+app.get('/api/contact', async (req, res) => {
+  try {
+    const { status, page = 1, limit = 10 } = req.query;
+    const filter = {};
+    if (status) filter.status = status;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [items, total] = await Promise.all([
+      ContactForm.find(filter).sort({ createdAt: -1 }).skip(skip).limit(parseInt(limit)),
+      ContactForm.countDocuments(filter)
+    ]);
+    res.json({ success: true, items, total, page: parseInt(page), pages: Math.ceil(total / parseInt(limit)) });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch contact submissions', details: error.message });
+  }
+});
+
+// Search API - searches pets, rescue cases, and medical records
+app.get('/api/search', async (req, res) => {
+  try {
+    const { q } = req.query;
+    if (!q || q.trim().length === 0) {
+      return res.json({ success: true, results: [] });
+    }
+
+    const query = q.trim();
+    const searchRegex = new RegExp(query, 'i');
+
+    // Search pets
+    const pets = await Pet.find({
+      $or: [
+        { name: searchRegex },
+        { breed: searchRegex },
+        { description: searchRegex },
+        { species: searchRegex }
+      ],
+      adoptionStatus: 'available'
+    }).limit(10);
+
+    // Search rescue cases
+    const rescueCases = await RescueCase.find({
+      $or: [
+        { title: searchRegex },
+        { description: searchRegex },
+        { location: searchRegex }
+      ]
+    }).limit(10);
+
+    // Search medical records
+    const medicalRecords = await MedicalRecord.find({
+      $or: [
+        { animalName: searchRegex },
+        { breed: searchRegex },
+        { medicalNotes: searchRegex }
+      ]
+    }).limit(10);
+
+    // Format results
+    const results = {
+      pets: pets.map(p => ({
+        type: 'pet',
+        id: p._id,
+        title: p.name,
+        subtitle: `${p.breed} • ${p.age}`,
+        description: p.description,
+        link: `adopt.html?pet=${p._id}`,
+        image: p.imageUrl
+      })),
+      rescueCases: rescueCases.map(r => ({
+        type: 'rescue',
+        id: r._id,
+        title: r.title,
+        subtitle: r.location,
+        description: r.description,
+        link: `emergency.html?case=${r._id}`,
+        status: r.status
+      })),
+      medicalRecords: medicalRecords.map(m => ({
+        type: 'medical',
+        id: m._id,
+        title: m.animalName,
+        subtitle: `${m.breed} • ${m.healthStatus}`,
+        description: m.medicalNotes,
+        link: `medical-records.html?id=${m._id}`
+      }))
+    };
+
+    const totalResults = pets.length + rescueCases.length + medicalRecords.length;
+
+    res.json({
+      success: true,
+      query: query,
+      totalResults,
+      results
+    });
+  } catch (error) {
+    console.error('Search error:', error);
+    res.status(500).json({ success: false, error: 'Search failed', details: error.message });
+  }
+});
+
+// Pet API Routes
+app.get('/api/pets', async (req, res) => {
+  try {
+    const { status = 'available', species, limit = 20 } = req.query;
+    const filter = {};
+    if (status) filter.adoptionStatus = status;
+    if (species) filter.species = species;
+    
+    let pets = await Pet.find(filter).sort({ createdAt: -1 }).limit(parseInt(limit));
+    
+    // If no pets exist, create sample pets
+    if (pets.length === 0) {
+      const samplePets = [
+        {
+          name: 'Buddy',
+          species: 'dog',
+          breed: 'Golden Retriever',
+          age: '2 years',
+          gender: 'male',
+          size: 'large',
+          description: 'Friendly and playful golden retriever. Great with kids and other pets.',
+          healthStatus: 'healthy',
+          vaccinated: true,
+          sterilized: true,
+          adoptionStatus: 'available',
+          imageUrl: 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&h=300&fit=crop',
+          location: 'Mumbai Shelter'
+        },
+        {
+          name: 'Luna',
+          species: 'cat',
+          breed: 'Persian',
+          age: '1 year',
+          gender: 'female',
+          size: 'small',
+          description: 'Calm and affectionate cat. Loves quiet environments and gentle cuddles.',
+          healthStatus: 'healthy',
+          vaccinated: true,
+          sterilized: true,
+          adoptionStatus: 'available',
+          imageUrl: 'https://images.unsplash.com/photo-1514888286974-6c03e2a1a220?w=400&h=300&fit=crop',
+          location: 'Delhi Shelter'
+        },
+        {
+          name: 'Max',
+          species: 'dog',
+          breed: 'Labrador',
+          age: '3 years',
+          gender: 'male',
+          size: 'large',
+          description: 'Energetic lab who loves to play fetch and go for long walks.',
+          healthStatus: 'healthy',
+          vaccinated: true,
+          sterilized: false,
+          adoptionStatus: 'available',
+          imageUrl: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=300&fit=crop',
+          location: 'Bangalore Shelter'
+        }
+      ];
+      
+      pets = await Pet.insertMany(samplePets);
+      console.log('Sample pets created:', pets.length);
+    }
+    
+    res.json({ success: true, pets });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch pets', details: error.message });
+  }
+});
+
+app.post('/api/pets', async (req, res) => {
+  try {
+    const newPet = new Pet(req.body);
+    const savedPet = await newPet.save();
+    res.status(201).json({ success: true, pet: savedPet });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create pet', details: error.message });
 // Stray Reports API
 app.post('/api/stray-reports', async (req, res) => {
   try {
@@ -807,9 +1108,20 @@ app.get('/api/health', (req, res) => {
   res.json({ ok: true, uptime: process.uptime(), env: process.env.NODE_ENV || 'development' });
 });
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({
+    success: false,
+    error: 'Internal server error',
+    details: err.message
+  });
+});
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({
+    success: false,
     error: 'Route not found'
   });
 });
