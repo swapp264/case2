@@ -1271,18 +1271,10 @@ footer a:hover {
     display: block;
     margin-bottom: 0.5rem;
   }
-  
   /* Mobile responsive layouts */
   .hero-section {
     grid-template-columns: 1fr;
     text-align: center;
-    gap: 1.5rem;
-  }
-  
-  /* Ensure user icon stays in top right on mobile */
-  .user-actions {
-    margin-left: auto;
-    z-index: 1002;
   }
   
   .user-icon {
