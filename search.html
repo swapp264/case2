@@ -7,12 +7,142 @@
     <meta name="description" content="Search the StrayCare site">
     <link rel="stylesheet" href="styles.css">
     <style>
-      .results { display: grid; gap: 1rem; margin-top: 1rem; }
-      .result { padding: 1rem; border:1px solid #e1e8ed; border-radius:12px; background: rgba(255,255,255,0.9); }
-      .result a { font-weight: 600; color:#8B4513; text-decoration: none; }
-      .meta { color:#555; font-size: .9rem; }
-      .snippet { margin-top:.35rem; color:#333; }
-      .muted { color:#777; }
+      .results { display: grid; gap: 1.5rem; margin-top: 2rem; }
+      .result-section { margin-bottom: 2rem; }
+      .result-section h3 { color: #8B4513; margin-bottom: 1rem; font-size: 1.3rem; }
+      .result { 
+        padding: 1.5rem; 
+        border: 2px solid #e1e8ed; 
+        border-radius: 12px; 
+        background: rgba(255,255,255,0.95);
+        transition: all 0.3s ease;
+        display: flex;
+        gap: 1rem;
+        align-items: start;
+      }
+      .result:hover {
+        border-color: #FF8C00;
+        box-shadow: 0 4px 12px rgba(255, 140, 0, 0.2);
+        transform: translateY(-2px);
+      }
+      .result-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 8px;
+        object-fit: cover;
+        flex-shrink: 0;
+      }
+      .result-content { flex: 1; }
+      .result a { 
+        font-weight: 600; 
+        color: #8B4513; 
+        text-decoration: none; 
+        font-size: 1.2rem;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+      .result a:hover { color: #FF8C00; }
+      .meta { 
+        color: #666; 
+        font-size: 0.9rem; 
+        margin-bottom: 0.5rem;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      .snippet { margin-top: 0.5rem; color: #333; line-height: 1.6; }
+      .muted { color: #777; }
+      .badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+      .badge-pet { background: #e3f2fd; color: #1976d2; }
+      .badge-rescue { background: #fff3e0; color: #f57c00; }
+      .badge-medical { background: #f3e5f5; color: #7b1fa2; }
+      .badge-page { background: #e8f5e9; color: #388e3c; }
+      .no-results {
+        text-align: center;
+        padding: 3rem;
+        color: #777;
+      }
+      .loading {
+        text-align: center;
+        padding: 2rem;
+        color: #666;
+      }
+      .filters {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 2px solid #e1e8ed;
+        margin: 2rem 0;
+      }
+      .filters h3 {
+        color: #8B4513;
+        margin-bottom: 1rem;
+        font-size: 1.3rem;
+      }
+      .filter-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+      }
+      .filter-section h4 {
+        color: #333;
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+      .filter-section label {
+        display: block;
+        margin: 0.5rem 0;
+        cursor: pointer;
+        color: #555;
+      }
+      .filter-section input[type="checkbox"] {
+        margin-right: 0.5rem;
+        cursor: pointer;
+      }
+      .apply-filters-btn {
+        background: #FF8C00;
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .apply-filters-btn:hover {
+        background: #FF6347;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
+      }
+      .result-count {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 1rem 0;
+      }
+      .toggle-filters-btn {
+        background: #f0f0f0;
+        border: 2px solid #ddd;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        color: #555;
+      }
+      .toggle-filters-btn:hover {
+        background: #e0e0e0;
+        border-color: #ccc;
+      }
     </style>
   </head>
   <body>
@@ -40,6 +170,36 @@
       <div class="container">
         <h2 id="title">Search</h2>
         <p class="muted" id="desc">Type in the box above and press Enter to search the whole site.</p>
+        
+        <!-- Filter Options -->
+        <section class="filters" id="filters" style="display: none;">
+          <h3>Filter Results</h3>
+          <div class="filter-group">
+            <div class="filter-section">
+              <h4>Category</h4>
+              <label><input type="checkbox" name="category" value="pets" checked> Pets</label>
+              <label><input type="checkbox" name="category" value="rescue" checked> Rescue Cases</label>
+              <label><input type="checkbox" name="category" value="medical" checked> Medical Records</label>
+              <label><input type="checkbox" name="category" value="pages" checked> Pages</label>
+            </div>
+            
+            <div class="filter-section">
+              <h4>Pet Type</h4>
+              <label><input type="checkbox" name="species" value="dog" checked> Dogs</label>
+              <label><input type="checkbox" name="species" value="cat" checked> Cats</label>
+              <label><input type="checkbox" name="species" value="other" checked> Other</label>
+            </div>
+            
+            <div class="filter-section">
+              <h4>Status</h4>
+              <label><input type="checkbox" name="status" value="available" checked> Available</label>
+              <label><input type="checkbox" name="status" value="pending"> Pending</label>
+              <label><input type="checkbox" name="status" value="completed"> Completed</label>
+            </div>
+          </div>
+          <button onclick="applyFilters()" class="apply-filters-btn">Apply Filters</button>
+        </section>
+        
         <div id="results" class="results" aria-live="polite"></div>
       </div>
     </main>
@@ -58,18 +218,227 @@
       const title = document.getElementById('title');
       const desc = document.getElementById('desc');
       const resultsEl = document.getElementById('results');
-      const pages = [
-        'index.html',
-        'about.html',
-        'adopt.html',
-        'donate.html',
-        'volunteer.html',
-        'emergency.html',
-        'contact.html',
-        'login.html',
-        'register.html',
-        'profile.html',
-        'settings.html'
+      
+      const pageMap = {
+        'about': { title: 'About StrayCare', url: 'about.html', desc: 'Learn about our mission and team' },
+        'adopt': { title: 'Adopt a Pet', url: 'adopt.html', desc: 'Find your perfect companion' },
+        'donate': { title: 'Donate', url: 'donate.html', desc: 'Support our cause' },
+        'volunteer': { title: 'Volunteer', url: 'volunteer.html', desc: 'Join our team of volunteers' },
+        'emergency': { title: 'Emergency Rescue', url: 'emergency.html', desc: 'Report emergency cases' },
+        'contact': { title: 'Contact Us', url: 'contact.html', desc: 'Get in touch with us' },
+        'login': { title: 'Login', url: 'login.html', desc: 'Access your account' },
+        'register': { title: 'Register', url: 'register.html', desc: 'Create a new account' },
+        'profile': { title: 'Profile', url: 'profile.html', desc: 'Manage your profile' },
+        'settings': { title: 'Settings', url: 'settings.html', desc: 'Configure your preferences' }
+      };
+
+      // Fake data for demonstration
+      const fakePets = [
+        {
+          type: 'pet',
+          id: '1',
+          title: 'Buddy',
+          subtitle: 'Golden Retriever • 2 years • Male',
+          description: 'Friendly and playful golden retriever. Great with kids and other pets. Loves to play fetch and go for walks.',
+          details: 'Vaccinated ✓ | Sterilized ✓ | House-trained ✓',
+          location: 'Mumbai Shelter',
+          link: 'adopt.html#buddy',
+          image: 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&h=300&fit=crop',
+          species: 'dog',
+          service: 'adoption'
+        },
+        {
+          type: 'pet',
+          id: '2',
+          title: 'Luna',
+          subtitle: 'Persian Cat • 1 year • Female',
+          description: 'Calm and affectionate cat. Loves quiet environments and gentle cuddles. Perfect for apartment living.',
+          details: 'Vaccinated ✓ | Sterilized ✓ | Indoor cat',
+          location: 'Delhi Shelter',
+          link: 'adopt.html#luna',
+          image: 'https://images.unsplash.com/photo-1514888286974-6c03e2a1a220?w=400&h=300&fit=crop',
+          species: 'cat',
+          service: 'adoption'
+        },
+        {
+          type: 'pet',
+          id: '3',
+          title: 'Max',
+          subtitle: 'Labrador • 3 years • Male',
+          description: 'Energetic lab who loves to play fetch and go for long walks. Well-trained and obedient.',
+          details: 'Vaccinated ✓ | Needs exercise | Good with children',
+          location: 'Bangalore Shelter',
+          link: 'adopt.html#max',
+          image: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=300&fit=crop',
+          species: 'dog',
+          service: 'adoption'
+        },
+        {
+          type: 'pet',
+          id: '4',
+          title: 'Whiskers',
+          subtitle: 'Tabby Cat • 2 years • Female',
+          description: 'Playful tabby cat with beautiful markings. Loves to chase toys and climb cat trees.',
+          details: 'Vaccinated ✓ | Sterilized ✓ | Playful',
+          location: 'Pune Shelter',
+          link: 'adopt.html#whiskers',
+          image: 'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=400&h=300&fit=crop',
+          species: 'cat',
+          service: 'adoption'
+        },
+        {
+          type: 'pet',
+          id: '5',
+          title: 'Rocky',
+          subtitle: 'German Shepherd • 4 years • Male',
+          description: 'Loyal and protective German Shepherd. Excellent guard dog and family companion.',
+          details: 'Vaccinated ✓ | Trained | Protective',
+          location: 'Chennai Shelter',
+          link: 'adopt.html#rocky',
+          image: 'https://images.unsplash.com/photo-1568572933382-74d440642117?w=400&h=300&fit=crop',
+          species: 'dog',
+          service: 'adoption'
+        },
+        {
+          type: 'pet',
+          id: '6',
+          title: 'Mittens',
+          subtitle: 'Siamese Cat • 1.5 years • Female',
+          description: 'Vocal and social Siamese cat. Loves attention and following you around the house.',
+          details: 'Vaccinated ✓ | Sterilized ✓ | Very social',
+          location: 'Hyderabad Shelter',
+          link: 'adopt.html#mittens',
+          image: 'https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?w=400&h=300&fit=crop',
+          species: 'cat',
+          service: 'adoption'
+        },
+        {
+          type: 'pet',
+          id: '7',
+          title: 'Charlie',
+          subtitle: 'Beagle • 2 years • Male',
+          description: 'Friendly beagle with a great nose. Loves outdoor adventures and sniffing everything.',
+          details: 'Vaccinated ✓ | Active | Good with other dogs',
+          location: 'Kolkata Shelter',
+          link: 'adopt.html#charlie',
+          image: 'https://images.unsplash.com/photo-1505628346881-b72b27e84530?w=400&h=300&fit=crop',
+          species: 'dog',
+          service: 'adoption'
+        },
+        {
+          type: 'pet',
+          id: '8',
+          title: 'Shadow',
+          subtitle: 'Black Cat • 3 years • Male',
+          description: 'Mysterious black cat with green eyes. Independent but affectionate with trusted humans.',
+          details: 'Vaccinated ✓ | Sterilized ✓ | Independent',
+          location: 'Ahmedabad Shelter',
+          link: 'adopt.html#shadow',
+          image: 'https://images.unsplash.com/photo-1529257414772-1960b7bea4eb?w=400&h=300&fit=crop',
+          species: 'cat',
+          service: 'adoption'
+        }
+      ];
+
+      const fakeRescueCases = [
+        {
+          type: 'rescue',
+          id: 'r1',
+          title: 'Injured Dog Found Near Highway',
+          subtitle: 'Mumbai, Andheri East',
+          description: 'A golden retriever was found injured near the highway. Needs immediate medical attention and rescue.',
+          details: 'Reported: 2 hours ago | Priority: URGENT | Contact: +91-9876543210',
+          link: 'emergency.html#case1',
+          status: 'urgent',
+          service: 'rescue'
+        },
+        {
+          type: 'rescue',
+          id: 'r2',
+          title: 'Abandoned Puppies in Construction Site',
+          subtitle: 'Delhi, Dwarka',
+          description: 'Five puppies abandoned at a construction site. They need food, shelter, and medical checkup.',
+          details: 'Reported: 5 hours ago | Priority: HIGH | Volunteers needed: 3',
+          link: 'emergency.html#case2',
+          status: 'pending',
+          service: 'rescue'
+        },
+        {
+          type: 'rescue',
+          id: 'r3',
+          title: 'Stray Cat Colony Needs Sterilization',
+          subtitle: 'Bangalore, Koramangala',
+          description: 'A colony of 15 stray cats needs TNR (Trap-Neuter-Return) program implementation.',
+          details: 'Reported: 1 day ago | Priority: MEDIUM | Estimated cost: ₹15,000',
+          link: 'emergency.html#case3',
+          status: 'in-progress',
+          service: 'rescue'
+        },
+        {
+          type: 'rescue',
+          id: 'r4',
+          title: 'Dog Trapped in Drain',
+          subtitle: 'Pune, Kothrud',
+          description: 'A dog has fallen into an open drain and cannot get out. Emergency rescue needed.',
+          details: 'Reported: 30 minutes ago | Priority: CRITICAL | Equipment needed',
+          link: 'emergency.html#case4',
+          status: 'urgent',
+          service: 'rescue'
+        },
+        {
+          type: 'rescue',
+          id: 'r5',
+          title: 'Injured Bird Needs Care',
+          subtitle: 'Chennai, T Nagar',
+          description: 'An injured parrot found in a park. Wing appears to be broken, needs veterinary care.',
+          details: 'Reported: 3 hours ago | Priority: HIGH | Vet consultation required',
+          link: 'emergency.html#case5',
+          status: 'pending',
+          service: 'rescue'
+        }
+      ];
+
+      const fakeMedicalRecords = [
+        {
+          type: 'medical',
+          id: 'm1',
+          title: 'Buddy',
+          subtitle: 'Golden Retriever • Healthy',
+          description: 'Completed vaccination series. Due for annual checkup next month. No health issues.',
+          details: 'Last Visit: 15 days ago | Next Checkup: Feb 15 | Vet: Dr. Sharma',
+          link: 'medical-records.html#m1',
+          service: 'medical'
+        },
+        {
+          type: 'medical',
+          id: 'm2',
+          title: 'Luna',
+          subtitle: 'Persian Cat • Under Treatment',
+          description: 'Recovering from upper respiratory infection. On antibiotics for 2 more weeks.',
+          details: 'Treatment Started: 1 week ago | Medication: Amoxicillin | Follow-up: Weekly',
+          link: 'medical-records.html#m2',
+          service: 'medical'
+        },
+        {
+          type: 'medical',
+          id: 'm3',
+          title: 'Max',
+          subtitle: 'Labrador • Healthy',
+          description: 'Recently sterilized. Post-op recovery going well. All vaccinations up to date.',
+          details: 'Surgery Date: 10 days ago | Recovery: 90% | Next Visit: 5 days',
+          link: 'medical-records.html#m3',
+          service: 'medical'
+        },
+        {
+          type: 'medical',
+          id: 'm4',
+          title: 'Rocky',
+          subtitle: 'German Shepherd • Critical',
+          description: 'Recovering from accident injuries. Multiple fractures healing. Requires ongoing physiotherapy.',
+          details: 'Admitted: 2 weeks ago | Treatment: Intensive | Daily monitoring required',
+          link: 'medical-records.html#m4',
+          service: 'medical'
+        }
       ];
 
       // prefill the input with the query
@@ -78,68 +447,241 @@
 
       if (!q) {
         title.textContent = 'Search the site';
-        desc.textContent = 'Enter a search term above to find matches across all pages.';
+        desc.textContent = 'Enter a search term above to find pets, rescue cases, and more.';
       } else {
         title.textContent = `Results for "${qRaw}"`;
-        desc.textContent = 'Searching…';
+        desc.innerHTML = '<div class="loading">Searching...</div>';
         searchAll();
       }
 
-      function textFromHTML(html) {
-        const div = document.createElement('div');
-        div.innerHTML = html;
-        // remove script/style
-        div.querySelectorAll('script,style,noscript').forEach(n => n.remove());
-        return div.textContent || '';
-      }
-
-      function snippetAround(text, index, len = 160) {
-        const start = Math.max(0, index - Math.floor(len/2));
-        const end = Math.min(text.length, start + len);
-        let snip = text.slice(start, end).replace(/\s+/g, ' ').trim();
-        return (start>0? '…' : '') + snip + (end<text.length? '…' : '');
-      }
-
-      async function searchAll(){
+      async function searchAll() {
         try {
-          const results = await Promise.allSettled(
-            pages.map(async (p) => {
-              const res = await fetch(p, { cache: 'no-cache' });
-              if (!res.ok) throw new Error(`HTTP ${res.status}`);
-              const html = await res.text();
-              const text = textFromHTML(html);
-              const lc = text.toLowerCase();
-              const idx = lc.indexOf(q);
-              if (idx === -1) return null;
-              // extract title
-              const m = html.match(/<title>([^<]+)<\/title>/i);
-              const pageTitle = m ? m[1] : p;
-              return { page: p, title: pageTitle, snippet: snippetAround(text, idx) };
-            })
+          let apiPets = [];
+          let apiRescue = [];
+          let apiMedical = [];
+          
+          // Try to search database via API
+          try {
+            const apiResponse = await fetch(`/api/search?q=${encodeURIComponent(qRaw)}`);
+            if (apiResponse.ok) {
+              const apiData = await apiResponse.json();
+              apiPets = apiData.results?.pets || [];
+              apiRescue = apiData.results?.rescueCases || [];
+              apiMedical = apiData.results?.medicalRecords || [];
+              console.log('API search results:', apiData);
+            }
+          } catch (apiError) {
+            console.warn('API search not available, using fake data:', apiError.message);
+          }
+
+          // Filter fake data based on search query
+          const filteredFakePets = fakePets.filter(pet => 
+            pet.title.toLowerCase().includes(q) ||
+            pet.subtitle.toLowerCase().includes(q) ||
+            pet.description.toLowerCase().includes(q) ||
+            pet.species.includes(q)
           );
 
-          const matches = results
-            .filter(r => r.status === 'fulfilled' && r.value)
-            .map(r => r.value);
+          const filteredFakeRescue = fakeRescueCases.filter(rescue =>
+            rescue.title.toLowerCase().includes(q) ||
+            rescue.subtitle.toLowerCase().includes(q) ||
+            rescue.description.toLowerCase().includes(q) ||
+            rescue.status.includes(q)
+          );
 
-          if (matches.length === 0) {
+          const filteredFakeMedical = fakeMedicalRecords.filter(medical =>
+            medical.title.toLowerCase().includes(q) ||
+            medical.subtitle.toLowerCase().includes(q) ||
+            medical.description.toLowerCase().includes(q)
+          );
+
+          // Search pages
+          const pageResults = Object.entries(pageMap)
+            .filter(([key, page]) => 
+              key.includes(q) || 
+              page.title.toLowerCase().includes(q) || 
+              page.desc.toLowerCase().includes(q)
+            )
+            .map(([key, page]) => ({
+              type: 'page',
+              title: page.title,
+              subtitle: page.url,
+              description: page.desc,
+              link: page.url
+            }));
+
+          // Combine API results with fake data (fake data as fallback)
+          const allResults = {
+            pets: apiPets.length > 0 ? apiPets : filteredFakePets,
+            rescueCases: apiRescue.length > 0 ? apiRescue : filteredFakeRescue,
+            medicalRecords: apiMedical.length > 0 ? apiMedical : filteredFakeMedical,
+            pages: pageResults
+          };
+
+          const totalResults = 
+            allResults.pets.length + 
+            allResults.rescueCases.length + 
+            allResults.medicalRecords.length + 
+            allResults.pages.length;
+
+          // Store results globally for filtering
+          allResultsData = allResults;
+
+          if (totalResults === 0) {
             desc.textContent = 'No results found.';
-            resultsEl.innerHTML = '';
+            resultsEl.innerHTML = '<div class="no-results">😔 No results found. Try different keywords.</div>';
             return;
           }
 
-          desc.textContent = `${matches.length} result${matches.length===1?'':'s'} found`;
-          resultsEl.innerHTML = matches.map(m => `
-            <article class="result">
-              <a href="${m.page}">${m.title}</a>
-              <div class="meta">${m.page}</div>
-              <div class="snippet">${m.snippet.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
-            </article>
-          `).join('');
+          // Show filters if there are results
+          document.getElementById('filters').style.display = 'block';
+
+          desc.innerHTML = `
+            <div class="result-count">
+              <span>${totalResults} result${totalResults === 1 ? '' : 's'} found</span>
+              <button class="toggle-filters-btn" onclick="toggleFilters()">🔧 Toggle Filters</button>
+            </div>
+          `;
+          
+          renderResults(allResults);
         } catch (e) {
           console.error('Search failed:', e);
           desc.textContent = 'Search failed. Please try again.';
+          resultsEl.innerHTML = '<div class="no-results">⚠️ Search failed. Please try again later.</div>';
         }
+      }
+
+      let allResultsData = null;
+
+      function toggleFilters() {
+        const filters = document.getElementById('filters');
+        if (filters.style.display === 'none') {
+          filters.style.display = 'block';
+        } else {
+          filters.style.display = 'none';
+        }
+      }
+
+      function applyFilters() {
+        if (allResultsData) {
+          renderResults(allResultsData);
+        }
+      }
+
+      function renderResults(data) {
+        // Get selected filters
+        const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(cb => cb.value);
+        const selectedSpecies = Array.from(document.querySelectorAll('input[name="species"]:checked')).map(cb => cb.value);
+        
+        // Filter results based on selections
+        const filteredPets = selectedCategories.includes('pets') 
+          ? data.pets.filter(p => {
+              if (!p.species) return true;
+              return selectedSpecies.includes(p.species);
+            })
+          : [];
+        
+        const filteredRescue = selectedCategories.includes('rescue') ? data.rescueCases : [];
+        const filteredMedical = selectedCategories.includes('medical') ? data.medicalRecords : [];
+        const filteredPages = selectedCategories.includes('pages') ? data.pages : [];
+
+        const totalFiltered = filteredPets.length + filteredRescue.length + filteredMedical.length + filteredPages.length;
+
+        if (totalFiltered === 0) {
+          resultsEl.innerHTML = '<div class="no-results">😔 No results match your filters. Try adjusting them.</div>';
+          return;
+        }
+
+        let html = '';
+
+        // Pets section
+        if (filteredPets.length > 0) {
+          html += `<div class="result-section"><h3>🐾 Pets Available for Adoption (${filteredPets.length})</h3>`;
+          filteredPets.forEach(pet => {
+            html += `
+              <article class="result" onclick="window.location.href='${pet.link}'" style="cursor: pointer;">
+                ${pet.image ? `<img src="${pet.image}" alt="${pet.title}" class="result-image" onerror="this.style.display='none'">` : ''}
+                <div class="result-content">
+                  <a href="${pet.link}">${pet.title}</a>
+                  <div class="meta">
+                    <span class="badge badge-pet">Adoption</span>
+                    <span>${pet.subtitle}</span>
+                  </div>
+                  ${pet.description ? `<div class="snippet">${pet.description}</div>` : ''}
+                  ${pet.details ? `<div class="meta" style="margin-top: 0.5rem; color: #666; font-size: 0.85rem;">${pet.details}</div>` : ''}
+                  ${pet.location ? `<div class="meta" style="margin-top: 0.25rem; color: #FF8C00; font-weight: 600;">📍 ${pet.location}</div>` : ''}
+                </div>
+              </article>
+            `;
+          });
+          html += '</div>';
+        }
+
+        // Rescue cases section
+        if (filteredRescue.length > 0) {
+          html += `<div class="result-section"><h3>🚨 Emergency Rescue Services (${filteredRescue.length})</h3>`;
+          filteredRescue.forEach(rescue => {
+            const statusColor = rescue.status === 'urgent' ? '#dc3545' : rescue.status === 'in-progress' ? '#ffc107' : '#28a745';
+            html += `
+              <article class="result" onclick="window.location.href='${rescue.link}'" style="cursor: pointer;">
+                <div class="result-content">
+                  <a href="${rescue.link}">${rescue.title}</a>
+                  <div class="meta">
+                    <span class="badge badge-rescue">Rescue Service</span>
+                    <span>${rescue.subtitle}</span>
+                    ${rescue.status ? `<span style="color: ${statusColor}; font-weight: 700; text-transform: uppercase;">• ${rescue.status}</span>` : ''}
+                  </div>
+                  ${rescue.description ? `<div class="snippet">${rescue.description}</div>` : ''}
+                  ${rescue.details ? `<div class="meta" style="margin-top: 0.5rem; color: #666; font-size: 0.85rem;">${rescue.details}</div>` : ''}
+                </div>
+              </article>
+            `;
+          });
+          html += '</div>';
+        }
+
+        // Medical records section
+        if (filteredMedical.length > 0) {
+          html += `<div class="result-section"><h3>🏥 Medical Services & Records (${filteredMedical.length})</h3>`;
+          filteredMedical.forEach(medical => {
+            html += `
+              <article class="result" onclick="window.location.href='${medical.link}'" style="cursor: pointer;">
+                <div class="result-content">
+                  <a href="${medical.link}">${medical.title}</a>
+                  <div class="meta">
+                    <span class="badge badge-medical">Medical Service</span>
+                    <span>${medical.subtitle}</span>
+                  </div>
+                  ${medical.description ? `<div class="snippet">${medical.description}</div>` : ''}
+                  ${medical.details ? `<div class="meta" style="margin-top: 0.5rem; color: #666; font-size: 0.85rem;">${medical.details}</div>` : ''}
+                </div>
+              </article>
+            `;
+          });
+          html += '</div>';
+        }
+
+        // Pages section
+        if (filteredPages.length > 0) {
+          html += `<div class="result-section"><h3>📄 Pages (${filteredPages.length})</h3>`;
+          filteredPages.forEach(page => {
+            html += `
+              <article class="result" onclick="window.location.href='${page.link}'" style="cursor: pointer;">
+                <div class="result-content">
+                  <a href="${page.link}">${page.title}</a>
+                  <div class="meta">
+                    <span class="badge badge-page">Page</span>
+                    <span>${page.subtitle}</span>
+                  </div>
+                  ${page.description ? `<div class="snippet">${page.description}</div>` : ''}
+                </div>
+              </article>
+            `;
+          });
+          html += '</div>';
+        }
+
+        resultsEl.innerHTML = html;
       }
     </script>
   </body>
