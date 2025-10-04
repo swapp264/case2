@@ -97,6 +97,19 @@
                 <select name="type" required>
                   <option value="dog">Dog</option>
                   <option value="cat">Cat</option>
+                  <option value="cow">Cow</option>
+                  <option value="bird">Bird</option>
+                  <option value="monkey">Monkey</option>
+                  <option value="horse">Horse</option>
+                  <option value="donkey">Donkey</option>
+                  <option value="goat">Goat</option>
+                  <option value="sheep">Sheep</option>
+                  <option value="pig">Pig</option>
+                  <option value="rabbit">Rabbit</option>
+                  <option value="pigeon">Pigeon</option>
+                  <option value="squirrel">Squirrel</option>
+                  <option value="snake">Snake</option>
+                  <option value="turtle">Turtle</option>
                   <option value="other">Other</option>
                 </select>
               </label>
@@ -124,6 +137,7 @@
               <button type="button" id="useLocationBtn">Use my location</button>
               <button type="submit" class="cta-button">Submit report</button>
             </div>
+            <p id="locationStatus" class="small location-status" aria-live="polite" hidden>📍 Location attached</p>
             <p class="small">Your coordinates are only used to help rescuers reach faster. No account required.</p>
           </form>
         </section>
@@ -378,23 +392,79 @@
           const { latitude, longitude } = pos.coords;
           document.getElementById('reportLat').value = latitude;
           document.getElementById('reportLng').value = longitude;
-          alert('Location attached to report.');
+          const status = document.getElementById('locationStatus');
+          if (status) {
+            status.hidden = false;
+            status.textContent = '📍 Location attached';
+            status.classList.remove('pulse');
+            // Retrigger animation
+            void status.offsetWidth;
+            status.classList.add('pulse');
+          }
         }, () => alert('Could not get location.')); 
       });
 
-      document.getElementById('reportForm').addEventListener('submit', (e) => {
+      document.getElementById('reportForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const form = e.target;
         const fd = new FormData(form);
         const payload = Object.fromEntries(fd.entries());
-        console.log('Report submitted:', payload);
-        alert('Thank you! Your report has been recorded.');
-        form.reset();
+        // Convert lat/lng to numbers when present
+        if (payload.lat) payload.lat = parseFloat(payload.lat);
+        if (payload.lng) payload.lng = parseFloat(payload.lng);
+        // Derive priority for NGO based on condition
+        const priority = (payload.condition === 'injured' || payload.condition === 'aggressive') ? 'high' : 'medium';
+        console.log('Report submitted (client payload):', payload);
+        try {
+          // Build API URL fallbacks similar to adopt form
+          const sameOrigin = (window.location.origin && window.location.origin.startsWith('http'))
+            ? window.location.origin
+            : '';
+          const fallbacks = [
+            sameOrigin ? `${sameOrigin}/api/stray-reports` : null,
+            'http://localhost:3000/api/stray-reports',
+            'http://127.0.0.1:3000/api/stray-reports'
+          ].filter(Boolean);
+
+          const body = {
+            type: payload.type,
+            condition: payload.condition,
+            locationText: payload.locationText || '',
+            lat: Number.isFinite(payload.lat) ? payload.lat : null,
+            lng: Number.isFinite(payload.lng) ? payload.lng : null,
+            priority
+          };
+
+          let res, respBody, lastErr;
+          let usedUrl = null;
+          for (const url of fallbacks) {
+            try {
+              res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+              });
+              respBody = await res.json().catch(() => ({}));
+              if (res.ok) { usedUrl = url; break; }
+              lastErr = new Error(respBody.error || `Request failed (${res.status})`);
+            } catch (e2) {
+              lastErr = e2;
+            }
+          }
+          if (!res || !res.ok) throw lastErr || new Error('Failed to submit report');
+          console.log('Stray report saved via:', usedUrl, 'response:', respBody);
+          alert('Thank you! Your report has been recorded.');
+        } catch (err) {
+          console.error('Failed to persist stray report:', err);
+          alert('Could not save your report. Please ensure the server is running on port 3000 and try again.');
+        } finally {
+          form.reset();
+          const status = document.getElementById('locationStatus');
+          if (status) { status.hidden = true; status.classList.remove('pulse'); }
+        }
       });
 
       init();
     </script>
   </body>
   </html>
-
-

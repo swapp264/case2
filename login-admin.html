@@ -76,18 +76,18 @@
       .login-link-btn {
         display: inline-block;
         padding: 0.5rem 1.5rem;
-        background: linear-gradient(135deg, #FF8C00 0%, #FF6347 100%);
+        background: linear-gradient(135deg, #009688 0%, #00BFA5 100%);
         color: white;
         text-decoration: none;
         border-radius: 50px;
         font-weight: 600;
         font-size: 0.9rem;
         transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(255, 140, 0, 0.3);
+        box-shadow: 0 2px 8px rgba(0, 150, 136, 0.3);
       }
       .login-link-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(255, 140, 0, 0.5);
+        box-shadow: 0 4px 15px rgba(0, 150, 136, 0.5);
       }
     </style>
 
@@ -101,7 +101,7 @@
         // Simulate admin login
         console.log('Admin login:', adminId);
         alert('Admin login successful! Redirecting to admin dashboard...');
-        window.location.href = 'dashboard.html';
+        window.location.href = 'dashboard.html?role=admin';
       });
 
       // Set year

@@ -21,6 +21,29 @@ mongoose.connect(MONGODB_URI, {
 })
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('MongoDB connection error:', err));
+let dbConnected = false;
+mongoose.set('strictQuery', true);
+// Uncomment to see queries during debugging
+// mongoose.set('debug', true);
+
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 15000,
+  retryWrites: true
+})
+.then(() => {
+  dbConnected = true;
+  console.log('Connected to MongoDB');
+})
+.catch(err => {
+  dbConnected = false;
+  console.error('MongoDB connection error:', err);
+});
+
+mongoose.connection.on('connected', () => { dbConnected = true; });
+mongoose.connection.on('disconnected', () => { dbConnected = false; });
+mongoose.connection.on('error', () => { dbConnected = false; });
 
 // Volunteer Application Schema
 const volunteerApplicationSchema = new mongoose.Schema({
@@ -235,6 +258,21 @@ app.post('/api/volunteer-applications', async (req, res) => {
     });
   }
 });
+
+// Stray Report Schema
+const strayReportSchema = new mongoose.Schema({
+  type: { type: String, required: true, trim: true },
+  condition: { type: String, required: true, trim: true },
+  locationText: { type: String, trim: true },
+  lat: { type: Number },
+  lng: { type: Number },
+  priority: { type: String, enum: ['low', 'medium', 'high', 'urgent'], default: 'medium' },
+  createdAt: { type: Date, default: Date.now }
+});
+
+const StrayReport = mongoose.model('StrayReport', strayReportSchema);
+
+// API Routes
 
 // Get all volunteer applications (for admin)
 app.get('/api/volunteer-applications', async (req, res) => {
@@ -797,6 +835,39 @@ app.post('/api/pets', async (req, res) => {
     res.status(201).json({ success: true, pet: savedPet });
   } catch (error) {
     res.status(500).json({ error: 'Failed to create pet', details: error.message });
+// Stray Reports API
+app.post('/api/stray-reports', async (req, res) => {
+  try {
+    console.log('POST /api/stray-reports received:', req.body);
+    if (!dbConnected) {
+      return res.status(503).json({ error: 'Database not connected. Please try again shortly.' });
+    }
+    const { type, condition, locationText = '', lat = null, lng = null, priority = 'medium' } = req.body || {};
+    if (!type || !condition) {
+      return res.status(400).json({ error: 'type and condition are required' });
+    }
+
+    // Save raw report
+    const report = new StrayReport({ type, condition, locationText, lat, lng, priority });
+    const savedReport = await report.save();
+
+    // Mirror into RescueCase for NGO dashboard visibility
+    const coords = (lat != null && lng != null) ? `(${lat}, ${lng})` : '';
+    const locationCombined = [locationText, coords].filter(Boolean).join(' ');
+    const newCase = new RescueCase({
+      title: `${type} — ${condition}`,
+      description: locationText || `${type} reported as ${condition}`,
+      location: locationCombined || 'Unknown',
+      reportedBy: 'anonymous',
+      phone: 'N/A',
+      priority: ['high', 'urgent', 'medium', 'low'].includes(priority) ? priority : 'medium'
+    });
+    await newCase.save();
+
+    res.status(201).json({ success: true, id: savedReport._id });
+  } catch (error) {
+    console.error('Error saving stray report:', error);
+    res.status(500).json({ error: 'Failed to submit stray report', details: error.message });
   }
 });
 
