@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StrayCare — Stray Reports</title>
+  <meta name="description" content="View all stray reports submitted by users">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="ngo.css">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body class="ngo-theme">
+  <header>
+    <div class="container">
+      <a href="index.html" aria-label="StrayCare Home">
+        <h1>StrayCare</h1>
+      </a>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="stray-reports.html" class="active">Stray Reports</a></li>
+          <li><a href="rescue-cases.html">Rescue Cases</a></li>
+          <li><a href="volunteers.html">Volunteers</a></li>
+          <li><a href="medical-records.html">Medical Records</a></li>
+          <li><a href="collaboration.html">Collaboration</a></li>
+        </ul>
+      </nav>
+      <div class="user-actions">
+        <div class="user-dropdown">
+          <button class="user-icon" aria-label="User Menu">👤 NGO Admin</button>
+          <div class="dropdown-menu">
+            <a href="profile.html">Profile</a>
+            <a href="settings.html">Settings</a>
+            <a href="#" onclick="authManager.logout()">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <section class="dashboard-overview">
+        <h2>Stray Reports</h2>
+        <p class="small">All reports submitted by users from the Emergency page.</p>
+      </section>
+
+      <section class="recent-cases">
+        <div class="section-header">
+          <h2>All Reports</h2>
+          <div class="view-all">
+            <label class="small">Page: <select id="pageSelect" aria-label="Page selector"></select></label>
+          </div>
+        </div>
+        <div id="notifyPanel" class="notification" style="display:none"></div>
+        <p class="small">Status legend: <span class="priority-badge high">In Progress</span> <span class="priority-badge urgent">Resolved</span> <span class="priority-badge">Pending</span> <span class="priority-badge">Not Found</span></p>
+        <div id="reportsContainer" class="cases-grid">
+          <div class="loading-message"><p>Loading reports...</p></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <p>
+          © <span id="year">2025</span> StrayCare
+          • <a href="contact.html">Contact</a>
+          • <a href="donate.html">Donate</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="auth.js"></script>
+  <script src="stray-reports.js"></script>
+</body>
+</html>

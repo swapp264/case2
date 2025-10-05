@@ -408,13 +408,11 @@
         e.preventDefault();
         const form = e.target;
         const fd = new FormData(form);
-        const payload = Object.fromEntries(fd.entries());
-        // Convert lat/lng to numbers when present
-        if (payload.lat) payload.lat = parseFloat(payload.lat);
-        if (payload.lng) payload.lng = parseFloat(payload.lng);
         // Derive priority for NGO based on condition
-        const priority = (payload.condition === 'injured' || payload.condition === 'aggressive') ? 'high' : 'medium';
-        console.log('Report submitted (client payload):', payload);
+        const condition = fd.get('condition');
+        const priority = (condition === 'injured' || condition === 'aggressive') ? 'high' : 'medium';
+        fd.append('priority', priority);
+        console.log('Report submitted (multipart)');
         try {
           // Build API URL fallbacks similar to adopt form
           const sameOrigin = (window.location.origin && window.location.origin.startsWith('http'))
@@ -426,23 +424,13 @@
             'http://127.0.0.1:3000/api/stray-reports'
           ].filter(Boolean);
 
-          const body = {
-            type: payload.type,
-            condition: payload.condition,
-            locationText: payload.locationText || '',
-            lat: Number.isFinite(payload.lat) ? payload.lat : null,
-            lng: Number.isFinite(payload.lng) ? payload.lng : null,
-            priority
-          };
-
           let res, respBody, lastErr;
           let usedUrl = null;
           for (const url of fallbacks) {
             try {
               res = await fetch(url, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
+                body: fd
               });
               respBody = await res.json().catch(() => ({}));
               if (res.ok) { usedUrl = url; break; }
