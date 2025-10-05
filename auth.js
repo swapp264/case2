@@ -96,7 +96,12 @@ class AuthManager {
         if (this.isNGOOrAdmin()) {
             const nav = document.querySelector('nav ul');
             if (nav) {
-                // Create NGO Dashboard navigation
+                // If a Dashboard link already exists, do not add another NGO section.
+                const existingDashLink = nav.querySelector('a[href="dashboard.html"]');
+                if (existingDashLink) {
+                    return; // Avoid duplicate "NGO Dashboard" entry
+                }
+                // Otherwise, create an NGO section (rare on public pages without dashboard link)
                 const ngoLi = document.createElement('li');
                 ngoLi.className = 'ngo-section';
                 ngoLi.innerHTML = `

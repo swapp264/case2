@@ -108,15 +108,7 @@ document.querySelector('.medical-form').addEventListener('submit', async functio
     };
     
     try {
-        const response = await fetch('/api/medical-records', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        });
-        
-        const data = await response.json();
+        const data = await postJsonWithFallback(['/api/medical-records', 'http://localhost:3000/api/medical-records', 'http://127.0.0.1:3000/api/medical-records'], formData);
         
         if (data.success) {
             // Show success message
@@ -125,17 +117,14 @@ document.querySelector('.medical-form').addEventListener('submit', async functio
             // Close modal and reset form
             closeNewRecordModal();
             this.reset();
-            
-            // Reload the page to show updated records
-            setTimeout(() => {
-                location.reload();
-            }, 1000);
+            // Refresh table without full reload
+            await loadMedicalRecords();
         } else {
             showNotification('Failed to create medical record: ' + (data.error || 'Unknown error'), 'error');
         }
     } catch (error) {
         console.error('Error creating medical record:', error);
-        showNotification('Failed to create medical record. Please try again.', 'error');
+        showNotification('Failed to create medical record: ' + (error?.message || 'Please try again.'), 'error');
     }
 });
 
@@ -275,15 +264,26 @@ style.textContent = `
 document.head.appendChild(style);
 
 // Export functionality
-document.querySelector('.btn-secondary').addEventListener('click', function() {
-    // Here you would typically generate and download a CSV/PDF report
-    console.log('Exporting medical records...');
-    showNotification('Exporting medical records...', 'info');
-    
-    // Simulate export delay
-    setTimeout(() => {
-        showNotification('Medical records exported successfully!', 'success');
-    }, 2000);
+document.querySelector('.btn-secondary').addEventListener('click', async function() {
+    const urls = ['/api/medical-records/export', 'http://localhost:3000/api/medical-records/export', 'http://127.0.0.1:3000/api/medical-records/export'];
+    const resolved = resolveCandidates(urls);
+    // Try to ping one then download
+    for (const u of resolved) {
+        try {
+            const head = await fetch(u, { method: 'HEAD' });
+            if (head.ok) {
+                const a = document.createElement('a');
+                a.href = u;
+                a.download = 'medical-records.csv';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                showNotification('Export started...', 'info');
+                return;
+            }
+        } catch (_) { /* try next */ }
+    }
+    showNotification('Failed to export medical records', 'error');
 });
 
 // Reminder card actions
@@ -303,8 +303,7 @@ document.querySelectorAll('.reminder-card button').forEach(button => {
 // Load medical records from backend
 async function loadMedicalRecords() {
     try {
-        const response = await fetch('/api/medical-records');
-        const data = await response.json();
+        const data = await fetchJsonWithFallback(['/api/medical-records', 'http://localhost:3000/api/medical-records', 'http://127.0.0.1:3000/api/medical-records']);
         
         if (data.success) {
             updateMedicalRecordsTable(data.records);
@@ -438,3 +437,45 @@ statStyle.textContent = `
     }
 `;
 document.head.appendChild(statStyle);
+
+// Fallback helpers
+function resolveCandidates(candidates) {
+    const origin = (window.location.origin && window.location.origin.startsWith('http')) ? window.location.origin : '';
+    const out = [];
+    for (const c of candidates) {
+        if (c.startsWith('http')) out.push(c);
+        else if (origin) out.push(`${origin}${c}`);
+    }
+    // ensure localhost variants are present
+    if (!out.some(u => u.includes('localhost:3000'))) out.push('http://localhost:3000' + (candidates[0].startsWith('/') ? candidates[0] : '/' + candidates[0]));
+    if (!out.some(u => u.includes('127.0.0.1:3000'))) out.push('http://127.0.0.1:3000' + (candidates[0].startsWith('/') ? candidates[0] : '/' + candidates[0]));
+    return out;
+}
+
+async function fetchJsonWithFallback(candidates) {
+    const urls = resolveCandidates(candidates);
+    let lastErr;
+    for (const u of urls) {
+        try {
+            const res = await fetch(u);
+            const data = await res.json();
+            if (res.ok) return data;
+            lastErr = new Error(data?.error || `Request failed (${res.status})`);
+        } catch (e) { lastErr = e; }
+    }
+    throw lastErr || new Error('All endpoints failed');
+}
+
+async function postJsonWithFallback(candidates, body) {
+    const urls = resolveCandidates(candidates);
+    let lastErr;
+    for (const u of urls) {
+        try {
+            const res = await fetch(u, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+            const data = await res.json();
+            if (res.ok) return data;
+            lastErr = new Error(data?.error || `Request failed (${res.status})`);
+        } catch (e) { lastErr = e; }
+    }
+    throw lastErr || new Error('All endpoints failed');
+}

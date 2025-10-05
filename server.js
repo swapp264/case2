@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
+const multer = require('multer');
 require('dotenv').config();
 
 const app = express();
@@ -11,6 +13,12 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
+// Ensure uploads dir exists and serve static files
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+app.use('/uploads', express.static(uploadsDir));
 
 // MongoDB connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/straycare';
@@ -292,13 +300,28 @@ app.post('/api/volunteer-applications', async (req, res) => {
 });
 
 // Stray Report Schema
+const commentSchema = new mongoose.Schema({
+  text: { type: String, required: true },
+  author: { type: String, default: 'NGO' },
+  createdAt: { type: Date, default: Date.now }
+}, { _id: false });
+
 const strayReportSchema = new mongoose.Schema({
   type: { type: String, required: true, trim: true },
   condition: { type: String, required: true, trim: true },
   locationText: { type: String, trim: true },
   lat: { type: Number },
   lng: { type: Number },
+  mediaUrls: [{ type: String }],
+  reporterName: { type: String, trim: true },
+  reporterPhone: { type: String, trim: true },
+  reporterEmail: { type: String, trim: true, lowercase: true },
   priority: { type: String, enum: ['low', 'medium', 'high', 'urgent'], default: 'medium' },
+  status: { type: String, enum: ['pending', 'in-progress', 'resolved', 'not-found'], default: 'pending' },
+  ngoComments: [commentSchema],
+  assignedVolunteer: { type: String },
+  checkInAt: { type: Date },
+  proofUrls: [{ type: String }],
   createdAt: { type: Date, default: Date.now }
 });
 
@@ -503,6 +526,28 @@ app.get('/api/medical-records', async (req, res) => {
     res.json({ success: true, records });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch medical records', details: error.message });
+  }
+});
+
+// Export medical records as CSV
+app.get('/api/medical-records/export', async (req, res) => {
+  try {
+    const records = await MedicalRecord.find().sort({ createdAt: -1 }).lean();
+    const headers = [
+      'animalId','animalName','breed','age','healthStatus','lastVaccination','vaccinationType','nextVaccinationDue','sterilizationStatus','sterilizationDate','medicalNotes','createdAt'
+    ];
+    const esc = (v) => {
+      if (v == null) return '';
+      const s = String(v).replace(/"/g, '""');
+      return /[",\n]/.test(s) ? `"${s}"` : s;
+    };
+    const rows = [headers.join(',')].concat(records.map(r => headers.map(h => esc(h.endsWith('Date') || h.includes('Vaccination') || h==='createdAt' ? (r[h] ? new Date(r[h]).toISOString() : '') : r[h])).join(',')));
+    const csv = rows.join('\n');
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename="medical-records.csv"');
+    res.send(csv);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to export medical records', details: error.message });
   }
 });
 
@@ -867,39 +912,190 @@ app.post('/api/pets', async (req, res) => {
     res.status(201).json({ success: true, pet: savedPet });
   } catch (error) {
     res.status(500).json({ error: 'Failed to create pet', details: error.message });
+  }
+});
+
+// Multer storage for uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) { cb(null, uploadsDir); },
+  filename: function (req, file, cb) {
+    const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const ext = path.extname(file.originalname || '');
+    cb(null, `report-${unique}${ext}`);
+  }
+});
+const upload = multer({ storage });
+
 // Stray Reports API
-app.post('/api/stray-reports', async (req, res) => {
+async function handleStrayReport(req, res) {
   try {
-    console.log('POST /api/stray-reports received:', req.body);
+    console.log('POST /api/stray-reports received (ct=%s):', req.headers['content-type']);
     if (!dbConnected) {
       return res.status(503).json({ error: 'Database not connected. Please try again shortly.' });
     }
-    const { type, condition, locationText = '', lat = null, lng = null, priority = 'medium' } = req.body || {};
+    const {
+      type,
+      condition,
+      locationText = '',
+      lat = null,
+      lng = null,
+      priority = 'medium',
+      reporterName = '',
+      reporterPhone = '',
+      reporterEmail = ''
+    } = req.body || {};
+
     if (!type || !condition) {
       return res.status(400).json({ error: 'type and condition are required' });
     }
 
     // Save raw report
-    const report = new StrayReport({ type, condition, locationText, lat, lng, priority });
+    const mediaUrls = [];
+    if (req.file) {
+      mediaUrls.push(`/uploads/${req.file.filename}`);
+    }
+    const numericLat = lat !== null && lat !== '' ? Number(lat) : null;
+    const numericLng = lng !== null && lng !== '' ? Number(lng) : null;
+    const report = new StrayReport({
+      type,
+      condition,
+      locationText,
+      lat: numericLat,
+      lng: numericLng,
+      priority,
+      mediaUrls,
+      reporterName,
+      reporterPhone,
+      reporterEmail
+    });
     const savedReport = await report.save();
 
     // Mirror into RescueCase for NGO dashboard visibility
-    const coords = (lat != null && lng != null) ? `(${lat}, ${lng})` : '';
+    const coords = (numericLat != null && numericLng != null) ? `(${numericLat}, ${numericLng})` : '';
     const locationCombined = [locationText, coords].filter(Boolean).join(' ');
     const newCase = new RescueCase({
       title: `${type} — ${condition}`,
       description: locationText || `${type} reported as ${condition}`,
       location: locationCombined || 'Unknown',
-      reportedBy: 'anonymous',
-      phone: 'N/A',
+      reportedBy: reporterName || 'anonymous',
+      phone: reporterPhone || 'N/A',
       priority: ['high', 'urgent', 'medium', 'low'].includes(priority) ? priority : 'medium'
     });
     await newCase.save();
 
-    res.status(201).json({ success: true, id: savedReport._id });
+    return res.status(201).json({ success: true, id: savedReport._id, mediaUrls: savedReport.mediaUrls });
   } catch (error) {
     console.error('Error saving stray report:', error);
-    res.status(500).json({ error: 'Failed to submit stray report', details: error.message });
+    return res.status(500).json({ error: 'Failed to submit stray report', details: error.message });
+  }
+}
+
+// Wrapper route that accepts both JSON and multipart
+app.post('/api/stray-reports', (req, res) => {
+  const ct = req.headers['content-type'] || '';
+  if (ct.includes('multipart/form-data')) {
+    return upload.single('photo')(req, res, () => handleStrayReport(req, res));
+  }
+  return handleStrayReport(req, res);
+});
+
+// Fetch stray reports (for NGO dashboard)
+app.get('/api/stray-reports', async (req, res) => {
+  try {
+    const { page = 1, limit = 50 } = req.query;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [items, total] = await Promise.all([
+      StrayReport.find().sort({ createdAt: -1 }).skip(skip).limit(parseInt(limit)),
+      StrayReport.countDocuments()
+    ]);
+    res.json({ success: true, items, total, page: parseInt(page), pages: Math.ceil(total / parseInt(limit)) });
+  } catch (error) {
+    console.error('Error fetching stray reports:', error);
+    res.status(500).json({ error: 'Failed to fetch stray reports', details: error.message });
+  }
+});
+
+// Add NGO comment
+app.post('/api/stray-reports/:id/comments', async (req, res) => {
+  try {
+    const { text, author = 'NGO' } = req.body || {};
+    if (!text) return res.status(400).json({ error: 'text is required' });
+    const updated = await StrayReport.findByIdAndUpdate(
+      req.params.id,
+      { $push: { ngoComments: { text, author, createdAt: new Date() } } },
+      { new: true }
+    );
+    if (!updated) return res.status(404).json({ error: 'Report not found' });
+    res.json({ success: true, report: updated });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to add comment', details: error.message });
+  }
+});
+
+// Assign volunteer
+app.patch('/api/stray-reports/:id/assign', async (req, res) => {
+  try {
+    const { volunteerName } = req.body || {};
+    if (!volunteerName) return res.status(400).json({ error: 'volunteerName is required' });
+    const updated = await StrayReport.findByIdAndUpdate(
+      req.params.id,
+      { assignedVolunteer: volunteerName, status: 'in-progress' },
+      { new: true }
+    );
+    if (!updated) return res.status(404).json({ error: 'Report not found' });
+    res.json({ success: true, report: updated });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to assign volunteer', details: error.message });
+  }
+});
+
+// Update status
+app.patch('/api/stray-reports/:id/status', async (req, res) => {
+  try {
+    const { status } = req.body || {};
+    const allowed = ['pending', 'in-progress', 'resolved', 'not-found'];
+    if (!allowed.includes(status)) return res.status(400).json({ error: 'invalid status' });
+    const updated = await StrayReport.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+    if (!updated) return res.status(404).json({ error: 'Report not found' });
+    res.json({ success: true, report: updated });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update status', details: error.message });
+  }
+});
+
+// Volunteer check-in
+app.patch('/api/stray-reports/:id/checkin', async (req, res) => {
+  try {
+    const updated = await StrayReport.findByIdAndUpdate(
+      req.params.id,
+      { checkInAt: new Date() },
+      { new: true }
+    );
+    if (!updated) return res.status(404).json({ error: 'Report not found' });
+    res.json({ success: true, report: updated });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to check-in', details: error.message });
+  }
+});
+
+// Upload proof media
+app.post('/api/stray-reports/:id/proof', upload.single('proof'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: 'proof file is required' });
+    const fileUrl = `/uploads/${req.file.filename}`;
+    const updated = await StrayReport.findByIdAndUpdate(
+      req.params.id,
+      { $push: { proofUrls: fileUrl } },
+      { new: true }
+    );
+    if (!updated) return res.status(404).json({ error: 'Report not found' });
+    res.json({ success: true, report: updated });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to upload proof', details: error.message });
   }
 });
 
