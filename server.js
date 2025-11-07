@@ -8,9 +8,16 @@ require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+let dbConnected = false;
 
 // Middleware
-app.use(cors());
+// Restrict CORS in production; allow localhost during dev
+const allowedOrigins = [
+  'https://straycare1.netlify.app',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000'
+];
+app.use(cors({ origin: allowedOrigins, methods: ['GET','POST','PATCH','DELETE'] }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 // Ensure uploads dir exists and serve static files
@@ -23,14 +30,14 @@ app.use('/uploads', express.static(uploadsDir));
 // MongoDB connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/straycare';
 
-mongoose.connect(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => console.error('MongoDB connection error:', err));
-let dbConnected = false;
-mongoose.set('strictQuery', true);
+// mongoose.connect(MONGODB_URI, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// })
+// .then(() => console.log('Connected to MongoDB'))
+// .catch(err => console.error('MongoDB connection error:', err));
+// let dbConnected = false;
+// mongoose.set('strictQuery', true);
 // Uncomment to see queries during debugging
 // mongoose.set('debug', true);
 
