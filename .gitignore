@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Build/output
+/dist/
+/build/
+/.cache/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS/filesystem junk
+.DS_Store
+Thumbs.db
+
+# Uploads (stored locally; use object storage in prod)
+uploads/
+
+# Hosts/CI
+.vercel/
+.netlify/
+
+# Coverage
+coverage/

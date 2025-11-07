@@ -140,6 +140,10 @@
           © <span id="year">2025</span> StrayCare
           • <a href="contact.html">Contact</a>
           • <a href="donate.html" aria-current="page">Donate</a>
+          • <a href="privacy.html">Privacy Policy</a>
+          • <a href="terms.html">Terms &amp; Conditions</a>
+          • <a href="refunds.html">Cancellation &amp; Refunds</a>
+          • <a href="shipping.html">Shipping Policy</a>
         </p>
       </div>
     </footer>
@@ -212,7 +216,7 @@
     <!-- Razorpay Integration Script -->
     <script>
       // Razorpay configuration
-      const RAZORPAY_KEY = 'rzp_test_1234567890'; // Replace with your actual Razorpay key
+      const RAZORPAY_KEY = 'rzp_test_RcU03dmcYbtb0B'; // Replace with your actual Razorpay key
       
       // Amount selection functionality
       document.addEventListener('DOMContentLoaded', function() {
@@ -265,6 +269,9 @@
           description: `Donation for ${purpose}`,
           image: 'https://via.placeholder.com/100x100?text=SC', // Replace with your logo
           order_id: '', // Generate order_id from backend
+          // Explicitly enable methods and UPI flow
+          method: { upi: '1', card: '1', netbanking: '1', wallet: '1', paylater: '1' },
+          upi: { flow: 'collect' },
           handler: function(response) {
             // Payment success callback
             alert('Thank you for your donation! Payment ID: ' + response.razorpay_payment_id);
