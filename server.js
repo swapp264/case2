@@ -13,7 +13,7 @@ let dbConnected = false;
 // Middleware
 // Restrict CORS in production; allow localhost during dev
 const allowedOrigins = [
-  'https://straycare1.netlify.app',
+  'https://straycare16.netlify.app',
   'http://localhost:3000',
   'http://127.0.0.1:3000'
 ];
