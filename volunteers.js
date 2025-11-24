@@ -211,7 +211,7 @@ function setupAdditionalEventListeners() {
 // Load volunteers from backend
 async function loadVolunteersFromBackend() {
     try {
-        const response = await fetch('/api/volunteers');
+        const response = await fetch('https://straycare-api.onrender.com/api/volunteers');
         const data = await response.json();
         
         if (data.success) {
@@ -280,7 +280,7 @@ function createDemoVolunteers() {
 // Load medical reminders due today
 async function loadMedicalReminders() {
     try {
-        const response = await fetch('/api/medical-reminders/today');
+        const response = await fetch('https://straycare-api.onrender.com/api/medical-reminders/today');
         const data = await response.json();
         
         if (data.success) {
@@ -450,7 +450,7 @@ function getHealthStatusDisplay(status) {
 // Load volunteer slots
 async function loadVolunteerSlots() {
     try {
-        const response = await fetch('/api/volunteer-slots');
+        const response = await fetch('https://straycare-api.onrender.com/api/volunteer-slots');
         const data = await response.json();
         
         if (data.success) {
@@ -1288,7 +1288,7 @@ async function handleAddVolunteer(e) {
 
         // Send to backend API
         console.log('Sending volunteer data to backend:', volunteerData);
-        const response = await fetch('/api/volunteers', {
+        const response = await fetch('https://straycare-api.onrender.com/api/volunteers', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

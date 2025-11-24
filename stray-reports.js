@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 function apiBase(url) {
   const sameOrigin = (window.location.origin && window.location.origin.startsWith('http')) ? window.location.origin : '';
   return [
+    `https://straycare-api.onrender.com${url}`,
     sameOrigin ? `${sameOrigin}${url}` : null,
     `http://localhost:3000${url}`,
     `http://127.0.0.1:3000${url}`
@@ -106,7 +107,7 @@ function renderReports(container, items) {
 function mediaTag(url) {
   if (!url) return '';
   const lower = url.toLowerCase();
-  const origin = (window.location.origin && window.location.origin.startsWith('http')) ? window.location.origin : 'http://localhost:3000';
+  const origin = (window.location.origin && window.location.origin.startsWith('http')) ? window.location.origin : 'https://straycare-api.onrender.com';
   const abs = url.startsWith('http') ? url : `${origin}${url.startsWith('/') ? '' : '/'}${url}`;
   if (lower.endsWith('.mp4') || lower.endsWith('.webm') || lower.endsWith('.ogg')) {
     return `<video src="${abs}" controls style="width:100%;max-height:200px;object-fit:cover"></video>`;
