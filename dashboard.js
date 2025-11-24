@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadDashboardData() {
     try {
         // Load rescue cases
-        const casesResponse = await fetch('/api/rescue-cases');
+        const casesResponse = await fetch('https://straycare-api.onrender.com/api/rescue-cases');
         const casesData = await casesResponse.json();
         
         if (casesData.success) {
@@ -28,7 +28,7 @@ async function loadDashboardData() {
         }
         
         // Load volunteers
-        const volunteersResponse = await fetch('/api/volunteers');
+        const volunteersResponse = await fetch('https://straycare-api.onrender.com/api/volunteers');
         const volunteersData = await volunteersResponse.json();
         
         if (volunteersData.success) {
@@ -381,7 +381,7 @@ async function selectVolunteer(caseId, volunteerName, volunteerId) {
             }
         }
         
-        const response = await fetch(`/api/rescue-cases/${caseId}`, {
+        const response = await fetch(`https://straycare-api.onrender.com/api/rescue-cases/${caseId}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -530,7 +530,7 @@ async function updateCaseStatus(caseId) {
     }
     
     try {
-        const response = await fetch(`/api/rescue-cases/${caseId}`, {
+        const response = await fetch(`https://straycare-api.onrender.com/api/rescue-cases/${caseId}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'

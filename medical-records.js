@@ -108,7 +108,12 @@ document.querySelector('.medical-form').addEventListener('submit', async functio
     };
     
     try {
-        const data = await postJsonWithFallback(['/api/medical-records', 'http://localhost:3000/api/medical-records', 'http://127.0.0.1:3000/api/medical-records'], formData);
+        const data = await postJsonWithFallback([
+            '/api/medical-records',
+            'https://straycare-api.onrender.com/api/medical-records',
+            'http://localhost:3000/api/medical-records',
+            'http://127.0.0.1:3000/api/medical-records'
+        ], formData);
         
         if (data.success) {
             // Show success message
@@ -265,7 +270,12 @@ document.head.appendChild(style);
 
 // Export functionality
 document.querySelector('.btn-secondary').addEventListener('click', async function() {
-    const urls = ['/api/medical-records/export', 'http://localhost:3000/api/medical-records/export', 'http://127.0.0.1:3000/api/medical-records/export'];
+    const urls = [
+        '/api/medical-records/export',
+        'https://straycare-api.onrender.com/api/medical-records/export',
+        'http://localhost:3000/api/medical-records/export',
+        'http://127.0.0.1:3000/api/medical-records/export'
+    ];
     const resolved = resolveCandidates(urls);
     // Try to ping one then download
     for (const u of resolved) {
@@ -303,7 +313,12 @@ document.querySelectorAll('.reminder-card button').forEach(button => {
 // Load medical records from backend
 async function loadMedicalRecords() {
     try {
-        const data = await fetchJsonWithFallback(['/api/medical-records', 'http://localhost:3000/api/medical-records', 'http://127.0.0.1:3000/api/medical-records']);
+        const data = await fetchJsonWithFallback([
+            '/api/medical-records',
+            'https://straycare-api.onrender.com/api/medical-records',
+            'http://localhost:3000/api/medical-records',
+            'http://127.0.0.1:3000/api/medical-records'
+        ]);
         
         if (data.success) {
             updateMedicalRecordsTable(data.records);
@@ -445,6 +460,11 @@ function resolveCandidates(candidates) {
     for (const c of candidates) {
         if (c.startsWith('http')) out.push(c);
         else if (origin) out.push(`${origin}${c}`);
+    }
+    // Prefer Render API first
+    if (candidates && candidates.length) {
+        const first = candidates[0].startsWith('/') ? candidates[0] : '/' + candidates[0];
+        out.unshift('https://straycare-api.onrender.com' + first);
     }
     // ensure localhost variants are present
     if (!out.some(u => u.includes('localhost:3000'))) out.push('http://localhost:3000' + (candidates[0].startsWith('/') ? candidates[0] : '/' + candidates[0]));

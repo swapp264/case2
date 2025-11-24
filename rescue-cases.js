@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Load cases from backend
 async function loadCasesFromBackend() {
     try {
-        const response = await fetch('/api/rescue-cases');
+        const response = await fetch('https://straycare-api.onrender.com/api/rescue-cases');
         const data = await response.json();
         
         if (data.success) {
@@ -579,7 +579,7 @@ async function handleNewCaseSubmit(event) {
     };
     
     try {
-        const response = await fetch('/api/rescue-cases', {
+        const response = await fetch('https://straycare-api.onrender.com/api/rescue-cases', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -755,7 +755,7 @@ function applyAllFilters() {
 async function assignVolunteer(caseId) {
     try {
         // Fetch available volunteers
-        const response = await fetch('/api/volunteers');
+        const response = await fetch('https://straycare-api.onrender.com/api/volunteers');
         const data = await response.json();
         
         if (data.success && data.volunteers.length > 0) {

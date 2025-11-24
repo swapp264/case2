@@ -799,6 +799,7 @@
         try {
           const sameOrigin = (window.location.origin && window.location.origin.startsWith('http')) ? window.location.origin : '';
           const endpoints = [
+            'https://straycare-api.onrender.com/api/volunteer-applications',
             '/api/volunteer-applications',
             sameOrigin ? sameOrigin + '/api/volunteer-applications' : null,
             'http://localhost:3000/api/volunteer-applications',
